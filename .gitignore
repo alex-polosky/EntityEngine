@@ -1,0 +1,4 @@
+bin/
+obj/
+PyInterface/bin/Debug/IronPython.SQLite.xml
+EntityFramework/obj/Debug/EntityFramework.csproj.FileListAbsolute.txt
