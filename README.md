@@ -23,3 +23,11 @@ A game engine I am currently developing utilizing an Entity Framework and SharpD
   Player System needs implemented  
   Generic shaders need written  
   Map editor needs made
+
+### Implemented:
+  Render System loads and works as intended  
+  Win System loads and works as intended  
+  Position System implemented, needs work  
+  Main game form can be launched as host window, or be ran in target element on window using Embedded form  
+  Extra debug form made for Python shell that appears in debug mode with access to base objects  
+  Script engine using IronPython works as expected, just need a component system implemented  
