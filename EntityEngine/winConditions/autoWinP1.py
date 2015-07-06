@@ -2,7 +2,7 @@ name = "Auto Win P1"
 description = \
 """\
 This is just an example of how the win conditions system will work.
-It will force the first com to always win after approx 5 seconds has passed
+It will force the first com to always win after approx 60 seconds has passed
 """
 
 def main(world, fps, coms):

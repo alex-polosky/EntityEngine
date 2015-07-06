@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,7 +44,9 @@
     <Compile Include="Component.cs" />
     <Compile Include="ComponentSystem.cs" />
     <Compile Include="Components\Children.cs" />
+    <Compile Include="Components\Font.cs" />
     <Compile Include="Components\Group.cs" />
+    <Compile Include="Components\String.cs" />
     <Compile Include="Components\Tag.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
