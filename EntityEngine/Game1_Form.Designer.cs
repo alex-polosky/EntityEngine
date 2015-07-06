@@ -37,7 +37,6 @@
             this.ClientSize = new System.Drawing.Size(356, 136);
             this.Name = "Game1_Form";
             this.Text = "Form1";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameExit);
             this.ResumeLayout(false);
 
         }

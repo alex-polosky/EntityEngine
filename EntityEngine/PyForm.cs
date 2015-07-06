@@ -22,6 +22,9 @@ namespace EntityEngine
         private EventRaisingStreamWriter errorWr;
         private Dictionary<string, object> variablesToPass;
 
+        public TextBox StdOut { get { return this.stdOut; } }
+        public TextBox StdErr { get { return this.stdErr; } }
+
         public PyForm(ref clsPyInterface py, Dictionary<string, object> variablesToPass)
         {
             InitializeComponent();

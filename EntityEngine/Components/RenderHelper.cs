@@ -142,7 +142,6 @@ namespace EntityEngine.Components
 
     public class Mesh3D
     {
-        private D3D10.Device device;
         public D3D10.VertexBufferBinding vertexBuffer;
         public D3D10.Buffer indexBuffer;
         public int numberOfVertices;

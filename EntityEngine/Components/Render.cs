@@ -21,37 +21,53 @@ namespace EntityEngine.Components
 {
     public class Camera
     {
-        public Viewport viewport; //{ get; private set; }
-
         public Matrix projectionMatrix;
+        public bool IsOrtho = false;
+        // TODO: figure out formula of this camera translation...
+        public Matrix orthoOffset;
 
         public Vector3 eye;
         public Vector3 view;
         public Vector3 up;
         public Matrix viewMatrix { get { return Matrix.LookAtLH(this.eye, this.view, this.up); } }
 
-        public Camera(D3D10.Device d3d10device, int targetWidth, int targetHeight)
+        public Camera(int targetWidth, int targetHeight, bool ortho=false)
         {
-            // Set up viewport
-            this.viewport = new Viewport();
-            this.viewport.Width = targetWidth;
-            this.viewport.Height = targetHeight;
-            this.viewport.MinDepth = 0.0f;
-            this.viewport.MaxDepth = 1.0f;
-            this.viewport.X = 0;
-            this.viewport.Y = 0;
+            this.IsOrtho = ortho;
 
-            d3d10device.Rasterizer.SetViewports(this.viewport);
+            if (ortho)
+            {
+                var aspect = (float)targetWidth / (float)targetHeight;
+                var scale = 0;
+                var near = 0f;
+                var far = 1f;
+                this.projectionMatrix = Matrix.OrthoLH(
+                    targetWidth + aspect * scale, targetHeight + scale, near, far
+                );
 
-            // Set up projection matrix
-            this.projectionMatrix = Matrix.PerspectiveFovLH(
-                MathUtil.Pi / 4.0f, targetWidth / targetHeight, 0.1f, 100.0f
-            );
+                this.eye = Vector3.Zero;
+                this.view = Vector3.UnitZ;
+                this.up = Vector3.UnitY;
 
-            // View matrix, and projection matrix
-            this.eye = new Vector3(1.0f, 1.0f, -10.0f);
-            this.view = new Vector3(0.0f, 0.0f, 0.0f);
-            this.up = Vector3.UnitY;
+                //this.orthoOffset = Matrix.Translation(-408.0f, 319.0f, 0.0f);
+                //this.orthoOffset = Matrix.Translation(
+                //    ((float)targetWidth) / 2,
+                //    ((float)targetHeight) / 2,
+                //    0);
+                this.orthoOffset = Matrix.Translation(0, 0, 0);
+            }
+            else
+            {
+                // Set up projection matrix
+                this.projectionMatrix = Matrix.PerspectiveFovLH(
+                    MathUtil.Pi / 4.0f, targetWidth / targetHeight, 0.1f, 100.0f
+                );
+
+                // View matrix, and projection matrix
+                this.eye = new Vector3(1.0f, 1.0f, -10.0f);
+                this.view = new Vector3(0.0f, 0.0f, 0.0f);
+                this.up = Vector3.UnitY;
+            }
         }
     }
 
@@ -62,6 +78,7 @@ namespace EntityEngine.Components
         public RenderTypeFlag renderFlags;
         public Mesh3D mesh;
         public Shader shader;
+        public Camera camera;
 
         public RenderComponent() : base() { }
         public RenderComponent(Entity e) : base(e) { }
@@ -83,6 +100,7 @@ namespace EntityEngine.Components
         private SwapChain swapChain;
         private D3D10.Device d3d10Device;
         private RenderTargetView renderTargetView;
+        public Viewport viewport;
 
         private Camera camera;
 
@@ -162,8 +180,19 @@ namespace EntityEngine.Components
 
             this.d3d10Device.OutputMerger.SetTargets(this.renderTargetView);
 
+            // Set up viewport
+            this.viewport = new Viewport();
+            this.viewport.Width = targetWidth;
+            this.viewport.Height = targetHeight;
+            this.viewport.MinDepth = 0.0f;
+            this.viewport.MaxDepth = 1.0f;
+            this.viewport.X = 0;
+            this.viewport.Y = 0;
+
+            this.d3d10Device.Rasterizer.SetViewports(this.viewport);
+
             // Set up camera
-            this.camera = new Camera(this.d3d10Device, this.targetWidth, this.targetHeight);
+            this.camera = new Camera(this.targetWidth, this.targetHeight, ortho:false);
 
             // Generic input assembler
             this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
@@ -183,16 +212,18 @@ namespace EntityEngine.Components
             // Clear our backbuffer with the rainbow color
             d3d10Device.ClearRenderTargetView(this.renderTargetView, (Color4)SharpDX.Color.CornflowerBlue);
 
+            this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+
             // We're going to rotate our camera around the y axis
             float time = (float)(timeDelta / 1000.0f); // time in milliseconds?
-            float angle = 1f;
-            float rotCos = (float)Math.Cos(time * angle);
-            float rotSin = (float)Math.Sin(time * angle);
 
-            var x = this.camera.eye.X;
-            var y = this.camera.eye.Y;
             if (this._components[0].entity.GetComponent<WinComponent>().win)
             {
+                float angle = 1f;
+                float rotCos = (float)Math.Cos(time * angle);
+                float rotSin = (float)Math.Sin(time * angle);
+                var x = this.camera.eye.X;
+                var y = this.camera.eye.Y;
                 this.camera.eye.X = ((x - 5.0f) * rotCos) - ((y - 5.0f) * rotSin);
                 this.camera.eye.Y = ((x - 5.0f) * rotSin) - ((y - 5.0f) * rotCos);
             }
@@ -211,8 +242,16 @@ namespace EntityEngine.Components
 
                 // Set up effect variables
                 // These matrices should always be defined in the shader, even if they're not used
-                com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(this.camera.viewMatrix);
-                com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(this.camera.projectionMatrix);
+                if (com.camera == null)
+                {
+                    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(this.camera.viewMatrix);
+                    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(this.camera.projectionMatrix);
+                }
+                else
+                {
+                    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(com.camera.viewMatrix * com.camera.orthoOffset);
+                    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(com.camera.projectionMatrix);
+                }
                 com.shader.effect.GetVariableByIndex(2).AsMatrix().SetMatrix(pos.rotationXMatrix);
                 com.shader.effect.GetVariableByIndex(3).AsMatrix().SetMatrix(pos.rotationYMatrix);
                 com.shader.effect.GetVariableByIndex(4).AsMatrix().SetMatrix(pos.rotationZMatrix);
@@ -246,6 +285,36 @@ namespace EntityEngine.Components
                 }
             }
 
+            // text?
+            //var font = new D3D10.Font(
+            //    this.d3d10Device,
+            //    8,
+            //    0,
+            //    FontWeight.Normal,
+            //    1,
+            //    false,
+            //    FontCharacterSet.Default,
+            //    FontPrecision.Default,
+            //    FontQuality.Default,
+            //    FontPitchAndFamily.Default,
+            //    "Courier New");
+            var font = new D3D10.Font(this.d3d10Device, new FontDescription()
+                {
+                    CharacterSet = FontCharacterSet.Default,
+                    FaceName = "Courier New",
+                    Height = 72,
+                    Italic = false,
+                    MipLevels = 1,
+                    OutputPrecision = FontPrecision.Default,
+                    PitchAndFamily = FontPitchAndFamily.Default,
+                    Quality = FontQuality.Default,
+                    Weight = FontWeight.Normal,
+                    //Width = 1
+                }
+            );
+            font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
+            font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
+
             // Present our drawn scene waiting for one vertical sync
             this.swapChain.Present(1, PresentFlags.None);
         }
@@ -253,6 +322,7 @@ namespace EntityEngine.Components
         public RenderSystem()
             : base()
         {
+            Console.WriteLine("RenderSystem()");
             foreach (Type type in this.__dependencies)
                 this.dependencies.Add(type);
         }
