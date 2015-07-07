@@ -83,13 +83,6 @@ namespace EntityEngine
                     new SharpDX.Direct3D10.InputElement("POSITION", 0, SharpDX.DXGI.Format.R32G32B32_Float, 0, 0),
                 }
              );
-            Components.Shader twoDShader = new Components.Shader(
-                this.render.Device,
-                "Shaders/2D.fx",
-                new SharpDX.Direct3D10.InputElement[] {
-                    new SharpDX.Direct3D10.InputElement("POSITION", 0, SharpDX.DXGI.Format.R32G32B32_Float, 0, 0),
-                }
-             );
             Components.Shader colorShader = new Components.Shader(
                 this.render.Device,
                 "Shaders/color.fx",
