@@ -1,11 +1,8 @@
 ﻿{
-    "__class__" : "EntityEngine.Components.WinSystem",
-    "WinCondition" : {
-        "__class__" : "List<EntityEngine.Components.WinSystem.WinCondition>",
-        "__islist__" : true,
-        "__list_vars__" : [
-            {
-            }
-        ]
-    }
-};
+    "json": 
+    {
+        "WinConditionInternal": 0
+    },
+    "assemblyName": "EntityEngine",
+    "className": "EntityEngine.Components.WinSystem"
+}

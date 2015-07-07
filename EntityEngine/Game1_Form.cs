@@ -308,9 +308,9 @@ List = Generic.List
             render.InitializeD3D(this, this.Width, this.Height);
             render.SetTitle("Testing");
 
-            // Start up File Manager
-            var win = FileManager.LoadObjFromFile(this.sys, this.py, this.FPS);
-            sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>((Components.WinSystem)win);
+            // Load the Win Conditions
+            sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>
+                (FileManager.LoadObjFromFile("Maps/Test/ObjDefs/WinSystem.js", this.sys, this.py, this.FPS));
 
             // Load any components
             this.SetUpEnts();

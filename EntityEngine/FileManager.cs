@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 using EntityFramework;
 using EntityEngine.Components;
-using EntityEngine.Components;
+using EntityFramework.Components;
 
 namespace EntityEngine
 {
@@ -34,42 +34,33 @@ namespace EntityEngine
             instance.GetType().GetProperty(propertyName).SetValue(instance, newValue, null);
         }
 
-        public static Object LoadObjFromFile(params Object[] args)
+        public static dynamic LoadObjFromFile(string filePath, params object[] args)
         {
-            // Pretend as if we just loaded a file
-            ObjFile t = new ObjFile()
+            ObjFile t;
+            using (var sReader = new StreamReader(filePath))
             {
-                file = "",
-//                code = @"{
-//    '__class__' : 'EntityEngine.Components.WinSystem',
-//    'WinConditions' : {
-//        '__class__' : 'List<EntityEngine.Components.WinSystem.WinCondition>',
-//        '__islist__' : true,
-//        '__list_vars__' : [
-//            {
-//            }
-//        ]
-//    }
-//}",
-                code = "{\"WinConditionInternal\":0}",
-                assemblyName = "EntityEngine",
-                className = "EntityEngine.Components.WinSystem"
-            };
-
-            //var type = Type.GetType(t.className);
-            //var instance = System.Activator.CreateInstance(type, args);
-
-            //Newtonsoft.Json.Linq.JObject json =
-            //    (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(t.code, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects } );
-
-            //string k = JsonConvert.SerializeObject(test);
-
+                try
+                {
+                    t = new ObjFile();
+                    t.file = filePath;
+                    var contents = sReader.ReadToEnd();
+                    var json = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(contents, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+                    t.code = json["json"].ToString();
+                    t.assemblyName = json["assemblyName"].ToString();
+                    t.className = json["className"].ToString();
+                }
+                catch
+                {
+                    t.assemblyName = "";
+                    throw;
+                }
+            }
             var code = t.code;
             var type = Type.GetType(t.className);
-            var i = JsonConvert.DeserializeObject(code, type);
-            i.GetType().GetMethod("initFromSerial").Invoke(i,  args);
+            var jsonObj = JsonConvert.DeserializeObject(code, type);
+            jsonObj.GetType().GetMethod("initFromSerial").Invoke(jsonObj, args);
 
-            return i;
+            return jsonObj;
         }
 
         public static EntityEngine.Components.Mesh3D LoadMeshFromFile(SharpDX.Direct3D10.Device device, string file)
