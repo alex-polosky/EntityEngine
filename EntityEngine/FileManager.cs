@@ -8,6 +8,10 @@ using System.Security.Cryptography;
 
 using Newtonsoft.Json;
 
+using EntityFramework;
+using EntityEngine.Components;
+using EntityEngine.Components;
+
 namespace EntityEngine
 {
     public static class FileManager
@@ -66,6 +70,259 @@ namespace EntityEngine
             i.GetType().GetMethod("initFromSerial").Invoke(i,  args);
 
             return i;
+        }
+
+        public static EntityEngine.Components.Mesh3D LoadMeshFromFile(SharpDX.Direct3D10.Device device, string file)
+        {
+            using (var sReader = new StreamReader(file))
+            {
+                var contents = sReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n').Replace("f", "").Replace(",", "");
+                var type = contents.Split('\n')[0];
+                EntityEngine.Components.VertexStructures.Types T =
+                    EntityEngine.Components.VertexStructures.Types.None;
+                Enum.TryParse(type, out T);
+
+                switch (T)
+                {
+                    case (EntityEngine.Components.VertexStructures.Types.Pos):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.Pos>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.Pos()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    case (EntityEngine.Components.VertexStructures.Types.Textured):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.Textured>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.Textured()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2])),
+                                        tex = new SharpDX.Vector2(float.Parse(floats[3]), float.Parse(floats[4]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    case (EntityEngine.Components.VertexStructures.Types.Normal):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.Normal>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.Normal()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2])),
+                                        uv = new SharpDX.Vector3(float.Parse(floats[3]), float.Parse(floats[4]), float.Parse(floats[5]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    case (EntityEngine.Components.VertexStructures.Types.Color):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.Color>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.Color()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2])),
+                                        col = new SharpDX.Vector4(float.Parse(floats[3]), float.Parse(floats[4]), float.Parse(floats[5]), float.Parse(floats[6]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    case (EntityEngine.Components.VertexStructures.Types.TexturedNormal):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.TexturedNormal>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.TexturedNormal()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2])),
+                                        tex = new SharpDX.Vector2(float.Parse(floats[3]), float.Parse(floats[4])),
+                                        uv = new SharpDX.Vector3(float.Parse(floats[5]), float.Parse(floats[6]), float.Parse(floats[7]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    case (EntityEngine.Components.VertexStructures.Types.ColorNormal):
+                        {
+                            var vertices = new List<EntityEngine.Components.VertexStructures.ColorNormal>();
+                            var indices = new List<short>();
+                            bool isVertex = true;
+                            foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                            {
+                                if (line == "")
+                                {
+                                    isVertex = false;
+                                    continue;
+                                }
+                                if (isVertex)
+                                {
+                                    var floats = line.Split(' ');
+                                    vertices.Add(new Components.VertexStructures.ColorNormal()
+                                    {
+                                        pos = new SharpDX.Vector3(float.Parse(floats[0]), float.Parse(floats[1]), float.Parse(floats[2])),
+                                        col = new SharpDX.Vector4(float.Parse(floats[3]), float.Parse(floats[4]), float.Parse(floats[5]), float.Parse(floats[6])),
+                                        uv = new SharpDX.Vector3(float.Parse(floats[7]), float.Parse(floats[8]), float.Parse(floats[9]))
+                                    });
+                                }
+                                else
+                                {
+                                    foreach (string s in line.Split(' '))
+                                    {
+                                        short u;
+                                        if (short.TryParse(s, out u))
+                                            indices.Add(u);
+                                        else
+                                            throw new Exception("Error loading indices from last line: '" + file + "'");
+                                    }
+                                }
+                            }
+                            if (indices.Count == 0)
+                                return new Mesh3D(device, vertices.ToArray());
+                            else
+                                return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                        }
+
+                    default:
+                        throw new Exception("Type: '" + type + "' is not recognized!");
+                }
+            }
         }
     }
 

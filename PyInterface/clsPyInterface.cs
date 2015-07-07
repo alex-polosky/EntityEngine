@@ -89,7 +89,7 @@ namespace PyInterface
             this.pythonVars = new Dictionary<string,object>();
             this.pyEngine = Python.CreateEngine(
 #if DEBUG
-                new Dictionary<string, object>() { {"Debug", true} }
+                //new Dictionary<string, object>() { {"Debug", true} }
 #endif
             );
             this.pyScope = this.pyEngine.CreateScope();

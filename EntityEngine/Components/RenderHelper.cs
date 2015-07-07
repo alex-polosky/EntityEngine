@@ -28,6 +28,11 @@ namespace EntityEngine.Components
 
     public static class VertexStructures
     {
+        public enum Types
+        {
+            None, Pos, Textured, Normal, Color, TexturedNormal, ColorNormal
+        }
+
         public struct Pos
         {
             public SharpDX.Vector3 pos;
@@ -88,6 +93,16 @@ namespace EntityEngine.Components
             public ColorNormal(SharpDX.Vector3 pos, SharpDX.Vector4 col, SharpDX.Vector3 uv)
             { this.pos = pos; this.col = col; this.uv = uv; }
         }
+
+        public static Dictionary<Types, Type> TypeMap = new Dictionary<Types, Type>()
+        {
+            {Types.Pos, typeof(Pos)},
+            {Types.Textured, typeof(Textured)},
+            {Types.Normal, typeof(Normal)},
+            {Types.Color, typeof(Color)},
+            {Types.TexturedNormal, typeof(TexturedNormal)},
+            {Types.ColorNormal, typeof(ColorNormal)}
+        };
     }
 
     public class Shader
