@@ -45,8 +45,19 @@ namespace EntityEngine.Components
                     targetWidth + aspect * scale, targetHeight + scale, near, far
                 );
 
-                this.eye = Vector3.Zero;
-                this.view = Vector3.UnitZ;
+                //this.eye = Vector3.Zero;
+                //this.view = Vector3.UnitZ;
+                //this.up = Vector3.UnitY;
+                this.eye = new SharpDX.Vector3(
+                    targetWidth / 2,
+                    targetHeight / 2,
+                    0f  //z
+                );
+                this.view = new SharpDX.Vector3(
+                    targetWidth / 2, 
+                    targetHeight / 2,
+                    1f
+                );
                 this.up = Vector3.UnitY;
 
                 //this.orthoOffset = Matrix.Translation(-408.0f, 319.0f, 0.0f);
@@ -59,8 +70,12 @@ namespace EntityEngine.Components
             else
             {
                 // Set up projection matrix
+                var fov = MathUtil.Pi / 4.0f;
+                var aspect = (float)targetWidth / (float)targetHeight;
+                var near = 0.1f;
+                var far = 100.0f;
                 this.projectionMatrix = Matrix.PerspectiveFovLH(
-                    MathUtil.Pi / 4.0f, targetWidth / targetHeight, 0.1f, 100.0f
+                    fov, aspect, near, far
                 );
 
                 // View matrix, and projection matrix
@@ -135,7 +150,9 @@ namespace EntityEngine.Components
             this.targetHeight = height;
 
             renderForm.ClientSize = new Size(this.targetWidth, this.targetHeight);
-            renderForm.StartPosition = FormStartPosition.CenterScreen;
+            //renderForm.StartPosition = FormStartPosition.CenterScreen;
+            renderForm.StartPosition = FormStartPosition.Manual;
+            renderForm.Location = Screen.PrimaryScreen.Bounds.Location;
 
             // Start Direct3D stuff here
             this.swapChainDesc = new SwapChainDescription();
@@ -217,7 +234,7 @@ namespace EntityEngine.Components
             // We're going to rotate our camera around the y axis
             float time = (float)(timeDelta / 1000.0f); // time in milliseconds?
 
-            if (this._components[0].entity.GetComponent<WinComponent>().win)
+            if (timeDelta > 5000)
             {
                 float angle = 1f;
                 float rotCos = (float)Math.Cos(time * angle);
@@ -286,34 +303,22 @@ namespace EntityEngine.Components
             }
 
             // text?
-            //var font = new D3D10.Font(
-            //    this.d3d10Device,
-            //    8,
-            //    0,
-            //    FontWeight.Normal,
-            //    1,
-            //    false,
-            //    FontCharacterSet.Default,
-            //    FontPrecision.Default,
-            //    FontQuality.Default,
-            //    FontPitchAndFamily.Default,
-            //    "Courier New");
-            var font = new D3D10.Font(this.d3d10Device, new FontDescription()
-                {
-                    CharacterSet = FontCharacterSet.Default,
-                    FaceName = "Courier New",
-                    Height = 72,
-                    Italic = false,
-                    MipLevels = 1,
-                    OutputPrecision = FontPrecision.Default,
-                    PitchAndFamily = FontPitchAndFamily.Default,
-                    Quality = FontQuality.Default,
-                    Weight = FontWeight.Normal,
-                    //Width = 1
-                }
-            );
-            font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
-            font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
+            //var font = new D3D10.Font(this.d3d10Device, new FontDescription()
+            //    {
+            //        CharacterSet = FontCharacterSet.Default,
+            //        FaceName = "Courier New",
+            //        Height = 72,
+            //        Italic = false,
+            //        MipLevels = 1,
+            //        OutputPrecision = FontPrecision.Default,
+            //        PitchAndFamily = FontPitchAndFamily.Default,
+            //        Quality = FontQuality.Default,
+            //        Weight = FontWeight.Normal,
+            //        //Width = 1
+            //    }
+            //);
+            //font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
+            //font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
 
             // Present our drawn scene waiting for one vertical sync
             this.swapChain.Present(1, PresentFlags.None);

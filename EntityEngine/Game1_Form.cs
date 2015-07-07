@@ -99,29 +99,86 @@ namespace EntityEngine
                 }
              );
 
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            EntityEngine.Components.Mesh3D meshCube = FileManager.LoadMeshFromFile(
+                this.render.Device, "Maps/Test/Models/cube.mesh");
+            EntityEngine.Components.Mesh3D meshSquare = FileManager.LoadMeshFromFile(
+                this.render.Device, "Maps/Test/Models/square.mesh");
+            EntityEngine.Components.Mesh3D meshSquareColor = FileManager.LoadMeshFromFile(
+                this.render.Device, "Maps/Test/Models/squarecolor.mesh");
 
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = basicShader;
-            rCom.mesh = new Components.Mesh3D(this.render.Device,
+            // 2D rendering first yo!
+            var lineThick = 1f;
+            var lineDistance = 20f;
+            var horLine = new Components.Mesh3D(this.render.Device,
                 new Components.VertexStructures.Pos[] {
 new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(-1.0f, 1.0f, 0.0f)),
+    new SharpDX.Vector3(0.0f, lineThick, 0.0f)),
 new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(1.0f, 1.0f, 0.0f)),
+    new SharpDX.Vector3(this.Width, lineThick, 0.0f)),
 new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(-1.0f, -1.0f, 0.0f)),
+    new SharpDX.Vector3(0.0f, 0.0f, 0.0f)),
 new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(1.0f, -1.0f, 0.0f)),
+    new SharpDX.Vector3(this.Width, 0.0f, 0.0f)),
                 },
                 new short[] {
                     0, 1, 2,
                     2, 1, 3
                 }
             );
+            var verLine = new Components.Mesh3D(this.render.Device,
+                new Components.VertexStructures.Pos[] {
+new Components.VertexStructures.Pos(
+    new SharpDX.Vector3(0.0f, this.Height, 0.0f)),
+new Components.VertexStructures.Pos(
+    new SharpDX.Vector3(lineThick, this.Height, 0.0f)),
+new Components.VertexStructures.Pos(
+    new SharpDX.Vector3(0.0f, 0.0f, 0.0f)),
+new Components.VertexStructures.Pos(
+    new SharpDX.Vector3(lineThick, 0.0f, 0.0f)),
+                },
+                new short[] {
+                    0, 1, 2,
+                    2, 1, 3
+                }
+            );
+
+            var cam = new Components.Camera(this.Width, this.Height, true);
+
+            for (int i = 0; i < this.Height; i += (int)lineDistance)
+            {
+                e = sys.AddNewEntity();
+                sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+                sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+                rCom = e.GetComponent<Components.RenderComponent>();
+                rCom.shader = basicShader;
+                rCom.mesh = horLine;
+                rCom.camera = cam;
+                e.GetComponent<Components.PositionComponent>().translationWorldMatrix =
+                    SharpDX.Matrix.Translation(0, i, 0);
+            }
+
+            for (int i = 0; i < this.Width; i += (int)lineDistance)
+            {
+                e = sys.AddNewEntity();
+                sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+                sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+                rCom = e.GetComponent<Components.RenderComponent>();
+                rCom.shader = basicShader;
+                rCom.mesh = verLine;
+                rCom.camera = cam;
+                e.GetComponent<Components.PositionComponent>().translationWorldMatrix =
+                    SharpDX.Matrix.Translation(i, 0, 0);
+            }
+
+            e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
+            e.GetComponent<TagComponent>().name = "win";
+            sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
+            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            rCom = e.GetComponent<Components.RenderComponent>();
+            rCom.shader = basicShader;
+            rCom.mesh = meshSquare;
             e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = 2.0f;
             e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = 2.0f;
 
@@ -129,25 +186,9 @@ new Components.VertexStructures.Pos(
             sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-
             rCom = e.GetComponent<Components.RenderComponent>();
             rCom.shader = colorShader;
-            rCom.mesh = new Components.Mesh3D(this.render.Device,
-                new Components.VertexStructures.Color[] {
-new Components.VertexStructures.Color(
-    new SharpDX.Vector3(-1.0f, 1.0f, 0.0f), new SharpDX.Vector4(1.0f, 0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.Color(
-    new SharpDX.Vector3(1.0f, 1.0f, 0.0f), new SharpDX.Vector4(0.0f, 1.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.Color(
-    new SharpDX.Vector3(-1.0f, -1.0f, 0.0f), new SharpDX.Vector4(0.0f, 0.0f, 1.0f, 1.0f)),
-new Components.VertexStructures.Color(
-    new SharpDX.Vector3(1.0f, -1.0f, 0.0f), new SharpDX.Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-                },
-                new short[] {
-                    0, 1, 2,
-                    2, 1, 3
-                }
-            );
+            rCom.mesh = meshSquareColor;
             e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = -2.0f;
             e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = -2.0f;
 
@@ -155,85 +196,9 @@ new Components.VertexStructures.Color(
             e = sys.AddNewEntity();
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-
             rCom = e.GetComponent<Components.RenderComponent>();
             rCom.shader = basicShader;
-            rCom.mesh = new Components.Mesh3D(this.render.Device,
-                new Components.VertexStructures.TexturedNormal[] {
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, -1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, -1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, -1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, -1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, 1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, 1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, 1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(0.0f, 0.0f, 1.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, 1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, -1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(-1.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, 1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, 1.0f, -1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, 1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, 1.0f, -1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(0.0f, 1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, -1.0f), new SharpDX.Vector2(0.0f, 0.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(-1.0f, -1.0f, 1.0f), new SharpDX.Vector2(0.0f, 1.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, -1.0f), new SharpDX.Vector2(1.0f, 0.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-new Components.VertexStructures.TexturedNormal(new SharpDX.Vector3(1.0f, -1.0f, 1.0f), new SharpDX.Vector2(1.0f, 1.0f), new SharpDX.Vector3(0.0f, -1.0f, 0.0f)),
-                },
-                new short[] {
-                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
-                }
-            );
-
-            // This is a test of the.. hud stuff?
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = twoDShader;
-            rCom.mesh = new Components.Mesh3D(this.render.Device,
-                new Components.VertexStructures.Pos[] {
-new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(0.0f, 0.2f, 0.0f)),
-new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(0.5f, 0.2f, 0.0f)),
-new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(0.0f, 0.0f, 0.0f)),
-new Components.VertexStructures.Pos(
-    new SharpDX.Vector3(0.5f, 0.0f, 0.0f)),
-                },
-                new short[] {
-                    0, 1, 2,
-                    2, 1, 3
-                }
-            );
-            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = 2.0f;
-            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = 2.0f;
-            rCom.camera = new Components.Camera(this.Width, this.Height, true);
-            rCom.camera.eye = new SharpDX.Vector3(
-                0f, //this.Width / 2, //x
-                0f, //this.Height / 2, //y
-                0f  //z
-            );
+            rCom.mesh = meshCube;
         }
 
         public Game1_Form()
@@ -281,8 +246,46 @@ List = Generic.List
 
             // Set up Width/Height 
             // TODO: load from file
-            this.Width = 800;
-            this.Height = 600;
+            var renderMode = 6;
+            switch (renderMode)
+            {
+                // 4:3
+                case (0):
+                    this.Width = 640;
+                    this.Height = 480;
+                    break;
+                case (1):
+                    this.Width = 800;
+                    this.Height = 600;
+                    break;
+                case (2):
+                    this.Width = 1024;
+                    this.Height = 768;
+                    break;
+                case (3):
+                    this.Width = 1280;
+                    this.Height = 960;
+                    break;
+                // 16:9
+                case (4):
+                    this.Width = 640;
+                    this.Height = 360;
+                    break;
+                case (5):
+                    this.Width = 960;
+                    this.Height = 540;
+                    break;
+                case (6):
+                    this.Width = 1280;
+                    this.Height = 720;
+                    break;
+                case (7):
+                    this.Width = 1920;
+                    this.Height = 1080;
+                    break;
+                default:
+                    break;
+            }
             
             // Init FPS
             this.FPS = new FrameRate();
@@ -322,7 +325,9 @@ List = Generic.List
         {
             this.FPS.StartFrame();
 
-            this.sys.GetAllEntities()[0].GetComponent<Components.PositionComponent>()
+            this.sys.GetComponentSystem<TagComponent, TagSystem>()
+                .getTaggedEntity("win")
+                .GetComponent<Components.PositionComponent>()
                 .translationWorldMatrix.M41 += 0.001f;
 
             this.sys.Update(this.FPS.ElaspedMS);
