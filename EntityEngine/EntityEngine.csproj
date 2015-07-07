@@ -82,7 +82,9 @@
     <Compile Include="Embedded.Designer.cs">
       <DependentUpon>Embedded.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileManager.cs" />
+    <Compile Include="FileManager.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="PyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,7 +118,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Content Include="Maps\Test\ObjDefs\WinSystem.js" />
+    <None Include="Maps\Test\ObjDefs\WinSystem.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Maps\Test\Models\squarecolor.mesh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
