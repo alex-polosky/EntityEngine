@@ -19,81 +19,12 @@ using EntityFramework.Components;
 
 namespace EntityEngine.Components
 {
-    public class Camera
-    {
-        public Matrix projectionMatrix;
-        public bool IsOrtho = false;
-        // TODO: figure out formula of this camera translation...
-        public Matrix orthoOffset;
-
-        public Vector3 eye;
-        public Vector3 view;
-        public Vector3 up;
-        public Matrix viewMatrix { get { return Matrix.LookAtLH(this.eye, this.view, this.up); } }
-
-        public Camera(int targetWidth, int targetHeight, bool ortho=false)
-        {
-            this.IsOrtho = ortho;
-
-            if (ortho)
-            {
-                var aspect = (float)targetWidth / (float)targetHeight;
-                var scale = 0;
-                var near = 0f;
-                var far = 1f;
-                this.projectionMatrix = Matrix.OrthoLH(
-                    targetWidth + aspect * scale, targetHeight + scale, near, far
-                );
-
-                //this.eye = Vector3.Zero;
-                //this.view = Vector3.UnitZ;
-                //this.up = Vector3.UnitY;
-                this.eye = new SharpDX.Vector3(
-                    targetWidth / 2,
-                    targetHeight / 2,
-                    0f  //z
-                );
-                this.view = new SharpDX.Vector3(
-                    targetWidth / 2, 
-                    targetHeight / 2,
-                    1f
-                );
-                this.up = Vector3.UnitY;
-
-                //this.orthoOffset = Matrix.Translation(-408.0f, 319.0f, 0.0f);
-                //this.orthoOffset = Matrix.Translation(
-                //    ((float)targetWidth) / 2,
-                //    ((float)targetHeight) / 2,
-                //    0);
-                this.orthoOffset = Matrix.Translation(0, 0, 0);
-            }
-            else
-            {
-                // Set up projection matrix
-                var fov = MathUtil.Pi / 4.0f;
-                var aspect = (float)targetWidth / (float)targetHeight;
-                var near = 0.1f;
-                var far = 100.0f;
-                this.projectionMatrix = Matrix.PerspectiveFovLH(
-                    fov, aspect, near, far
-                );
-
-                // View matrix, and projection matrix
-                this.eye = new Vector3(1.0f, 1.0f, -10.0f);
-                this.view = new Vector3(0.0f, 0.0f, 0.0f);
-                this.up = Vector3.UnitY;
-            }
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////
-
     public class RenderComponent : EntityFramework.Component
     {
         public RenderTypeFlag renderFlags;
         public Mesh3D mesh;
         public Shader shader;
-        public Camera camera;
+        //public CameraComponent camera;
 
         public RenderComponent() : base() { }
         public RenderComponent(Entity e) : base(e) { }
@@ -115,15 +46,27 @@ namespace EntityEngine.Components
         private SwapChain swapChain;
         private D3D10.Device d3d10Device;
         private RenderTargetView renderTargetView;
+        private DepthStencilView depthStencilView;
+        private DepthStencilStateDescription depthState;
+        private DepthStencilStateDescription depthNonState;
+        private bool isOrthoCurrent = false;
         public Viewport viewport;
 
-        private Camera camera;
+        private SharpDX.Direct3D10.Font font;
+
+        private CameraComponent camera;
+        public CameraComponent Camera { get { return this.camera; } }
 
         public D3D10.Device Device { get { return this.d3d10Device; } }
 
         public void SetTitle(string title)
         {
             this.renderForm.Text = title;
+        }
+
+        public void SetCamera(CameraComponent cam)
+        {
+            this.camera = cam;
         }
 
         public void ShowGame()
@@ -136,7 +79,7 @@ namespace EntityEngine.Components
             this.renderForm.Hide();
         }
 
-        public void InitializeD3D(Form form = null, int width = 800, int height = 600)
+        public void InitializeD3D(Form form = null, int width = 800, int height = 600, CameraComponent cam = null)
         {
             // Setting up the host form
             if (form == null)
@@ -180,11 +123,11 @@ namespace EntityEngine.Components
             D3D10.Device.CreateWithSwapChain(
                 D3D10.DriverType.Hardware,
 #if DEBUG
-                DeviceCreationFlags.Debug,
+ DeviceCreationFlags.Debug,
 #else
                 DeviceCreationFlags.None,
 #endif
-                this.swapChainDesc,
+ this.swapChainDesc,
                 out this.d3d10Device,
                 out this.swapChain
             );
@@ -208,8 +151,76 @@ namespace EntityEngine.Components
 
             this.d3d10Device.Rasterizer.SetViewports(this.viewport);
 
+            // Z-Buffer!?
+            var zBufferTextureDescription = new Texture2DDescription
+            {
+                Format = Format.D16_UNorm,
+                ArraySize = 1,
+                MipLevels = 1,
+                Width = this.targetWidth,
+                Height = this.targetHeight,
+                SampleDescription = new SampleDescription(1, 0),
+                Usage = ResourceUsage.Default,
+                BindFlags = BindFlags.DepthStencil,
+                CpuAccessFlags = CpuAccessFlags.None,
+                OptionFlags = ResourceOptionFlags.None
+            };
+            using (var zBufferTexture = new Texture2D(this.d3d10Device, zBufferTextureDescription))
+                this.depthStencilView = new DepthStencilView(this.d3d10Device, zBufferTexture);
+            this.d3d10Device.OutputMerger.SetTargets(depthStencilView, this.renderTargetView);
+
+            this.depthState = new DepthStencilStateDescription()
+            {
+                IsDepthEnabled = true,
+                DepthWriteMask = DepthWriteMask.All,
+                DepthComparison = Comparison.Less,
+                IsStencilEnabled = true,
+                StencilReadMask = 0xFF,
+                StencilWriteMask = 0xFF,
+                FrontFace = new DepthStencilOperationDescription()
+                {
+                    FailOperation = StencilOperation.Keep,
+                    DepthFailOperation = StencilOperation.Increment,
+                    PassOperation = StencilOperation.Keep,
+                    Comparison = Comparison.Always
+                },
+                BackFace = new DepthStencilOperationDescription()
+                {
+                    FailOperation = StencilOperation.Keep,
+                    DepthFailOperation = StencilOperation.Decrement,
+                    PassOperation = StencilOperation.Keep,
+                    Comparison = Comparison.Always
+                }
+            };
+            this.depthNonState = new DepthStencilStateDescription()
+            {
+                IsDepthEnabled = false
+            };
+            this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device,
+                this.depthState), 1);
+
+            // Font
+            this.font = new D3D10.Font(this.d3d10Device, new FontDescription()
+                {
+                    CharacterSet = FontCharacterSet.Default,
+                    FaceName = "Courier New",
+                    Height = 72 / 4,
+                    Italic = false,
+                    MipLevels = 1,
+                    OutputPrecision = FontPrecision.Default,
+                    PitchAndFamily = FontPitchAndFamily.Default,
+                    Quality = FontQuality.Default,
+                    Weight = FontWeight.Normal,
+                    //Width = 1
+                }
+            );
+
             // Set up camera
-            this.camera = new Camera(this.targetWidth, this.targetHeight, ortho:false);
+            if (cam == null)
+                this.camera =
+                    new CameraComponent(this.targetWidth, this.targetHeight);
+            else
+                this.camera = cam;
 
             // Generic input assembler
             this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
@@ -228,22 +239,12 @@ namespace EntityEngine.Components
         {
             // Clear our backbuffer with the rainbow color
             d3d10Device.ClearRenderTargetView(this.renderTargetView, (Color4)SharpDX.Color.CornflowerBlue);
+            this.d3d10Device.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1f, 0);
 
             this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
             // We're going to rotate our camera around the y axis
             float time = (float)(timeDelta / 1000.0f); // time in milliseconds?
-
-            if (timeDelta > 5000)
-            {
-                float angle = 1f;
-                float rotCos = (float)Math.Cos(time * angle);
-                float rotSin = (float)Math.Sin(time * angle);
-                var x = this.camera.eye.X;
-                var y = this.camera.eye.Y;
-                this.camera.eye.X = ((x - 5.0f) * rotCos) - ((y - 5.0f) * rotSin);
-                this.camera.eye.Y = ((x - 5.0f) * rotSin) - ((y - 5.0f) * rotCos);
-            }
 
             // Do actual drawing here
             foreach (RenderComponent com in this._components)
@@ -259,16 +260,50 @@ namespace EntityEngine.Components
 
                 // Set up effect variables
                 // These matrices should always be defined in the shader, even if they're not used
-                if (com.camera == null)
-                {
-                    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(this.camera.viewMatrix);
-                    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(this.camera.projectionMatrix);
-                }
+                //if (com.camera == null)
+                //{
+                //    if (this.isOrthoCurrent)
+                //    {
+                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
+                //        this.isOrthoCurrent = false;
+                //    }
+                //    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(this.camera.ViewMatrix);
+                //    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(this.camera.projectionMatrix);
+                //}
+                //else
+                //{
+                //    if (this.isOrthoCurrent && !com.camera.IsZBuffer)
+                //    {
+                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
+                //        this.isOrthoCurrent = false;
+                //    }
+                //    if (!this.isOrthoCurrent && com.camera.IsZBuffer)
+                //    {
+                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.orthoState), 1);
+                //        this.isOrthoCurrent = true;
+                //    }
+                //    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(com.camera.ViewMatrix);
+                //    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(com.camera.projectionMatrix);
+                //}
+                var camCom = com.entity.GetComponent<CameraComponent>();
+                if (camCom == null)
+                    camCom = this.camera;
+                //if (this.isOrthoCurrent && !camCom.IsZBuffer)
+                //{
+                //    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
+                //    this.isOrthoCurrent = false;
+                //}
+                //if (!this.isOrthoCurrent && camCom.IsZBuffer)
+                //{
+                //    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.orthoState), 1);
+                //    this.isOrthoCurrent = true;
+                //}
+                if (!camCom.IsZBuffer)
+                    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthNonState), 1);
                 else
-                {
-                    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(com.camera.viewMatrix * com.camera.orthoOffset);
-                    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(com.camera.projectionMatrix);
-                }
+                    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthState), 1);
+                com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(camCom.ViewMatrix);
+                com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(camCom.projectionMatrix);
                 com.shader.effect.GetVariableByIndex(2).AsMatrix().SetMatrix(pos.rotationXMatrix);
                 com.shader.effect.GetVariableByIndex(3).AsMatrix().SetMatrix(pos.rotationYMatrix);
                 com.shader.effect.GetVariableByIndex(4).AsMatrix().SetMatrix(pos.rotationZMatrix);
@@ -303,22 +338,10 @@ namespace EntityEngine.Components
             }
 
             // text?
-            //var font = new D3D10.Font(this.d3d10Device, new FontDescription()
-            //    {
-            //        CharacterSet = FontCharacterSet.Default,
-            //        FaceName = "Courier New",
-            //        Height = 72,
-            //        Italic = false,
-            //        MipLevels = 1,
-            //        OutputPrecision = FontPrecision.Default,
-            //        PitchAndFamily = FontPitchAndFamily.Default,
-            //        Quality = FontQuality.Default,
-            //        Weight = FontWeight.Normal,
-            //        //Width = 1
-            //    }
-            //);
             //font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
             //font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
+            //this.font.DrawText(null, "Camera Eye: " + this.camera.Eye.ToString(), 3, 3, Color4.White);
+            //font.DrawText(null, String.Format("Yaw: {0}\nPitch: {1}\nRoll: {2}", camera.RadianY, camera.RadianX, camera.RadianZ), 3, 3, Color4.White);
 
             // Present our drawn scene waiting for one vertical sync
             this.swapChain.Present(1, PresentFlags.None);
