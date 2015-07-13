@@ -16,6 +16,11 @@ namespace EntityEngine
 {
     public static class FileManager
     {
+        public static Dictionary<string, EntityEngine.Components.Mesh3D> Mesh = 
+            new Dictionary<string, EntityEngine.Components.Mesh3D>();
+        public static Dictionary<string, EntityEngine.Components.Shader> Shader =
+            new Dictionary<string, EntityEngine.Components.Shader>();
+
         public struct ObjFile
         {
             public string file;
@@ -32,6 +37,42 @@ namespace EntityEngine
         public static void SetProperty(object instance, string propertyName, object newValue)
         {
             instance.GetType().GetProperty(propertyName).SetValue(instance, newValue, null);
+        }
+
+        public static void SaveEntity(string filePath, Entity e)
+        {
+            var js = new Dictionary<string, Type>();
+            js.Add(JsonConvert.SerializeObject(e), typeof(Entity));
+            foreach (var com in e.GetAllComponents())
+            {
+                try
+                {
+                    js.Add(JsonConvert.SerializeObject(com), com.GetType());
+                }
+                catch
+                {
+                    throw new JsonSerializationException(String.Format("Error serializing '{0}', please check for any dangling references", com.GetType()));
+                }
+            }
+
+            var jsList = js.ToList();
+            string json = "{";
+            json += "\"json\": " + jsList[0].Key + ",";
+            json += "\"assemblyName\": \"" + jsList[0].Value.Assembly.ToString() + "\", ";
+            json += "\"className\": \"" + jsList[0].Value.FullName.ToString() + "\", ";
+            json += "\"components\": [";
+            jsList.Remove(jsList[0]);
+            foreach (var j in jsList)
+            {
+                json += "{";
+                json += "\"json\": " + j.Key + ",";
+                json += "\"assemblyName\": \"" + j.Value.Assembly.ToString() + "\", ";
+                json += "\"className\": \"" + j.Value.FullName.ToString() + "\"";
+                json += "},";
+            }
+            json = json.Substring(0, json.Length - 1);
+            json += "]";
+            json += "}";
         }
 
         public static dynamic LoadObjFromFile(string filePath, params object[] args)
@@ -60,6 +101,40 @@ namespace EntityEngine
             var jsonObj = JsonConvert.DeserializeObject(code, type);
             jsonObj.GetType().GetMethod("initFromSerial").Invoke(jsonObj, args);
 
+            //var e = new Entity(new Guid(0xABCD, 0xAB, 0xBA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0));
+            //var a = new PositionComponent(e);
+            //a.rotationXMatrix = SharpDX.Matrix.RotationX(3);
+            //a.rotationYMatrix = SharpDX.Matrix.RotationY(2);
+            //a.rotationZMatrix = SharpDX.Matrix.RotationZ(7);
+            //a.translationWorldMatrix *=
+            //    SharpDX.Matrix.Translation(1, 5, 3);
+
+            //var j = JsonConvert.SerializeObject(a);
+            //var b = JsonConvert.DeserializeObject(j, a.GetType());
+
+            Entity e;
+            using (MD5 md5 = MD5.Create())
+                e = new Entity(new Guid(md5.ComputeHash(Encoding.Default.GetBytes("testEntity"))));
+
+            var js = new Dictionary<string, Type>()
+            {
+                { JsonConvert.SerializeObject(new RenderComponent(e)), typeof(RenderComponent)},
+                { JsonConvert.SerializeObject(new CameraComponent(e)), typeof(CameraComponent)},
+                { JsonConvert.SerializeObject(new PositionComponent(e)), typeof(PositionComponent)},
+                { JsonConvert.SerializeObject(new WinComponent(e)), typeof(WinComponent)},
+                { JsonConvert.SerializeObject(new ChildrenComponent(e)), typeof(ChildrenComponent)},
+                { JsonConvert.SerializeObject(new TagComponent(e)), typeof(TagComponent)},
+                { JsonConvert.SerializeObject(new GroupComponent(e)), typeof(GroupComponent)},
+                { JsonConvert.SerializeObject(e), typeof(Entity)}
+            };
+
+            Guid a = e.guid;
+            var b = JsonConvert.SerializeObject(a);
+            Guid c = JsonConvert.DeserializeObject<Guid>(b);
+
+            Entity e2 = (Entity)JsonConvert.DeserializeObject(js.ToList()[7].Key, js.ToList()[7].Value);
+            SetProperty(e2, "guid", e.guid);
+
             return jsonObj;
         }
 
@@ -67,8 +142,15 @@ namespace EntityEngine
         {
             using (var sReader = new StreamReader(file))
             {
-                var contents = sReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n').Replace("f", "").Replace(",", "");
+                var contents = sReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n');
                 var type = contents.Split('\n')[0];
+                contents = contents.Substring(contents.IndexOf('\n') + 1);
+                Guid id;
+                if (!Guid.TryParse(contents.Split('\n')[0].Replace("{", "").Replace("}", ""), out id))
+                    id = Guid.NewGuid();
+                else
+                    contents = contents.Substring(contents.IndexOf('\n') + 1);
+                contents = contents.Replace("f", "").Replace(",", "");
                 EntityEngine.Components.VertexStructures.Types T =
                     EntityEngine.Components.VertexStructures.Types.None;
                 Enum.TryParse(type, out T);
@@ -80,7 +162,7 @@ namespace EntityEngine
                 {
                     case (EntityEngine.Components.VertexStructures.Types.Pos):
                         vertices = new List<EntityEngine.Components.VertexStructures.Pos>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -96,7 +178,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Textured):
                         vertices = new List<EntityEngine.Components.VertexStructures.Textured>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -113,7 +195,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Normal):
                         vertices = new List<EntityEngine.Components.VertexStructures.Normal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -130,7 +212,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Color):
                         vertices = new List<EntityEngine.Components.VertexStructures.Color>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -147,7 +229,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.TexturedNormal):
                         vertices = new List<EntityEngine.Components.VertexStructures.TexturedNormal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -165,7 +247,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.ColorNormal):
                         vertices = new List<EntityEngine.Components.VertexStructures.ColorNormal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -194,10 +276,37 @@ namespace EntityEngine
                         throw new Exception("Error loading indices from last line: '" + file + "'");
                 }
 
+                Mesh3D mesh;
                 if (indices.Count == 0)
-                    return new Mesh3D(device, vertices.ToArray());
+                    mesh = new Mesh3D(device, vertices.ToArray(), filePath: file);
                 else
-                    return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                    mesh = new Mesh3D(device, vertices.ToArray(), indices.ToArray(), file);
+                SetProperty(mesh, "guid", id);
+                return mesh;
+            }
+        }
+
+        public static void LoadAllMesh(string dir, SharpDX.Direct3D10.Device device, string ext=".mesh")
+        {
+            foreach (var file in Directory.GetFiles(dir))
+            {
+                if (Path.GetExtension(file) == ext)
+                {
+                    Mesh[Path.GetFileNameWithoutExtension(file)] =
+                        LoadMeshFromFile(device, file);
+                }
+            }
+        }
+
+        public static void LoadAllShader(string dir, SharpDX.Direct3D10.Device device, string ext = ".fx")
+        {
+            foreach (var file in Directory.GetFiles(dir))
+            {
+                if (Path.GetExtension(file) == ext)
+                {
+                    //Shader[Path.GetFileNameWithoutExtension(file)] =
+                    //    LoadMeshFromFile(device, file);
+                }
             }
         }
     }

@@ -9,10 +9,19 @@ using PyInterface;
 
 namespace EntityEngine.Components
 {
-
     public partial class WinComponent : EntityFramework.Component
     {
         public bool win = false;
+
+        public WinComponent()
+            : base()
+        {
+        }
+
+        public WinComponent(Entity e)
+            : base(e)
+        {
+        }
     }
 
     [DataContract]
@@ -207,8 +216,8 @@ WinConditions = winConditions.WinConditions
     // These are the by default null values
     public partial class WinComponent
     {
-        public static int nullINT = -1;
-        public static string nullSTR = null;
-        public static bool? nullBOOL = null;
+        public static readonly int nullINT = -1;
+        public static readonly string nullSTR = null;
+        public static readonly bool? nullBOOL = null;
     }
 }

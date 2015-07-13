@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 
@@ -105,25 +106,30 @@ namespace EntityEngine.Components
         };
     }
 
+    [DataContract]
     public class Shader
     {
-        private D3D10.Device device;
-        public string shaderPath { get; private set; }
+        private Guid id;
+        [DataMember]
+        public Guid guid { get { return this.id; } private set { this.id = value; } }
+        [DataMember]
+        public string filePath { get; private set; }
         public Effect effect { get; private set; }
         public List<List<InputLayout>> inputLayouts { get; private set; }
         public List<KeyValuePair<object, Type>> vars { get; private set; }
 
         public Shader(D3D10.Device device, string path, InputElement[] shaderVars, string shaderLevel = "fx_4_0")
         {
-            this.device = device;
-            this.shaderPath = path;
+            this.id = Guid.NewGuid();
+
+            this.filePath = path;
             this.effect = null;
 
             ShaderBytecode shaderCode = ShaderBytecode.CompileFromFile(
                 path,
                 shaderLevel
             );
-            this.effect = new Effect(this.device, shaderCode.Data);
+            this.effect = new Effect(device, shaderCode.Data);
             this.inputLayouts = new List<List<InputLayout>>();
             this.vars = new List<KeyValuePair<object, Type>>();
 
@@ -155,8 +161,14 @@ namespace EntityEngine.Components
         }
     }
 
+    [DataContract]
     public class Mesh3D
     {
+        private Guid id;
+        [DataMember]
+        public Guid guid { get { return this.id; } private set { this.id = value; } }
+        [DataMember]
+        public string filePath { get; private set; }
         public D3D10.VertexBufferBinding vertexBuffer;
         public D3D10.Buffer indexBuffer;
         public int numberOfVertices;
@@ -175,82 +187,64 @@ namespace EntityEngine.Components
             return buffer;
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.Pos[] vertices, short[] indices = null)
+        private Mesh3D(D3D10.Device device, dynamic vertices, short[] indices, string filePath, bool throwaway=false)
         {
+            this.id = Guid.NewGuid();
+            this.filePath = filePath;
             this.numberOfVertices = vertices.Length;
             if (indices != null)
+            {
                 this.numberOfIndices = (short)indices.Length;
+                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
+            }
+        }
 
+        public Mesh3D(D3D10.Device device, VertexStructures.Pos[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
+        {
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.Pos>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.Pos.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.Color[] vertices, short[] indices = null)
+        public Mesh3D(D3D10.Device device, VertexStructures.Color[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
         {
-            this.numberOfVertices = vertices.Length;
-            if (indices != null)
-                this.numberOfIndices = (short)indices.Length;
-
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.Color>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.Color.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.Normal[] vertices, short[] indices = null)
+        public Mesh3D(D3D10.Device device, VertexStructures.Normal[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
         {
-            this.numberOfVertices = vertices.Length;
-            if (indices != null)
-                this.numberOfIndices = (short)indices.Length;
-
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.Normal>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.Normal.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.Textured[] vertices, short[] indices = null)
+        public Mesh3D(D3D10.Device device, VertexStructures.Textured[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
         {
-            this.numberOfVertices = vertices.Length;
-            if (indices != null)
-                this.numberOfIndices = (short)indices.Length;
-
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.Textured>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.Textured.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.ColorNormal[] vertices, short[] indices = null)
+        public Mesh3D(D3D10.Device device, VertexStructures.ColorNormal[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
         {
-            this.numberOfVertices = vertices.Length;
-            if (indices != null)
-                this.numberOfIndices = (short)indices.Length;
-
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.ColorNormal>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.ColorNormal.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
-        public Mesh3D(D3D10.Device device, VertexStructures.TexturedNormal[] vertices, short[] indices = null)
+        public Mesh3D(D3D10.Device device, VertexStructures.TexturedNormal[] vertices, short[] indices = null, string filePath = "")
+            : this(device, vertices, indices, filePath, false)
         {
-            this.numberOfVertices = vertices.Length;
-            if (indices != null)
-                this.numberOfIndices = (short)indices.Length;
-
             this.vertexBuffer = new VertexBufferBinding(
                 CreateBuffer<VertexStructures.TexturedNormal>(device, BindFlags.VertexBuffer, vertices),
                 VertexStructures.TexturedNormal.sizeInBytes, 0);
-            if (indices != null)
-                this.indexBuffer = CreateBuffer<short>(device, BindFlags.IndexBuffer, indices);
         }
 
         [Obsolete]

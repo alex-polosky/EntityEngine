@@ -9,6 +9,7 @@ namespace EntityFramework.Components
     {
         public string name;
         public TagComponent() : base() { }
+        public TagComponent(Entity e) : base(e) { }
         public TagComponent(string name)
             : base()
         { this.name = name; }

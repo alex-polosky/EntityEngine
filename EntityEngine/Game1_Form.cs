@@ -82,7 +82,7 @@ namespace EntityEngine
         private bool mAcq = false;
         /////////////////////////////////////////////////////////
 
-        private void SetUpEnts()
+        protected virtual void SetUpEnts()
         {
             Entity e;
             Components.RenderComponent rCom;
@@ -214,6 +214,7 @@ new Components.VertexStructures.Pos(
             // Now here is all of the rest.....
 
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
             sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
             e.GetComponent<TagComponent>().name = "win";
             sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
@@ -228,6 +229,7 @@ new Components.VertexStructures.Pos(
                 SharpDX.Matrix.RotationY((float)Math.PI);
 
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
             sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
@@ -241,11 +243,14 @@ new Components.VertexStructures.Pos(
 
             // Try to render a cube xD
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
             rCom = e.GetComponent<Components.RenderComponent>();
             rCom.shader = basicShader;
             rCom.mesh = meshCube;
+            sys.GetComponentSystem<ChildrenComponent, ChildrenSystem>()
+                .SetParent(e, sys.GetComponentSystem<TagComponent, TagSystem>().getTaggedEntity("win"));
         }
 
         public Game1_Form()
@@ -356,8 +361,16 @@ List = Generic.List
             sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>
                 (FileManager.LoadObjFromFile("Maps/Test/ObjDefs/WinSystem.js", this.sys, this.py, this.FPS));
 
+            // Load shaders/meshes
+            FileManager.LoadAllMesh("Maps/Test/Models", render.Device);
+            FileManager.LoadAllShader("Maps/Test/Shaders", render.Device);
+
             // Load any components
             this.SetUpEnts();
+
+            // Attempt to serialize Win Entity
+            FileManager.SaveEntity("", sys.GetComponentSystem<TagComponent, TagSystem>()
+                .getTaggedEntity("win"));
 
             // Start the game
             this.Shown += new EventHandler(this.StartRunning_Game);
