@@ -16,6 +16,13 @@ namespace EntityEngine
 {
     public static class FileManager
     {
+        public static Dictionary<string, EntityEngine.Components.Mesh3D> Mesh = 
+            new Dictionary<string, EntityEngine.Components.Mesh3D>();
+        public static Dictionary<string, EntityEngine.Components.Shader> Shader =
+            new Dictionary<string, EntityEngine.Components.Shader>();
+        public static Dictionary<Guid, dynamic> guidObjects =
+            new Dictionary<Guid, dynamic>();
+
         public struct ObjFile
         {
             public string file;
@@ -29,9 +36,163 @@ namespace EntityEngine
             return instance.GetType().GetProperty(propertyName).GetType();
         }
 
-        public static void SetProperty(object instance, string propertyName, object newValue)
+        public static void SetProperty(object instance, string propertyName, object newValue, Type type = null)
         {
-            instance.GetType().GetProperty(propertyName).SetValue(instance, newValue, null);
+            if (type == null)
+                type = instance.GetType();
+            type.GetProperty(propertyName).SetValue(instance, newValue, null);
+        }
+
+        public static void SaveEntity(string filePath, Entity e)
+        {
+            var js = new Dictionary<string, Type>();
+            js.Add(JsonConvert.SerializeObject(e), typeof(Entity));
+            foreach (var com in e.GetAllComponents())
+            {
+                try
+                {
+                    js.Add(JsonConvert.SerializeObject(com), com.GetType());
+                }
+                catch
+                {
+                    throw new JsonSerializationException(String.Format("Error serializing '{0}', please check for any dangling references", com.GetType()));
+                }
+            }
+
+            var jsList = js.ToList();
+            string json = "{";
+            json += "\"json\": " + jsList[0].Key + ",";
+            json += "\"assemblyName\": \"" + jsList[0].Value.Assembly.ToString() + "\", ";
+            json += "\"className\": \"" + jsList[0].Value.FullName.ToString() + "\", ";
+            json += "\"components\": [";
+            jsList.Remove(jsList[0]);
+            foreach (var j in jsList)
+            {
+                json += "{";
+                json += "\"json\": " + j.Key + ",";
+                json += "\"assemblyName\": \"" + j.Value.Assembly.ToString() + "\", ";
+                json += "\"className\": \"" + j.Value.FullName.ToString() + "\"";
+                json += "},";
+            }
+            json = json.Substring(0, json.Length - 1);
+            json += "]";
+            json += "}";
+
+            using (var sWriter = new StreamWriter(filePath, false))
+            {
+                sWriter.Write(json);
+            }
+        }
+
+        // Maybe use a Component return type instead...?
+        public static KeyValuePair<dynamic, dynamic> LoadComponent(string filePath, SystemManager sys)
+        {
+            return new KeyValuePair<dynamic, dynamic>();
+        }
+        public static KeyValuePair<dynamic, dynamic> LoadComponentS(string contents, SystemManager sys)
+        {
+            var json = (Newtonsoft.Json.Linq.JObject)
+                JsonConvert.DeserializeObject(contents, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+            var comJson = json["json"].ToString();
+            var guid = Guid.Parse(json["json"]["guid"].ToString());
+            var assemblyName = json["assemblyName"].ToString();
+            var className = json["className"].ToString();
+
+            var comType = Type.GetType(className + ", " + assemblyName);
+            var comSysType = Type.GetType(
+                className.Substring(
+                    0, className.IndexOf(
+                        className.Split('.')[className.Split('.').Length - 1]
+                    )
+                ) + 
+                className.Split('.')[className.Split('.').Length - 1].Replace("Component", "System") +
+                ", " + assemblyName);
+
+            dynamic comObj = JsonConvert.DeserializeObject(comJson, comType);
+            //sys.GetComponentSystem<Com?, Sys?>.AddComponent(comObj)
+            dynamic comSys = typeof(SystemManager).GetMethod("GetComponentSystem")
+                .MakeGenericMethod(comType, comSysType)
+                .Invoke(sys, null);
+
+            SetProperty(comObj, "guid", guid, typeof(Component));
+
+            FileManager.guidObjects.Add(guid, comObj);
+
+            return new KeyValuePair<dynamic, dynamic>(comObj, comSys);
+        }
+
+        public static Entity LoadEntity(string filePath, SystemManager sys)
+        {
+            string contents;
+            using (var sReader = new StreamReader(filePath))
+            {
+                contents = sReader.ReadToEnd();
+            }
+
+            var json = (Newtonsoft.Json.Linq.JObject)
+                JsonConvert.DeserializeObject(contents, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+            var entityJson = json["json"].ToString();
+            var guid = Guid.Parse(json["json"]["guid"].ToString());
+            var assemblyName = json["assemblyName"].ToString();
+            var className = json["className"].ToString();
+            var type = Type.GetType(className);
+            var componentCode = json["components"].ToList();
+
+            var entityObj = JsonConvert.DeserializeObject<Entity>(entityJson);
+            SetProperty(entityObj, "guid", guid);
+
+            var coms = new List<KeyValuePair<dynamic, dynamic>>();
+            foreach (var comCode in componentCode)
+                coms.Add(LoadComponentS(comCode.ToString(), sys));
+
+            foreach (var com in coms)
+            {
+                com.Key.SetEntity(entityObj);
+                com.Value.AddComponent(com.Key);
+            }
+
+            FileManager.guidObjects.Add(guid, (dynamic)entityObj);
+
+            return entityObj;
+        }
+
+        public static void LoadAllEntities(string directory, SystemManager sys, bool resolveRefs = true)
+        {
+            foreach (var filePath in Directory.GetFiles(directory))
+                sys.AddEntity(LoadEntity(filePath, sys));
+
+            if (resolveRefs)
+                LoadResolveReferences(sys);
+        }
+
+        public static void LoadResolveReferences(SystemManager sys)
+        {
+            // First, we need to do loading of the render component mesh/shaders
+            // I know.. we're really really not following module stuff here, but the
+            // render component is vital to the engine
+            // TODO: fix the shader/mesh load stuff?
+            RenderSystem renSys = sys.GetComponentSystem<RenderComponent, RenderSystem>();
+            foreach (dynamic dynCom in FileManager.guidObjects.Values)
+            {
+                try
+                {
+                    // Component
+                    Component com = (Component)dynCom;
+                    if (com.GetType() == typeof(RenderComponent))
+                    {
+                        RenderComponent renCom = (RenderComponent)com;
+                        renCom.mesh = LoadMeshFromFile(renSys.Device, renCom.mesh.filePath);
+                        var shaderGuid = renCom.shader.guid;
+                        renCom.shader =
+                            new Shader(renSys.Device, renCom.shader.filePath, renCom.shader.shaderVars, renCom.shader.shaderLevel);
+                        SetProperty(renCom.shader, "guid", shaderGuid);
+                    }
+                }
+                catch
+                {
+                    // Entity
+                }
+            }
         }
 
         public static dynamic LoadObjFromFile(string filePath, params object[] args)
@@ -67,8 +228,15 @@ namespace EntityEngine
         {
             using (var sReader = new StreamReader(file))
             {
-                var contents = sReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n').Replace("f", "").Replace(",", "");
+                var contents = sReader.ReadToEnd().Replace("\r\n", "\n").Replace('\r', '\n');
                 var type = contents.Split('\n')[0];
+                contents = contents.Substring(contents.IndexOf('\n') + 1);
+                Guid id;
+                if (!Guid.TryParse(contents.Split('\n')[0].Replace("{", "").Replace("}", ""), out id))
+                    id = Guid.NewGuid();
+                else
+                    contents = contents.Substring(contents.IndexOf('\n') + 1);
+                contents = contents.Replace("f", "").Replace(",", "");
                 EntityEngine.Components.VertexStructures.Types T =
                     EntityEngine.Components.VertexStructures.Types.None;
                 Enum.TryParse(type, out T);
@@ -80,7 +248,7 @@ namespace EntityEngine
                 {
                     case (EntityEngine.Components.VertexStructures.Types.Pos):
                         vertices = new List<EntityEngine.Components.VertexStructures.Pos>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -96,7 +264,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Textured):
                         vertices = new List<EntityEngine.Components.VertexStructures.Textured>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -113,7 +281,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Normal):
                         vertices = new List<EntityEngine.Components.VertexStructures.Normal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -130,7 +298,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.Color):
                         vertices = new List<EntityEngine.Components.VertexStructures.Color>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -147,7 +315,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.TexturedNormal):
                         vertices = new List<EntityEngine.Components.VertexStructures.TexturedNormal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -165,7 +333,7 @@ namespace EntityEngine
 
                     case (EntityEngine.Components.VertexStructures.Types.ColorNormal):
                         vertices = new List<EntityEngine.Components.VertexStructures.ColorNormal>();
-                        foreach (string line in contents.Replace(type + '\n', "").Split('\n'))
+                        foreach (string line in contents.Split('\n'))
                         {
                             if (line == "")
                             {
@@ -194,10 +362,39 @@ namespace EntityEngine
                         throw new Exception("Error loading indices from last line: '" + file + "'");
                 }
 
+                Mesh3D mesh;
                 if (indices.Count == 0)
-                    return new Mesh3D(device, vertices.ToArray());
+                    mesh = new Mesh3D(device, vertices.ToArray(), filePath: file);
                 else
-                    return new Mesh3D(device, vertices.ToArray(), indices.ToArray());
+                    mesh = new Mesh3D(device, vertices.ToArray(), indices.ToArray(), file);
+                SetProperty(mesh, "guid", id);
+                return mesh;
+            }
+        }
+
+        [Obsolete]
+        public static void LoadAllMesh(string dir, SharpDX.Direct3D10.Device device, string ext=".mesh")
+        {
+            foreach (var file in Directory.GetFiles(dir))
+            {
+                if (Path.GetExtension(file) == ext)
+                {
+                    Mesh[Path.GetFileNameWithoutExtension(file)] =
+                        LoadMeshFromFile(device, file);
+                }
+            }
+        }
+
+        [Obsolete]
+        public static void LoadAllShader(string dir, SharpDX.Direct3D10.Device device, string ext = ".fx")
+        {
+            foreach (var file in Directory.GetFiles(dir))
+            {
+                if (Path.GetExtension(file) == ext)
+                {
+                    //Shader[Path.GetFileNameWithoutExtension(file)] =
+                    //    LoadMeshFromFile(device, file);
+                }
             }
         }
     }

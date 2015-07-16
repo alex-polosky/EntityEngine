@@ -22,6 +22,11 @@ namespace EntityFramework
             return this._entities.Last();
         }
 
+        public void AddEntity(Entity e)
+        {
+            this._entities.Add(e);
+        }
+
         public void RemoveEntity(Guid id)
         {
         }

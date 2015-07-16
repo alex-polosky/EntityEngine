@@ -24,7 +24,6 @@ namespace EntityEngine.Components
         public RenderTypeFlag renderFlags;
         public Mesh3D mesh;
         public Shader shader;
-        //public CameraComponent camera;
 
         public RenderComponent() : base() { }
         public RenderComponent(Entity e) : base(e) { }
@@ -260,44 +259,9 @@ namespace EntityEngine.Components
 
                 // Set up effect variables
                 // These matrices should always be defined in the shader, even if they're not used
-                //if (com.camera == null)
-                //{
-                //    if (this.isOrthoCurrent)
-                //    {
-                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
-                //        this.isOrthoCurrent = false;
-                //    }
-                //    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(this.camera.ViewMatrix);
-                //    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(this.camera.projectionMatrix);
-                //}
-                //else
-                //{
-                //    if (this.isOrthoCurrent && !com.camera.IsZBuffer)
-                //    {
-                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
-                //        this.isOrthoCurrent = false;
-                //    }
-                //    if (!this.isOrthoCurrent && com.camera.IsZBuffer)
-                //    {
-                //        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.orthoState), 1);
-                //        this.isOrthoCurrent = true;
-                //    }
-                //    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(com.camera.ViewMatrix);
-                //    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(com.camera.projectionMatrix);
-                //}
                 var camCom = com.entity.GetComponent<CameraComponent>();
                 if (camCom == null)
                     camCom = this.camera;
-                //if (this.isOrthoCurrent && !camCom.IsZBuffer)
-                //{
-                //    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.normState), 1);
-                //    this.isOrthoCurrent = false;
-                //}
-                //if (!this.isOrthoCurrent && camCom.IsZBuffer)
-                //{
-                //    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.orthoState), 1);
-                //    this.isOrthoCurrent = true;
-                //}
                 if (!camCom.IsZBuffer)
                     this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthNonState), 1);
                 else

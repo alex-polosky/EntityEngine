@@ -89,9 +89,7 @@
     <Compile Include="Embedded.Designer.cs">
       <DependentUpon>Embedded.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileManager.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="FileManager.cs" />
     <Compile Include="PyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,8 +155,25 @@
       <Name>PyInterface</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Folder Include="Maps\Test\ObjDefs\Entities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Maps\Test\ObjDefs\Copy of WinSystem.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="Maps\Test\Shaders\2D.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\Test\Shaders\basicEffect.fx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\Test\Shaders\color.fx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Maps\Test\Shaders\textured.fx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\2D.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

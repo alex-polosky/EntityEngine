@@ -7,8 +7,10 @@ namespace EntityFramework
 {
     public class Component
     {
+        private Guid id;
         private Entity _entity;
-        public Entity entity { get { return this._entity; } }
+        public Entity entity { get { return this._entity; } private set { this._entity = value; } }
+        public Guid guid { get { return this.id; } private set { this.id = value; } }
 
         // please do not override these methods
         public void SetEntity(Entity e)
@@ -34,10 +36,12 @@ namespace EntityFramework
 
         public Component()
         {
+            this.id = Guid.NewGuid();
         }
 
         public Component(Entity e)
         {
+            this.id = Guid.NewGuid();
             this.SetEntity(e);
         }
     }

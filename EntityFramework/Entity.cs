@@ -10,7 +10,7 @@ namespace EntityFramework
         private Guid id;
         private Dictionary<string, Component> _components;
 
-        public Guid guid { get { return this.id; } }
+        public Guid guid { get { return this.id; } private set { this.id = value; } }
 
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
@@ -50,7 +50,7 @@ namespace EntityFramework
         internal void AddComponent(Component com)
         {
             if (this._components.Keys.Contains(com.GetType().Name))
-                throw new Exception(string.Format("Entity already contains a component with type %s", com.GetType().Name));
+                throw new Exception(string.Format("Entity already contains a component with type {0}", com.GetType().Name));
             else
                 this._components.Add(com.GetType().Name, com);
         }

@@ -174,9 +174,15 @@ namespace EntityEngine.Components
             this.viewMatrix = Matrix.LookAtLH(this.eye, this.view, this.camRotation.Up);
         }
 
+        public CameraComponent(Entity e, int targetWidth = 800, int targetHeight = 600, bool ortho = false, bool moveWithRot = true, bool lockXmove = false, bool lockYmove = false, bool lockZmove = false, bool lockAxes = true, bool zBuffer = true)
+            : this(targetWidth, targetHeight, ortho, moveWithRot, lockXmove, lockYmove, lockZmove, lockAxes, zBuffer)
+        {
+            this.SetEntity(e);
+        }
+
         public CameraComponent()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 
