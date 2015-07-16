@@ -52,7 +52,7 @@ namespace EntityFramework
             }
         }
 
-        public override void Update(double timeDelta)
+        public override void Update(double timeDelta = 0)
         {
         }
 

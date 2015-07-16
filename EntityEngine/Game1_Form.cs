@@ -57,13 +57,13 @@ namespace EntityEngine
 
     public partial class Game1_Form : Form
     {
-        private FrameRate FPS;
+        protected FrameRate FPS;
 
-        private clsPyInterface py;
-        private Dictionary<string, object> pyVars;
+        protected clsPyInterface py;
+        protected Dictionary<string, object> pyVars;
 
-        private SystemManager sys;
-        private Components.RenderSystem render;
+        protected SystemManager sys;
+        protected Components.RenderSystem render;
 
         public class PyHelp
         {
@@ -82,7 +82,10 @@ namespace EntityEngine
         private bool mAcq = false;
         /////////////////////////////////////////////////////////
 
-        protected virtual void SetUpEnts()
+        protected virtual void SetUpEnts() { }
+
+        [Obsolete]
+        private void SetUpEnts_Example_Dep()
         {
             Entity e;
             Components.RenderComponent rCom;
@@ -178,6 +181,8 @@ new Components.VertexStructures.Pos(
             var w = 0.01f;
             var d = 10000f;
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
             e.GetComponent<TagComponent>().name = "X-Axis";
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
@@ -189,6 +194,8 @@ new Components.VertexStructures.Pos(
                 SharpDX.Matrix.Scaling(new SharpDX.Vector3(d, w, w));
 
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
             e.GetComponent<TagComponent>().name = "Y-Axis";
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
@@ -200,6 +207,8 @@ new Components.VertexStructures.Pos(
                 SharpDX.Matrix.Scaling(new SharpDX.Vector3(w, d, w));
 
             e = sys.AddNewEntity();
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
             e.GetComponent<TagComponent>().name = "Z-Axis";
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
@@ -215,6 +224,8 @@ new Components.VertexStructures.Pos(
 
             e = sys.AddNewEntity();
             sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
             e.GetComponent<TagComponent>().name = "win";
             sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
@@ -230,6 +241,8 @@ new Components.VertexStructures.Pos(
 
             e = sys.AddNewEntity();
             sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
@@ -244,6 +257,8 @@ new Components.VertexStructures.Pos(
             // Try to render a cube xD
             e = sys.AddNewEntity();
             sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            e.GetComponent<GroupComponent>().groups.Add("save");
             sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
             sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
             rCom = e.GetComponent<Components.RenderComponent>();
@@ -358,19 +373,22 @@ List = Generic.List
             render.SetCamera(cam);
 
             // Load the Win Conditions
-            sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>
-                (FileManager.LoadObjFromFile("Maps/Test/ObjDefs/WinSystem.js", this.sys, this.py, this.FPS));
-
-            // Load shaders/meshes
-            FileManager.LoadAllMesh("Maps/Test/Models", render.Device);
-            FileManager.LoadAllShader("Maps/Test/Shaders", render.Device);
+            //sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>
+            //    (FileManager.LoadObjFromFile("Maps/Test/ObjDefs/WinSystem.js", this.sys, this.py, this.FPS));
+            sys.AddComponentSystem<Components.WinComponent, Components.WinSystem>();
+            sys.GetComponentSystem<Components.WinComponent, Components.WinSystem>()
+                .initFromSerial(ref sys, ref py, ref FPS);
 
             // Load any components
             this.SetUpEnts();
+            //FileManager.LoadAllEntities(Path.Combine("Maps", "Test", "ObjDefs", "Entities"), sys);
 
-            // Attempt to serialize Win Entity
-            FileManager.SaveEntity("", sys.GetComponentSystem<TagComponent, TagSystem>()
-                .getTaggedEntity("win"));
+            // Attempt to serialize all entities
+            //FileManager.SaveEntity("", sys.GetComponentSystem<TagComponent, TagSystem>()
+            //    .getTaggedEntity("win"));
+            //var x = 0;
+            //foreach (var entity in sys.GetComponentSystem<GroupComponent, GroupSystem>().getTaggedEntities("save"))
+            //    FileManager.SaveEntity(Path.Combine("Maps", "Test", "ObjDefs", "Entities", String.Format("entity_{0}.js", x++)), entity);
 
             // Start the game
             this.Shown += new EventHandler(this.StartRunning_Game);
@@ -382,10 +400,10 @@ List = Generic.List
         {
             this.FPS.StartFrame();
 
-            this.sys.GetComponentSystem<TagComponent, TagSystem>()
-                .getTaggedEntity("win")
-                .GetComponent<Components.PositionComponent>()
-                .translationWorldMatrix.M41 += 0.001f;
+            //this.sys.GetComponentSystem<TagComponent, TagSystem>()
+            //    .getTaggedEntity("win")
+            //    .GetComponent<Components.PositionComponent>()
+            //    .translationWorldMatrix.M41 += 0.001f;
 
             // Testing some camera movement...
             if (this.kbAcq)

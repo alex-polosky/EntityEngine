@@ -114,9 +114,17 @@ namespace EntityEngine.Components
         public Guid guid { get { return this.id; } private set { this.id = value; } }
         [DataMember]
         public string filePath { get; private set; }
+        [DataMember]
+        public InputElement[] shaderVars { get; private set; }
+        [DataMember]
+        public string shaderLevel { get; private set; }
         public Effect effect { get; private set; }
         public List<List<InputLayout>> inputLayouts { get; private set; }
         public List<KeyValuePair<object, Type>> vars { get; private set; }
+
+        public Shader()
+        {
+        }
 
         public Shader(D3D10.Device device, string path, InputElement[] shaderVars, string shaderLevel = "fx_4_0")
         {
@@ -124,6 +132,8 @@ namespace EntityEngine.Components
 
             this.filePath = path;
             this.effect = null;
+            this.shaderVars = shaderVars;
+            this.shaderLevel = shaderLevel;
 
             ShaderBytecode shaderCode = ShaderBytecode.CompileFromFile(
                 path,
@@ -185,6 +195,10 @@ namespace EntityEngine.Components
             var buffer = new D3D10.Buffer(device, stream, len, ResourceUsage.Default,
                 bindFlags, CpuAccessFlags.None, ResourceOptionFlags.None);
             return buffer;
+        }
+
+        public Mesh3D()
+        {
         }
 
         private Mesh3D(D3D10.Device device, dynamic vertices, short[] indices, string filePath, bool throwaway=false)

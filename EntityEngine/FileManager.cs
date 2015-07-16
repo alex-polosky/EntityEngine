@@ -20,6 +20,8 @@ namespace EntityEngine
             new Dictionary<string, EntityEngine.Components.Mesh3D>();
         public static Dictionary<string, EntityEngine.Components.Shader> Shader =
             new Dictionary<string, EntityEngine.Components.Shader>();
+        public static Dictionary<Guid, dynamic> guidObjects =
+            new Dictionary<Guid, dynamic>();
 
         public struct ObjFile
         {
@@ -34,9 +36,11 @@ namespace EntityEngine
             return instance.GetType().GetProperty(propertyName).GetType();
         }
 
-        public static void SetProperty(object instance, string propertyName, object newValue)
+        public static void SetProperty(object instance, string propertyName, object newValue, Type type = null)
         {
-            instance.GetType().GetProperty(propertyName).SetValue(instance, newValue, null);
+            if (type == null)
+                type = instance.GetType();
+            type.GetProperty(propertyName).SetValue(instance, newValue, null);
         }
 
         public static void SaveEntity(string filePath, Entity e)
@@ -73,6 +77,122 @@ namespace EntityEngine
             json = json.Substring(0, json.Length - 1);
             json += "]";
             json += "}";
+
+            using (var sWriter = new StreamWriter(filePath, false))
+            {
+                sWriter.Write(json);
+            }
+        }
+
+        // Maybe use a Component return type instead...?
+        public static KeyValuePair<dynamic, dynamic> LoadComponent(string filePath, SystemManager sys)
+        {
+            return new KeyValuePair<dynamic, dynamic>();
+        }
+        public static KeyValuePair<dynamic, dynamic> LoadComponentS(string contents, SystemManager sys)
+        {
+            var json = (Newtonsoft.Json.Linq.JObject)
+                JsonConvert.DeserializeObject(contents, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+            var comJson = json["json"].ToString();
+            var guid = Guid.Parse(json["json"]["guid"].ToString());
+            var assemblyName = json["assemblyName"].ToString();
+            var className = json["className"].ToString();
+
+            var comType = Type.GetType(className + ", " + assemblyName);
+            var comSysType = Type.GetType(
+                className.Substring(
+                    0, className.IndexOf(
+                        className.Split('.')[className.Split('.').Length - 1]
+                    )
+                ) + 
+                className.Split('.')[className.Split('.').Length - 1].Replace("Component", "System") +
+                ", " + assemblyName);
+
+            dynamic comObj = JsonConvert.DeserializeObject(comJson, comType);
+            //sys.GetComponentSystem<Com?, Sys?>.AddComponent(comObj)
+            dynamic comSys = typeof(SystemManager).GetMethod("GetComponentSystem")
+                .MakeGenericMethod(comType, comSysType)
+                .Invoke(sys, null);
+
+            SetProperty(comObj, "guid", guid, typeof(Component));
+
+            FileManager.guidObjects.Add(guid, comObj);
+
+            return new KeyValuePair<dynamic, dynamic>(comObj, comSys);
+        }
+
+        public static Entity LoadEntity(string filePath, SystemManager sys)
+        {
+            string contents;
+            using (var sReader = new StreamReader(filePath))
+            {
+                contents = sReader.ReadToEnd();
+            }
+
+            var json = (Newtonsoft.Json.Linq.JObject)
+                JsonConvert.DeserializeObject(contents, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+            var entityJson = json["json"].ToString();
+            var guid = Guid.Parse(json["json"]["guid"].ToString());
+            var assemblyName = json["assemblyName"].ToString();
+            var className = json["className"].ToString();
+            var type = Type.GetType(className);
+            var componentCode = json["components"].ToList();
+
+            var entityObj = JsonConvert.DeserializeObject<Entity>(entityJson);
+            SetProperty(entityObj, "guid", guid);
+
+            var coms = new List<KeyValuePair<dynamic, dynamic>>();
+            foreach (var comCode in componentCode)
+                coms.Add(LoadComponentS(comCode.ToString(), sys));
+
+            foreach (var com in coms)
+            {
+                com.Key.SetEntity(entityObj);
+                com.Value.AddComponent(com.Key);
+            }
+
+            FileManager.guidObjects.Add(guid, (dynamic)entityObj);
+
+            return entityObj;
+        }
+
+        public static void LoadAllEntities(string directory, SystemManager sys, bool resolveRefs = true)
+        {
+            foreach (var filePath in Directory.GetFiles(directory))
+                sys.AddEntity(LoadEntity(filePath, sys));
+
+            if (resolveRefs)
+                LoadResolveReferences(sys);
+        }
+
+        public static void LoadResolveReferences(SystemManager sys)
+        {
+            // First, we need to do loading of the render component mesh/shaders
+            // I know.. we're really really not following module stuff here, but the
+            // render component is vital to the engine
+            // TODO: fix the shader/mesh load stuff?
+            RenderSystem renSys = sys.GetComponentSystem<RenderComponent, RenderSystem>();
+            foreach (dynamic dynCom in FileManager.guidObjects.Values)
+            {
+                try
+                {
+                    // Component
+                    Component com = (Component)dynCom;
+                    if (com.GetType() == typeof(RenderComponent))
+                    {
+                        RenderComponent renCom = (RenderComponent)com;
+                        renCom.mesh = LoadMeshFromFile(renSys.Device, renCom.mesh.filePath);
+                        var shaderGuid = renCom.shader.guid;
+                        renCom.shader =
+                            new Shader(renSys.Device, renCom.shader.filePath, renCom.shader.shaderVars, renCom.shader.shaderLevel);
+                        SetProperty(renCom.shader, "guid", shaderGuid);
+                    }
+                }
+                catch
+                {
+                    // Entity
+                }
+            }
         }
 
         public static dynamic LoadObjFromFile(string filePath, params object[] args)
@@ -100,40 +220,6 @@ namespace EntityEngine
             var type = Type.GetType(t.className);
             var jsonObj = JsonConvert.DeserializeObject(code, type);
             jsonObj.GetType().GetMethod("initFromSerial").Invoke(jsonObj, args);
-
-            //var e = new Entity(new Guid(0xABCD, 0xAB, 0xBA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0));
-            //var a = new PositionComponent(e);
-            //a.rotationXMatrix = SharpDX.Matrix.RotationX(3);
-            //a.rotationYMatrix = SharpDX.Matrix.RotationY(2);
-            //a.rotationZMatrix = SharpDX.Matrix.RotationZ(7);
-            //a.translationWorldMatrix *=
-            //    SharpDX.Matrix.Translation(1, 5, 3);
-
-            //var j = JsonConvert.SerializeObject(a);
-            //var b = JsonConvert.DeserializeObject(j, a.GetType());
-
-            Entity e;
-            using (MD5 md5 = MD5.Create())
-                e = new Entity(new Guid(md5.ComputeHash(Encoding.Default.GetBytes("testEntity"))));
-
-            var js = new Dictionary<string, Type>()
-            {
-                { JsonConvert.SerializeObject(new RenderComponent(e)), typeof(RenderComponent)},
-                { JsonConvert.SerializeObject(new CameraComponent(e)), typeof(CameraComponent)},
-                { JsonConvert.SerializeObject(new PositionComponent(e)), typeof(PositionComponent)},
-                { JsonConvert.SerializeObject(new WinComponent(e)), typeof(WinComponent)},
-                { JsonConvert.SerializeObject(new ChildrenComponent(e)), typeof(ChildrenComponent)},
-                { JsonConvert.SerializeObject(new TagComponent(e)), typeof(TagComponent)},
-                { JsonConvert.SerializeObject(new GroupComponent(e)), typeof(GroupComponent)},
-                { JsonConvert.SerializeObject(e), typeof(Entity)}
-            };
-
-            Guid a = e.guid;
-            var b = JsonConvert.SerializeObject(a);
-            Guid c = JsonConvert.DeserializeObject<Guid>(b);
-
-            Entity e2 = (Entity)JsonConvert.DeserializeObject(js.ToList()[7].Key, js.ToList()[7].Value);
-            SetProperty(e2, "guid", e.guid);
 
             return jsonObj;
         }
@@ -286,6 +372,7 @@ namespace EntityEngine
             }
         }
 
+        [Obsolete]
         public static void LoadAllMesh(string dir, SharpDX.Direct3D10.Device device, string ext=".mesh")
         {
             foreach (var file in Directory.GetFiles(dir))
@@ -298,6 +385,7 @@ namespace EntityEngine
             }
         }
 
+        [Obsolete]
         public static void LoadAllShader(string dir, SharpDX.Direct3D10.Device device, string ext = ".fx")
         {
             foreach (var file in Directory.GetFiles(dir))

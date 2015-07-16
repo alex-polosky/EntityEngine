@@ -30,10 +30,14 @@ namespace EntityFramework.Components
         ~ChildrenComponent()
         {
             // It's completely possible that the parent/children relationships aren't destroyed..
-            if (this.parent != null)
-                this.parent.GetComponent<ChildrenComponent>().children.Remove(this.parent);
-            foreach (Entity child in this.children)
-                child.GetComponent<ChildrenComponent>().parent = null;
+            try
+            {
+                if (this.parent != null)
+                    this.parent.GetComponent<ChildrenComponent>().children.Remove(this.parent);
+                foreach (Entity child in this.children)
+                    child.GetComponent<ChildrenComponent>().parent = null;
+            }
+            catch { }
         }
     }
 

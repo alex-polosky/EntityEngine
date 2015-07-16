@@ -154,10 +154,10 @@ WinConditions = winConditions.WinConditions
             if (!this.fpsSet)
                 throw new Exception("Internal FrameRate has not been set!");
 
-            if (this.winCondition.name != "")
+            if (this.winCondition.name != null && this.winCondition.name != "")
                 this.winners = this.winCondition.main(this.world, this.fps, this._components);
             else
-                if (this.winConditionInternal != 0)
+                if (this.winConditionInternal != -1)
                 {
                     this.winCondition = this.winConditions[this.winConditionInternal];
                     if (this.winCondition.name != "")

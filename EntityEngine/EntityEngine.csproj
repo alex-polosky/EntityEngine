@@ -155,8 +155,13 @@
       <Name>PyInterface</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Folder Include="Maps\Test\ObjDefs\Entities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Maps\Test\ObjDefs\Copy of WinSystem.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Maps\Test\Shaders\2D.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
