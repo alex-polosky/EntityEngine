@@ -74,11 +74,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\EntityEngine\EntityEngine.csproj">
+    <ProjectReference Include="..\..\Core\EntityEngine\EntityEngine.csproj">
       <Project>{BA32E84A-582F-4989-BCF7-DAA09584D9B9}</Project>
       <Name>EntityEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EntityFramework\EntityFramework.csproj">
+    <ProjectReference Include="..\..\Core\EntityFramework\EntityFramework.csproj">
       <Project>{9B024C51-9A91-4254-90DB-9F2E91000F16}</Project>
       <Name>EntityFramework</Name>
     </ProjectReference>
