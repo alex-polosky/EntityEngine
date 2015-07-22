@@ -64,6 +64,8 @@ namespace EntityEngine
         protected SystemManager sys;
         protected Components.RenderSystem render;
 
+        protected PyForm pyForm;
+
         public SystemManager world { get { return this.sys; } }
 
         public class PyHelp
@@ -208,7 +210,7 @@ List = Generic.List
                     {"PyHelp", new PyHelp()},
                     {"this", this}
                 };
-                var pyForm = new PyForm(ref this.py, this.pyVars);
+                this.pyForm = new PyForm(ref this.py, this.pyVars);
                 Console.SetOut(new MultiTextWriter(Console.Out, new ControlWriter(pyForm.StdOut)));
                 pyForm.Show();
             }
@@ -289,6 +291,19 @@ List = Generic.List
             if (useGrid)
                 this.SetUpEnts_Example_Dep();
             this.SetUpEnts();
+
+            if (usePyConsole)
+            {
+                this.pyVars = new Dictionary<string, object>()
+                {
+                    {"FPS", this.FPS},
+                    {"world", this.sys},
+                    {"render", this.render},
+                    {"PyHelp", new PyHelp()},
+                    {"this", this}
+                };
+                pyForm.SetVars(this.pyVars);
+            }
 
             // Start the game
             this.Shown += new EventHandler(this.StartRunning_Game);

@@ -236,79 +236,82 @@ namespace EntityEngine.Components
 
         public override void Update(double timeDelta = 0.0f)
         {
-            // Clear our backbuffer with the rainbow color
-            d3d10Device.ClearRenderTargetView(this.renderTargetView, (Color4)SharpDX.Color.CornflowerBlue);
-            this.d3d10Device.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1f, 0);
-
-            this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-
-            // We're going to rotate our camera around the y axis
-            float time = (float)(timeDelta / 1000.0f); // time in milliseconds?
-
-            // Do actual drawing here
-            foreach (RenderComponent com in this._components)
+            if (this.renderForm.Visible)
             {
-                // Get any required components
-                PositionComponent pos = com.entity.GetComponent<PositionComponent>();
+                // Clear our backbuffer with the rainbow color
+                d3d10Device.ClearRenderTargetView(this.renderTargetView, (Color4)SharpDX.Color.CornflowerBlue);
+                this.d3d10Device.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1f, 0);
 
-                // Set up required buffers
-                var inputAssembler = this.d3d10Device.InputAssembler;
-                inputAssembler.SetVertexBuffers(0, com.mesh.vertexBuffer);
-                if (com.mesh.indexBuffer != null)
-                    inputAssembler.SetIndexBuffer(com.mesh.indexBuffer, Format.R16_UInt, 0);
+                this.d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
-                // Set up effect variables
-                // These matrices should always be defined in the shader, even if they're not used
-                var camCom = com.entity.GetComponent<CameraComponent>();
-                if (camCom == null)
-                    camCom = this.camera;
-                if (!camCom.IsZBuffer)
-                    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthNonState), 1);
-                else
-                    this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthState), 1);
-                com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(camCom.ViewMatrix);
-                com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(camCom.projectionMatrix);
-                com.shader.effect.GetVariableByIndex(2).AsMatrix().SetMatrix(pos.rotationXMatrix);
-                com.shader.effect.GetVariableByIndex(3).AsMatrix().SetMatrix(pos.rotationYMatrix);
-                com.shader.effect.GetVariableByIndex(4).AsMatrix().SetMatrix(pos.rotationZMatrix);
-                com.shader.effect.GetVariableByIndex(5).AsMatrix().SetMatrix(pos.scalingMatrix);
-                com.shader.effect.GetVariableByIndex(6).AsMatrix().SetMatrix(pos.translationLocalMatrix);
-                com.shader.effect.GetVariableByIndex(7).AsMatrix().SetMatrix(pos.translationWorldMatrix);
-                foreach (var shaderVars in com.shader.vars)
+                // We're going to rotate our camera around the y axis
+                float time = (float)(timeDelta / 1000.0f); // time in milliseconds?
+
+                // Do actual drawing here
+                foreach (RenderComponent com in this._components)
                 {
-                    // Eventually, we'll use this to set all the required variables needed
-                }
+                    // Get any required components
+                    PositionComponent pos = com.entity.GetComponent<PositionComponent>();
 
-                // Run through each technique, pass, draw
-                int i = 0, j = 0;
-                foreach (var techniqueContainer in com.shader.inputLayouts)
-                {
-                    var technique = com.shader.effect.GetTechniqueByIndex(i);
-                    foreach (var passContainer in techniqueContainer)
+                    // Set up required buffers
+                    var inputAssembler = this.d3d10Device.InputAssembler;
+                    inputAssembler.SetVertexBuffers(0, com.mesh.vertexBuffer);
+                    if (com.mesh.indexBuffer != null)
+                        inputAssembler.SetIndexBuffer(com.mesh.indexBuffer, Format.R16_UInt, 0);
+
+                    // Set up effect variables
+                    // These matrices should always be defined in the shader, even if they're not used
+                    var camCom = com.entity.GetComponent<CameraComponent>();
+                    if (camCom == null)
+                        camCom = this.camera;
+                    if (!camCom.IsZBuffer)
+                        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthNonState), 1);
+                    else
+                        this.d3d10Device.OutputMerger.SetDepthStencilState(new DepthStencilState(this.d3d10Device, this.depthState), 1);
+                    com.shader.effect.GetVariableByIndex(0).AsMatrix().SetMatrix(camCom.ViewMatrix);
+                    com.shader.effect.GetVariableByIndex(1).AsMatrix().SetMatrix(camCom.projectionMatrix);
+                    com.shader.effect.GetVariableByIndex(2).AsMatrix().SetMatrix(pos.rotationXMatrix);
+                    com.shader.effect.GetVariableByIndex(3).AsMatrix().SetMatrix(pos.rotationYMatrix);
+                    com.shader.effect.GetVariableByIndex(4).AsMatrix().SetMatrix(pos.rotationZMatrix);
+                    com.shader.effect.GetVariableByIndex(5).AsMatrix().SetMatrix(pos.scalingMatrix);
+                    com.shader.effect.GetVariableByIndex(6).AsMatrix().SetMatrix(pos.translationLocalMatrix);
+                    com.shader.effect.GetVariableByIndex(7).AsMatrix().SetMatrix(pos.translationWorldMatrix);
+                    foreach (var shaderVars in com.shader.vars)
                     {
-                        var pass = technique.GetPassByIndex(j);
-                        inputAssembler.InputLayout = passContainer;
-
-                        pass.Apply();
-                        if (com.mesh.indexBuffer != null)
-                            this.d3d10Device.DrawIndexed(com.mesh.numberOfIndices, 0, 0);
-                        else
-                            this.d3d10Device.Draw(com.mesh.numberOfVertices, 0);
-
-                        j += 1;
+                        // Eventually, we'll use this to set all the required variables needed
                     }
-                    i += 1;
+
+                    // Run through each technique, pass, draw
+                    int i = 0, j = 0;
+                    foreach (var techniqueContainer in com.shader.inputLayouts)
+                    {
+                        var technique = com.shader.effect.GetTechniqueByIndex(i);
+                        foreach (var passContainer in techniqueContainer)
+                        {
+                            var pass = technique.GetPassByIndex(j);
+                            inputAssembler.InputLayout = passContainer;
+
+                            pass.Apply();
+                            if (com.mesh.indexBuffer != null)
+                                this.d3d10Device.DrawIndexed(com.mesh.numberOfIndices, 0, 0);
+                            else
+                                this.d3d10Device.Draw(com.mesh.numberOfVertices, 0);
+
+                            j += 1;
+                        }
+                        i += 1;
+                    }
                 }
+
+                // text?
+                //font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
+                //font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
+                //this.font.DrawText(null, "Camera Eye: " + this.camera.Eye.ToString(), 3, 3, Color4.White);
+                //font.DrawText(null, String.Format("Yaw: {0}\nPitch: {1}\nRoll: {2}", camera.RadianY, camera.RadianX, camera.RadianZ), 3, 3, Color4.White);
+
+                // Present our drawn scene waiting for one vertical sync
+                this.swapChain.Present(1, PresentFlags.None);
             }
-
-            // text?
-            //font.DrawText(null, "SIMPLE TEXT", 0, 0, Color4.Black);
-            //font.DrawText(null, "SIMPLE TEXT", 1, 1, Color4.White);
-            //this.font.DrawText(null, "Camera Eye: " + this.camera.Eye.ToString(), 3, 3, Color4.White);
-            //font.DrawText(null, String.Format("Yaw: {0}\nPitch: {1}\nRoll: {2}", camera.RadianY, camera.RadianX, camera.RadianZ), 3, 3, Color4.White);
-
-            // Present our drawn scene waiting for one vertical sync
-            this.swapChain.Present(1, PresentFlags.None);
         }
 
         public RenderSystem()

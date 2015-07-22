@@ -41,6 +41,11 @@ namespace EntityEngine
             this.errorWr.StringWritten += new EventHandler<MyEvtArgs<string>>(this.error_StringWritten);
             py.SetErrorOutput(this.errorMs, this.errorWr);
 
+            this.SetVars(variablesToPass);
+        }
+
+        public void SetVars(Dictionary<string, object> variablesToPass)
+        {
             this.variablesToPass = variablesToPass;
         }
 
