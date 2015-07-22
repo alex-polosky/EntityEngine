@@ -12,7 +12,7 @@ using EntityFramework;
 using EntityFramework.Components;
 
 namespace EntityEngine.Components
-{   
+{
     public class CameraComponent : EntityFramework.Component
     {
         private Vector3 eye;
@@ -59,6 +59,12 @@ namespace EntityEngine.Components
                 UpdateViewMatrix();
         }
 
+        public void Rotate(float x, float y, float z, bool updateView = false)
+        { this.Rotate(new Vector3(x, y, z), updateView); }
+
+        public void Rotate(List<float> v, bool updateView = false)
+        { if (v.Count == 3) this.Rotate(new Vector3(v[0], v[1], v[2]), updateView); }
+
         public void Move(Vector3 v, bool updateView = false)
         {
             if (this.IsMoveWithRot)
@@ -85,6 +91,12 @@ namespace EntityEngine.Components
             if (updateView)
                 UpdateViewMatrix();
         }
+
+        public void Move(float x, float y, float z, bool updateView = false)
+        { this.Move(new Vector3(x, y, z), updateView); }
+
+        public void Move(List<float> v, bool updateView = false)
+        { if (v.Count == 3) this.Move(new Vector3(v[0], v[1], v[2]), updateView); }
 
         public void ResetProjectionMatrix(int targetWidth, int targetHeight)
         {

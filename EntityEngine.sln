@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityEngine", "EntityEngin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{08587D08-E187-4E8C-95B5-58C293B044AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Pong\Pong.csproj", "{EFDED84E-42AD-42F8-926D-8E269C4601AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Examples\Pong\Pong.csproj", "{EFDED84E-42AD-42F8-926D-8E269C4601AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{8E4A2A02-BA95-4EA9-8F7A-02245A343714}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Examples\Test\Test.csproj", "{8E4A2A02-BA95-4EA9-8F7A-02245A343714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

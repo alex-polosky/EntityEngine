@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using SharpDX.DirectInput;
 using SharpDX.Windows;
 
 using EntityFramework;
@@ -65,6 +64,8 @@ namespace EntityEngine
         protected SystemManager sys;
         protected Components.RenderSystem render;
 
+        public SystemManager world { get { return this.sys; } }
+
         public class PyHelp
         {
             public string c_typeof(object obj)
@@ -75,11 +76,6 @@ namespace EntityEngine
 
         /////////////////////////////////////////////////////////
         // testing code
-        private DirectInput dInput;
-        private Keyboard keyboard;
-        private Mouse mouse;
-        private bool kbAcq = false;
-        private bool mAcq = false;
         /////////////////////////////////////////////////////////
 
         protected virtual void SetUpEnts() { }
@@ -178,97 +174,97 @@ new Components.VertexStructures.Pos(
 
             ////////////////////////////////////////////////////////////
             // 3D XYZ plot!
-            var w = 0.01f;
-            var d = 10000f;
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
-            e.GetComponent<TagComponent>().name = "X-Axis";
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = colorShader;
-            rCom.mesh = meshCube;
-            e.GetComponent<Components.PositionComponent>().scalingMatrix *=
-                SharpDX.Matrix.Scaling(new SharpDX.Vector3(d, w, w));
+            //var w = 0.01f;
+            //var d = 10000f;
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
+            //e.GetComponent<TagComponent>().name = "X-Axis";
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = colorShader;
+            //rCom.mesh = meshCube;
+            //e.GetComponent<Components.PositionComponent>().scalingMatrix *=
+            //    SharpDX.Matrix.Scaling(new SharpDX.Vector3(d, w, w));
 
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
-            e.GetComponent<TagComponent>().name = "Y-Axis";
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = colorShader;
-            rCom.mesh = meshCube;
-            e.GetComponent<Components.PositionComponent>().scalingMatrix *=
-                SharpDX.Matrix.Scaling(new SharpDX.Vector3(w, d, w));
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
+            //e.GetComponent<TagComponent>().name = "Y-Axis";
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = colorShader;
+            //rCom.mesh = meshCube;
+            //e.GetComponent<Components.PositionComponent>().scalingMatrix *=
+            //    SharpDX.Matrix.Scaling(new SharpDX.Vector3(w, d, w));
 
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
-            e.GetComponent<TagComponent>().name = "Z-Axis";
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = colorShader;
-            rCom.mesh = meshCube;
-            e.GetComponent<Components.PositionComponent>().scalingMatrix *=
-                SharpDX.Matrix.Scaling(new SharpDX.Vector3(w, w, d));
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
+            //e.GetComponent<TagComponent>().name = "Z-Axis";
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = colorShader;
+            //rCom.mesh = meshCube;
+            //e.GetComponent<Components.PositionComponent>().scalingMatrix *=
+            //    SharpDX.Matrix.Scaling(new SharpDX.Vector3(w, w, d));
 
             ////////////////////////////////////////////////////////////
             // Now here is all of the rest.....
 
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
-            e.GetComponent<TagComponent>().name = "win";
-            sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = basicShader;
-            rCom.mesh = meshSquare;
-            e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = 2.0f;
-            e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = 2.0f;
-            e.GetComponent<Components.PositionComponent>().rotationYMatrix =
-                SharpDX.Matrix.RotationY((float)Math.PI);
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<TagComponent, TagSystem>(e);
+            //e.GetComponent<TagComponent>().name = "win";
+            //sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = basicShader;
+            //rCom.mesh = meshSquare;
+            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = 2.0f;
+            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = 2.0f;
+            //e.GetComponent<Components.PositionComponent>().rotationYMatrix =
+            //    SharpDX.Matrix.RotationY((float)Math.PI);
 
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = colorShader;
-            rCom.mesh = meshSquareColor;
-            e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = -2.0f;
-            e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = -2.0f;
-            e.GetComponent<Components.PositionComponent>().rotationYMatrix =
-                SharpDX.Matrix.RotationY((float)Math.PI);
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<Components.WinComponent, Components.WinSystem>(e);
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = colorShader;
+            //rCom.mesh = meshSquareColor;
+            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M41 = -2.0f;
+            //e.GetComponent<Components.PositionComponent>().translationWorldMatrix.M42 = -2.0f;
+            //e.GetComponent<Components.PositionComponent>().rotationYMatrix =
+            //    SharpDX.Matrix.RotationY((float)Math.PI);
 
-            // Try to render a cube xD
-            e = sys.AddNewEntity();
-            sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
-            sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
-            e.GetComponent<GroupComponent>().groups.Add("save");
-            sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
-            sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
-            rCom = e.GetComponent<Components.RenderComponent>();
-            rCom.shader = basicShader;
-            rCom.mesh = meshCube;
-            sys.GetComponentSystem<ChildrenComponent, ChildrenSystem>()
-                .SetParent(e, sys.GetComponentSystem<TagComponent, TagSystem>().getTaggedEntity("win"));
+            //// Try to render a cube xD
+            //e = sys.AddNewEntity();
+            //sys.AddNewComponentToEntity<ChildrenComponent, ChildrenSystem>(e);
+            //sys.AddNewComponentToEntity<GroupComponent, GroupSystem>(e);
+            //e.GetComponent<GroupComponent>().groups.Add("save");
+            //sys.AddNewComponentToEntity<Components.PositionComponent, Components.PositionSystem>(e);
+            //sys.AddNewComponentToEntity<Components.RenderComponent, Components.RenderSystem>(e);
+            //rCom = e.GetComponent<Components.RenderComponent>();
+            //rCom.shader = basicShader;
+            //rCom.mesh = meshCube;
+            //sys.GetComponentSystem<ChildrenComponent, ChildrenSystem>()
+            //    .SetParent(e, sys.GetComponentSystem<TagComponent, TagSystem>().getTaggedEntity("win"));
         }
 
-        public Game1_Form()
+        public Game1_Form(bool useGrid = false)
         {
             InitializeComponent();
 
@@ -353,7 +349,7 @@ List = Generic.List
                 default:
                     break;
             }
-            
+
             // Init FPS
             this.FPS = new FrameRate();
 
@@ -379,7 +375,12 @@ List = Generic.List
             sys.GetComponentSystem<Components.WinComponent, Components.WinSystem>()
                 .initFromSerial(ref sys, ref py, ref FPS);
 
+            // Load up input manager
+            sys.AddComponentSystem<Components.InputComponent, Components.InputSystem>();
+
             // Load any components
+            if (useGrid)
+                this.SetUpEnts_Example_Dep();
             this.SetUpEnts();
             //FileManager.LoadAllEntities(Path.Combine("Maps", "Test", "ObjDefs", "Entities"), sys);
 
@@ -388,7 +389,7 @@ List = Generic.List
             //    .getTaggedEntity("win"));
             //var x = 0;
             //foreach (var entity in sys.GetComponentSystem<GroupComponent, GroupSystem>().getTaggedEntities("save"))
-            //    FileManager.SaveEntity(Path.Combine("Maps", "Test", "ObjDefs", "Entities", String.Format("entity_{0}.js", x++)), entity);
+            //   FileManager.SaveEntity(Path.Combine("Maps", "Test", "ObjDefs", "Entities", String.Format("entity_{0}.js", x++)), entity);
 
             // Start the game
             this.Shown += new EventHandler(this.StartRunning_Game);
@@ -406,80 +407,80 @@ List = Generic.List
             //    .translationWorldMatrix.M41 += 0.001f;
 
             // Testing some camera movement...
-            if (this.kbAcq)
-            {
-                var move = SharpDX.Vector3.Zero;
-                var rot = SharpDX.Vector3.Zero;
+            //if (this.kbAcq)
+            //{
+            //    var move = SharpDX.Vector3.Zero;
+            //    var rot = SharpDX.Vector3.Zero;
 
-                var kbState = this.keyboard.GetCurrentState();
-                if (kbState.IsPressed(Key.W))
-                {
-                    move.Z += 0.1f;
-                }
-                if (kbState.IsPressed(Key.S))
-                {
-                    move.Z += -0.1f;
-                }
-                if (kbState.IsPressed(Key.A))
-                {
-                    move.X += 0.1f;
-                }
-                if (kbState.IsPressed(Key.D))
-                {
-                    move.X += -0.1f;
-                }
-                if (kbState.IsPressed(Key.Q))
-                {
-                    move.Y += -0.1f;
-                }
-                if (kbState.IsPressed(Key.E))
-                {
-                    move.Y += 0.1f;
-                }
+            //    var kbState = this.keyboard.GetCurrentState();
+            //    if (kbState.IsPressed(Key.W))
+            //    {
+            //        move.Z += 0.1f;
+            //    }
+            //    if (kbState.IsPressed(Key.S))
+            //    {
+            //        move.Z += -0.1f;
+            //    }
+            //    if (kbState.IsPressed(Key.A))
+            //    {
+            //        move.X += 0.1f;
+            //    }
+            //    if (kbState.IsPressed(Key.D))
+            //    {
+            //        move.X += -0.1f;
+            //    }
+            //    if (kbState.IsPressed(Key.Q))
+            //    {
+            //        move.Y += -0.1f;
+            //    }
+            //    if (kbState.IsPressed(Key.E))
+            //    {
+            //        move.Y += 0.1f;
+            //    }
 
-                if (kbState.IsPressed(Key.Left))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.Y += -angle;
-                }
-                if (kbState.IsPressed(Key.Right))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.Y += angle;
-                }
-                if (kbState.IsPressed(Key.Up))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.X += angle;
-                }
-                if (kbState.IsPressed(Key.Down))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.X += -angle;
-                }
-                if (kbState.IsPressed(Key.Z))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.Z += angle;
-                }
-                if (kbState.IsPressed(Key.C))
-                {
-                    float degree = 1;
-                    float angle = (float)Math.PI * degree / 180.0f;
-                    rot.Z += -angle;
-                }
+            //    if (kbState.IsPressed(Key.Left))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.Y += -angle;
+            //    }
+            //    if (kbState.IsPressed(Key.Right))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.Y += angle;
+            //    }
+            //    if (kbState.IsPressed(Key.Up))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.X += angle;
+            //    }
+            //    if (kbState.IsPressed(Key.Down))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.X += -angle;
+            //    }
+            //    if (kbState.IsPressed(Key.Z))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.Z += angle;
+            //    }
+            //    if (kbState.IsPressed(Key.C))
+            //    {
+            //        float degree = 1;
+            //        float angle = (float)Math.PI * degree / 180.0f;
+            //        rot.Z += -angle;
+            //    }
 
-                if (move != SharpDX.Vector3.Zero)
-                    render.Camera.Move(move);
-                if (rot != SharpDX.Vector3.Zero)
-                    render.Camera.Rotate(rot);
-                render.Camera.UpdateViewMatrix();
-            }
+            //    if (move != SharpDX.Vector3.Zero)
+            //        render.Camera.Move(move);
+            //    if (rot != SharpDX.Vector3.Zero)
+            //        render.Camera.Rotate(rot);
+            //    render.Camera.UpdateViewMatrix();
+            //}
 
             this.sys.Update(this.FPS.ElaspedMS);
             //this.sys.GetComponentSystem<Components.RenderComponent, Components.RenderSystem>()
@@ -497,47 +498,23 @@ List = Generic.List
 
         private void StartRunning_Game(object sender, EventArgs e)
         {
-            /////////////////////////////////////////////////////////
-            // testing code
-            this.dInput = new DirectInput();
-            this.keyboard = new Keyboard(this.dInput);
-            this.keyboard.Acquire();
-            this.kbAcq = true;
-            this.mouse = new Mouse(this.dInput);
-            this.mouse.Acquire();
-            this.mAcq = true;
-            /////////////////////////////////////////////////////////
+            this.sys.GetComponentSystem<Components.InputComponent, Components.InputSystem>()
+                .Enable();
             RenderLoop.Run(this, this.UpdateSys);
         }
 
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            if (this.keyboard != null)
-            {
-                this.keyboard.Acquire();
-                this.kbAcq = true;
-            }
-            if (this.mouse != null)
-            {
-                this.mouse.Acquire();
-                this.mAcq = true;
-            }
+            this.sys.GetComponentSystem<Components.InputComponent, Components.InputSystem>()
+                .Enable();
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
             base.OnLostFocus(e);
-            if (this.keyboard != null)
-            {
-                this.keyboard.Unacquire();
-                this.kbAcq = false;
-            }
-            if (this.mouse != null)
-            {
-                this.mouse.Unacquire();
-                this.mAcq = false;
-            }
+            this.sys.GetComponentSystem<Components.InputComponent, Components.InputSystem>()
+                .Disable();
         }
 
         #region "TextWriters"
