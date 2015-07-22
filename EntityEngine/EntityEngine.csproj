@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Components\Color.cs" />
     <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\Input.cs" />
     <Compile Include="Components\Menu.cs" />
     <Compile Include="Components\Render.cs" />
     <Compile Include="Components\Position.cs" />
