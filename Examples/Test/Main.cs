@@ -88,8 +88,8 @@ namespace Test
                 .AddComponent(com);
         }
 
-        public Main(bool useGrid = true)
-            : base(useGrid)
+        public Main(int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
+            : base(renderMode, usePyConsole, useGrid, customWidth, customHeight)
         {
             InitializeComponent();
         }

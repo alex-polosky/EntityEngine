@@ -43,6 +43,14 @@ namespace EntityEngine
             type.GetProperty(propertyName).SetValue(instance, newValue, null);
         }
 
+        //FileManager.LoadAllEntities(Path.Combine("Maps", "Test", "ObjDefs", "Entities"), sys);
+
+        // Attempt to serialize all entities
+        //FileManager.SaveEntity("", sys.GetComponentSystem<TagComponent, TagSystem>()
+        //    .getTaggedEntity("win"));
+        //var x = 0;
+        //foreach (var entity in sys.GetComponentSystem<GroupComponent, GroupSystem>().getTaggedEntities("save"))
+        //   FileManager.SaveEntity(Path.Combine("Maps", "Test", "ObjDefs", "Entities", String.Format("entity_{0}.js", x++)), entity);
         public static void SaveEntity(string filePath, Entity e)
         {
             var js = new Dictionary<string, Type>();
