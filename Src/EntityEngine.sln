@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FDB4C826-6D3C-4D66-A01E-96353CD4A8B0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ToolKit", "ToolKit", "{FDB4C826-6D3C-4D66-A01E-96353CD4A8B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{08587D08-E187-4E8C-95B5-58C293B044AF}"
 EndProject
@@ -16,6 +16,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework", "Core\EntityFramework\EntityFramework.csproj", "{9B024C51-9A91-4254-90DB-9F2E91000F16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyInterface", "Core\PyInterface\PyInterface.csproj", "{7CD2E53D-7182-44F3-96C0-E41744DE512A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEditor", "ToolKit\GameEditor\GameEditor.csproj", "{6B5004E9-5CAA-41F2-A701-9A7E281241F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjDefEditor", "ToolKit\ObjDefEditor\ObjDefEditor.csproj", "{D2162924-5130-4A32-B606-76A68029BDA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuite", "ToolKit\TestSuite\TestSuite.csproj", "{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,11 +83,44 @@ Global
 		{7CD2E53D-7182-44F3-96C0-E41744DE512A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7CD2E53D-7182-44F3-96C0-E41744DE512A}.Release|x86.ActiveCfg = Release|x86
 		{7CD2E53D-7182-44F3-96C0-E41744DE512A}.Release|x86.Build.0 = Release|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Debug|x86.ActiveCfg = Debug|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Debug|x86.Build.0 = Debug|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Release|Any CPU.ActiveCfg = Release|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Release|x86.ActiveCfg = Release|x86
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6}.Release|x86.Build.0 = Release|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Debug|x86.ActiveCfg = Debug|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Debug|x86.Build.0 = Debug|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Release|Any CPU.ActiveCfg = Release|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Release|Mixed Platforms.Build.0 = Release|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Release|x86.ActiveCfg = Release|x86
+		{D2162924-5130-4A32-B606-76A68029BDA5}.Release|x86.Build.0 = Release|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Debug|x86.ActiveCfg = Debug|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Debug|x86.Build.0 = Debug|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Release|Any CPU.ActiveCfg = Release|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Release|x86.ActiveCfg = Release|x86
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6B5004E9-5CAA-41F2-A701-9A7E281241F6} = {FDB4C826-6D3C-4D66-A01E-96353CD4A8B0}
+		{D2162924-5130-4A32-B606-76A68029BDA5} = {FDB4C826-6D3C-4D66-A01E-96353CD4A8B0}
+		{CBF2CCFF-9C3D-44DC-A34E-79A0600850A7} = {FDB4C826-6D3C-4D66-A01E-96353CD4A8B0}
 		{EFDED84E-42AD-42F8-926D-8E269C4601AB} = {08587D08-E187-4E8C-95B5-58C293B044AF}
 		{8E4A2A02-BA95-4EA9-8F7A-02245A343714} = {08587D08-E187-4E8C-95B5-58C293B044AF}
 		{BA32E84A-582F-4989-BCF7-DAA09584D9B9} = {92AB59F6-2B67-4ACB-A6AE-9A3C0C93A510}

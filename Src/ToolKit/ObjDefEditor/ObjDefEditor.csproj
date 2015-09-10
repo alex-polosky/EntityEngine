@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>3c447af6-fab2-4955-a7bb-e6535d67cdd2</ProjectGuid>
+    <ProjectGuid>{D2162924-5130-4A32-B606-76A68029BDA5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ObjDefEditor</RootNamespace>

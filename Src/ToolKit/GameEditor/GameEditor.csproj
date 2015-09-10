@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>e98d6180-46fb-4ea4-aaf1-4a091ef5e8ab</ProjectGuid>
+    <ProjectGuid>{6B5004E9-5CAA-41F2-A701-9A7E281241F6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GameEditor</RootNamespace>
