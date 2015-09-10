@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputBox.cs" />
     <Compile Include="objDefEditorMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
