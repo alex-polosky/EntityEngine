@@ -1,6 +1,6 @@
-﻿namespace TestSuite
+﻿namespace GameEditor
 {
-    partial class Form1
+    partial class gameEditorMainForm
     {
         /// <summary>
         /// Required designer variable.

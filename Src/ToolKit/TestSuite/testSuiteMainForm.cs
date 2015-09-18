@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ObjDefEditor
+namespace TestSuite
 {
-    public partial class Form1 : Form
+    public partial class testSuiteMainForm : Form
     {
-        public Form1()
+        public testSuiteMainForm()
         {
             InitializeComponent();
         }

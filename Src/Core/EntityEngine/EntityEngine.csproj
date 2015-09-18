@@ -39,29 +39,25 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\JSON.NET\Bin\Net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.D3DCompiler.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D10">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.Direct3D10.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11, Version=2.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.Direct3D10.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DirectInput">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.DirectInput.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.DirectInput.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DirectSound">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.DirectSound.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.DirectSound.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\..\Lib\SharpDX\Bin\DirectX11-net40\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\..\..\Lib\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

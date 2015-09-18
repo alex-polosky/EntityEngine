@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace TestSuite
+namespace GameEditor
 {
-    public partial class Form1 : Form
+    public partial class gameEditorMainForm : Form
     {
-        public Form1()
+        public gameEditorMainForm()
         {
             InitializeComponent();
         }
