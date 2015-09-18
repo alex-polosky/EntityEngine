@@ -17,6 +17,60 @@ namespace ObjDefEditor
         private List<string> openFiles;
         private TreeNode selectedNode;
 
+        public string Tree2Json(TreeNode parent)
+        {
+            string json = "";
+
+            // Data
+            if (parent.Nodes.Count == 0)
+            {
+                json += '"' + parent.Text + '"';
+            }
+            // Array/Object
+            else
+            {
+                if (parent.Nodes[0].Text == parent.Text + "[")
+                {
+                    // Have to determine if the children are objects or just strings
+                    // I suppose we could have lists in lists? but that would just fall under object
+                    json += '"' + parent.Text + '"' + " : [ ";
+                    foreach (TreeNode child in parent.Nodes)
+                    {
+                        if (child.Nodes.Count == 0)
+                            json += '"' + child.Text + '"' + ",";
+                        else
+                        {
+                            json += '{' + Tree2Json(child) + '}' + ",";
+                        }
+                    }
+                    json += "],";
+                }
+                else
+                {
+                    json += '"' + parent.Text + '"' + " : ";
+                    if (parent.Nodes.Count == 1)
+                        if (parent.Nodes[0].Nodes.Count == 0)
+                            json += '"' + parent.Nodes[0].Text + '"' + ",";
+                        else
+                            json += '{' + Tree2Json(parent.Nodes[0]) + '}' + ",";
+                    else
+                    {
+                        json += "{ ";
+                        foreach (TreeNode child in parent.Nodes)
+                        {
+                            if (child.Nodes.Count == 0)
+                                json += '"' + child.Text + '"' + ",";
+                            else
+                                json += '{' + Tree2Json(child) + '}' + ",";
+                        }
+                        json += "},";
+                    }
+                }
+            }
+
+            return json;
+        }
+
         public TreeNode Json2Tree(dynamic obj)
         {
             TreeNode parent = new TreeNode();
@@ -111,6 +165,16 @@ namespace ObjDefEditor
             return null;
         }
 
+        // Init
+
+        public objDefEditorMainForm()
+        {
+            InitializeComponent();
+            this.openFiles = new List<string>();
+        }
+
+        // Button handlers
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.openFiles.Count == 0)
@@ -131,7 +195,7 @@ namespace ObjDefEditor
             if (this.selectedNode != null && this.selectedNode != this.treeView1.Nodes[0])
             {
                 string edit = this.selectedNode.Text;
-                Dialogs.InputBox("Title", "Prompt", ref edit);
+                Dialogs.InputBox("Editing field", this.selectedNode.Parent.Text, ref edit);
                 this.selectedNode.Text = edit;
             }
         }
@@ -143,7 +207,21 @@ namespace ObjDefEditor
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (this.openFiles.Count != 0)
+            {
+                if (MessageBox.Show(
+                        "Would you like to save this file?\n" + this.openFiles[0],
+                        "",
+                        MessageBoxButtons.YesNo
+                    ) == DialogResult.Yes)
+                {
+                    //using (var sWriter = new StreamWriter(this.openFiles[0]))
+                    //{
+                    //    sWriter.Write(Tree2Json(this.treeView1.Nodes[0]));
+                    //}
+                    var a = Tree2Json(this.treeView1.Nodes[0]);
+                }
+            }
         }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -155,10 +233,14 @@ namespace ObjDefEditor
             }
         }
 
-        public objDefEditorMainForm()
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
-            this.openFiles = new List<string>();
+            this.treeView1.ExpandAll();
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.treeView1.CollapseAll();
         }
     }
 }
