@@ -17,7 +17,7 @@ namespace ObjDefEditor
         private List<string> openFiles;
         private TreeNode selectedNode;
 
-        public string Tree2Json(TreeNode parent)
+        public string Tree2Json(TreeNode parent, bool ignoreObjText = false)
         {
             string json = "";
 
@@ -26,46 +26,33 @@ namespace ObjDefEditor
             {
                 json += '"' + parent.Text + '"';
             }
-            // Array/Object
+            else if (parent.Nodes[0].Text == parent.Text + "[0]")
+            {
+                json += '"' + parent.Text + '"' + " : [ ";
+                foreach (TreeNode child in parent.Nodes)
+                {
+                    json += Tree2Json(child, true);
+                }
+                json += "],";
+            }
+            else if (parent.Nodes.Count == 1 && parent.Nodes[0].Nodes.Count == 0)
+            {
+                if (!ignoreObjText)
+                    json += '"' + parent.Text + '"' + ": " + '"' + parent.Nodes[0].Text + '"' + ',';
+                else
+                    json += '"' + parent.Nodes[0].Text + '"' + ',';
+            }
             else
             {
-                if (parent.Nodes[0].Text == parent.Text + "[")
-                {
-                    // Have to determine if the children are objects or just strings
-                    // I suppose we could have lists in lists? but that would just fall under object
-                    json += '"' + parent.Text + '"' + " : [ ";
-                    foreach (TreeNode child in parent.Nodes)
-                    {
-                        if (child.Nodes.Count == 0)
-                            json += '"' + child.Text + '"' + ",";
-                        else
-                        {
-                            json += '{' + Tree2Json(child) + '}' + ",";
-                        }
-                    }
-                    json += "],";
-                }
+                if (!ignoreObjText)
+                    json += '"' + parent.Text + '"' + " : { ";
                 else
+                    json += " { ";
+                foreach (TreeNode child in parent.Nodes)
                 {
-                    json += '"' + parent.Text + '"' + " : ";
-                    if (parent.Nodes.Count == 1)
-                        if (parent.Nodes[0].Nodes.Count == 0)
-                            json += '"' + parent.Nodes[0].Text + '"' + ",";
-                        else
-                            json += '{' + Tree2Json(parent.Nodes[0]) + '}' + ",";
-                    else
-                    {
-                        json += "{ ";
-                        foreach (TreeNode child in parent.Nodes)
-                        {
-                            if (child.Nodes.Count == 0)
-                                json += '"' + child.Text + '"' + ",";
-                            else
-                                json += '{' + Tree2Json(child) + '}' + ",";
-                        }
-                        json += "},";
-                    }
+                    json += Tree2Json(child);
                 }
+                json += "},";
             }
 
             return json;
@@ -215,11 +202,10 @@ namespace ObjDefEditor
                         MessageBoxButtons.YesNo
                     ) == DialogResult.Yes)
                 {
-                    //using (var sWriter = new StreamWriter(this.openFiles[0]))
-                    //{
-                    //    sWriter.Write(Tree2Json(this.treeView1.Nodes[0]));
-                    //}
-                    var a = Tree2Json(this.treeView1.Nodes[0]);
+                    var json = Tree2Json(this.treeView1.Nodes[0]);
+                    json = json.Substring(json.IndexOf("{"));
+                    using (var sWriter = new StreamWriter(this.openFiles[0]))
+                        sWriter.Write(json);
                 }
             }
         }
