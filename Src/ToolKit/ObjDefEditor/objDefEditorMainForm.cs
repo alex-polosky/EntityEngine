@@ -204,6 +204,8 @@ namespace ObjDefEditor
                 {
                     var json = Tree2Json(this.treeView1.Nodes[0]);
                     json = json.Substring(json.IndexOf("{"));
+                    if (json.Last() == ',')
+                        json = json.Substring(0, json.Length - 1);
                     using (var sWriter = new StreamWriter(this.openFiles[0]))
                         sWriter.Write(json);
                 }
