@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using EntityEngine;
+using EntityFramework;
+using EntityFramework.Components;
 
 namespace Pong
 {
@@ -15,10 +17,12 @@ namespace Pong
     {
         protected override void SetUpEnts()
         {
+            Entity e;
+
         }
 
-        public Main()
-            : base()
+        public Main(int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
+            : base(renderMode, usePyConsole, useGrid, customWidth, customHeight)
         {
             InitializeComponent();
         }
