@@ -17,7 +17,7 @@
     <Setting Name="FolderShaders" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Shaders</Value>
     </Setting>
-    <Setting Name="Strings" Type="System.String" Scope="Application">
+    <Setting Name="FolderStrings" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Strings</Value>
     </Setting>
   </Settings>

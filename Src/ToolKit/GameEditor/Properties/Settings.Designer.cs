@@ -71,9 +71,9 @@ namespace GameEditor.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Strings")]
-        public string Strings {
+        public string FolderStrings {
             get {
-                return ((string)(this["Strings"]));
+                return ((string)(this["FolderStrings"]));
             }
         }
     }
