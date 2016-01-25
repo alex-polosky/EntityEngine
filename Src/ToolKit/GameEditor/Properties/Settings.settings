@@ -17,8 +17,29 @@
     <Setting Name="FolderShaders" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Shaders</Value>
     </Setting>
-    <Setting Name="Strings" Type="System.String" Scope="Application">
+    <Setting Name="FolderStrings" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Strings</Value>
+    </Setting>
+    <Setting Name="FolderBaseMap" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MapMainMenu" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MapGlobal" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="InferMapReference" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoLoadMaps" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FirstRun" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MapPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

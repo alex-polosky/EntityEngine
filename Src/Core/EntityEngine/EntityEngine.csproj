@@ -13,13 +13,13 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\..\Bin\Core</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -38,26 +37,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Lib\Newtonsoft\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\Lib\SharpDX.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\..\..\Lib\SharpDX.D3DCompiler.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D10">
-      <HintPath>..\..\..\Lib\SharpDX.Direct3D10.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.Direct3D10.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DirectInput">
-      <HintPath>..\..\..\Lib\SharpDX.DirectInput.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.DirectInput.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DirectSound">
-      <HintPath>..\..\..\Lib\SharpDX.DirectSound.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.DirectSound.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\..\Lib\SharpDX.DXGI.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>..\..\..\Lib\SharpDX\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BootStrap.cs" />
     <Compile Include="Components\Collision.cs" />
     <Compile Include="Components\Color.cs" />
     <Compile Include="Components\Camera.cs" />
@@ -100,7 +107,6 @@
     <Compile Include="Game1_Form.Designer.cs">
       <DependentUpon>Game1_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Embedded.resx">
       <DependentUpon>Embedded.cs</DependentUpon>
@@ -121,18 +127,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Maps\Test\ObjDefs\WinSystem.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Maps\Test\Models\squarecolor.mesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Maps\Test\Models\square.mesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Maps\Test\Models\cube.mesh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -145,52 +139,17 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntityFramework\EntityFramework.csproj">
+      <Private>False</Private>
       <Project>{9B024C51-9A91-4254-90DB-9F2E91000F16}</Project>
       <Name>EntityFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\PyInterface\PyInterface.csproj">
+      <Private>False</Private>
       <Project>{7CD2E53D-7182-44F3-96C0-E41744DE512A}</Project>
       <Name>PyInterface</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Maps\Test\ObjDefs\Entities\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Maps\Test\ObjDefs\Copy of WinSystem.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="Maps\Test\Shaders\2D.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Maps\Test\Shaders\basicEffect.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Maps\Test\Shaders\color.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Maps\Test\Shaders\textured.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\2D.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\basicEffect.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\color.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\textured.fx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="winConditions\autoWinP1.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="winConditions\__init__.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
