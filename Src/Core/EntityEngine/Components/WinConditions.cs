@@ -113,15 +113,18 @@ WinConditions = winConditions.WinConditions
 
             this.winConditions = new List<WinCondition>();
             dynamic wins = this.py.ConvertList(this.pyVars["WinConditions"]);
-            for (int i = 0; i < wins.Count; i++)
+            if (wins != null)
             {
-                this.winConditions.Add(new WinCondition()
+                for (int i = 0; i < wins.Count; i++)
+                {
+                    this.winConditions.Add(new WinCondition()
                     {
                         name = wins[0].name,
                         description = wins[0].description,
                         main = wins[0].main
                     }
-                );
+                    );
+                }
             }
         }
 #else

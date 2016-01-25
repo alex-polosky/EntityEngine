@@ -19,6 +19,7 @@
             "className": "EntityFramework.Components.GroupComponent"
         },
         {
+			"reference": "0577b8fa-9353-4fe5-81e0-143d805f7e65",
             "json": {
                 "name": "X-Axis",
                 "entity": {

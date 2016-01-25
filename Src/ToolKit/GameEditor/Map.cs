@@ -4,49 +4,85 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using Newtonsoft.Json;
+
 namespace GameEditor
 {
-    public class HierarchyAssettNode
+    public class MapSetting
     {
-        public string name;
-        public HierarchyAssettNode parent;
-        public List<HierarchyAssettNode> children;
-        public List<Assett> assetts;
-        public List<string> childrenNames 
-        { 
-            get 
-            { 
-                List<string> names = new List<string>();
-                foreach (HierarchyAssettNode node in children)
-                    names.Add(node.name);
-                return names; 
-            } 
-        }
-        public Dictionary<string, HierarchyAssettNode> childrenNameMap
+        private static string pathSettings= "SETTINGS";
+        private static string pathCom = "component.definition";
+        private static string pathLib = "library.definition";
+        private static string pathGid = "guid.definition";
+
+        private Map _map;
+        private Dictionary<string, string> _componentDefinition;
+        private Dictionary<string, string> _libraryDefinition;
+        private Dictionary<string, string> _guidDefinition;
+
+        public Dictionary<string, Dictionary<string, string>> Definitions
         {
             get
             {
-                Dictionary<string, HierarchyAssettNode> map = new Dictionary<string, HierarchyAssettNode>();
-                foreach (HierarchyAssettNode node in children)
-                    map.Add(node.name, node);
-                return map;
+                return new Dictionary<string, Dictionary<string, string>>()
+                {
+                    {"Component", _componentDefinition},
+                    {"Library", _libraryDefinition},
+                    {"Guid", _guidDefinition}
+                };
             }
         }
 
-        public HierarchyAssettNode()
+        private void LoadDefinition(string fileName, ref Dictionary<string, string> definition)
         {
-            name = "";
-            parent = null;
-            children = new List<HierarchyAssettNode>();
-            assetts = new List<Assett>();
+            var path = System.IO.Path.Combine(_map.MapPath, pathSettings, fileName);
+            string data = "";
+            if (!System.IO.File.Exists(path))
+                return;
+            using (StreamReader sr = new StreamReader(path))
+            {
+                data = sr.ReadToEnd();
+            }
+            foreach (string line in data.Split('\n'))
+            {
+                if (line.Count() == 0)
+                    continue;
+                if (line[0] == '#')
+                    continue;
+                var set = line.Split('=');
+                if (set.Count() < 2)
+                    continue;
+                definition[set[0]] = set[1];
+            }
         }
 
-        public HierarchyAssettNode(string name, HierarchyAssettNode node)
+        public void LoadComponentDefinition()
         {
-            this.name = name;
-            parent = node;
-            children = new List<HierarchyAssettNode>();
-            assetts = new List<Assett>();
+            _componentDefinition = new Dictionary<string, string>();
+            LoadDefinition(pathCom, ref _componentDefinition);
+        }
+
+        public void LoadLibraryDefinition()
+        {
+            _libraryDefinition = new Dictionary<string, string>();
+            LoadDefinition(pathLib, ref _libraryDefinition);
+        }
+
+        public void LoadGuidDefinition()
+        {
+            _guidDefinition = new Dictionary<string, string>();
+            LoadDefinition(pathGid, ref _guidDefinition);
+        }
+
+        public MapSetting(Map map, bool loadDefinitions=true)
+        {
+            _map = map;
+            if (loadDefinitions)
+            {
+                LoadComponentDefinition();
+                LoadLibraryDefinition();
+                LoadGuidDefinition();
+            }
         }
     }
 
@@ -54,27 +90,31 @@ namespace GameEditor
     {
 #region Private Vars
         private string _mapPath;
-        private Dictionary<AssettType, string> _mapFolderPaths;
-        private Dictionary<AssettType, List<Assett>> _assetts;
-        private HierarchyAssettNode _hierarchy;
+        private MapSetting _settings;
+        private Dictionary<AssetType, string> _mapFolderPaths;
+        private Dictionary<AssetType, List<Asset>> _assetts;
+        private AssetNode _hierarchyNodes;
+        private AssetNode _typeNodes;
 #endregion
 
 #region Public Vars
         public string MapPath { get { return _mapPath; } }
-        public Dictionary<AssettType, string> MapFolderPaths { get { return _mapFolderPaths; } }
-        public Dictionary<AssettType, List<Assett>> AssettsOfType { get { return _assetts; } }
-        public List<Assett> Assetts 
+        public MapSetting MapSettings { get { return _settings; } }
+        public Dictionary<AssetType, string> MapFolderPaths { get { return _mapFolderPaths; } }
+        public Dictionary<AssetType, List<Asset>> AssetsOfType { get { return _assetts; } }
+        public List<Asset> Assets 
         { 
             get 
             { 
-                List<Assett> assetts = new List<Assett>();
-                foreach (AssettType assettType in Enum.GetValues(typeof(AssettType)))
-                    foreach (Assett assett in _assetts[assettType])
+                List<Asset> assetts = new List<Asset>();
+                foreach (AssetType assettType in Enum.GetValues(typeof(AssetType)))
+                    foreach (Asset assett in _assetts[assettType])
                         assetts.Add(assett);
                 return assetts;
             }
         }
-        public HierarchyAssettNode Hierarchy { get { return _hierarchy; } }
+        public AssetNode HierarchyNodes { get { return _hierarchyNodes; } }
+        public AssetNode TypeNodes { get { return _typeNodes; } }
 #endregion
 
 #region Public Methods
@@ -82,12 +122,12 @@ namespace GameEditor
         // generic; instruments; instruments.guitar; 
         // hierarchy search must start with the top and works way down
         // searching for guitar would return nothing, as there's no top level for guitar
-        public List<Assett> GetAssettsFromHierarchy(string searchQuery, AssettType assettTypeSearch)
+        public List<Asset> GetAssetsFromHierarchy(string searchQuery, AssetType assettTypeSearch)
         {
-            List<Assett> assetts = new List<Assett>();
+            List<Asset> assetts = new List<Asset>();
 
             string[] hierarchy = searchQuery.Split('.');
-            foreach (Assett assett in _assetts[assettTypeSearch])
+            foreach (Asset assett in _assetts[assettTypeSearch])
             {
                 if (hierarchy.Length > assett.Hierarchy.Count)
                     continue;
@@ -101,74 +141,236 @@ namespace GameEditor
 
             return assetts;
         }
-        public List<Assett> GetAssettsFromHierarchy(string searchQuery)
+        public List<Asset> GetAssetsFromHierarchy(string searchQuery)
         {
-            List<Assett> assetts = new List<Assett>();
+            List<Asset> assetts = new List<Asset>();
 
-            foreach (AssettType assettType in Enum.GetValues(typeof(AssettType)))
-                foreach (Assett assett in GetAssettsFromHierarchy(searchQuery, assettType))
+            foreach (AssetType assettType in Enum.GetValues(typeof(AssetType)))
+                foreach (Asset assett in GetAssetsFromHierarchy(searchQuery, assettType))
                     assetts.Add(assett);
 
             return assetts;
+        }
+
+        public Asset GetAssetFromGuid(Guid guid)
+        {
+            Asset asset = null;
+            string path = GuidManager.GetFromGuid(guid);
+            path = path.Split(':')[0] + ":" + path.Split(':')[1];
+            if (path != null && path != "")
+            {
+                foreach (Asset a in Assets)
+                {
+                    if (a.AssetPath == path)
+                    {
+                        asset = a;
+                        break;
+                    }
+                }
+            }
+            return asset;
+        }
+        public Guid GetGuidFromAsset(Asset asset)
+        {
+            Guid guid = GuidManager.NULL;
+            switch (asset.AssetType)
+            {
+                case AssetType.Component:
+                case AssetType.Entity:
+                    guid = GuidManager.GetGuidOfObject(asset.AssetPath);
+                    break;
+            }
+            return guid;
         }
 #endregion
 
 #region Private Methods
         private void LoadMapPaths()
         {
-            _mapFolderPaths = new Dictionary<AssettType, string>()
+            _mapFolderPaths = new Dictionary<AssetType, string>()
             {
-                {AssettType.Audio, Path.Combine(_mapPath, Properties.Settings.Default.FolderAudio)},
-                {AssettType.Component, Path.Combine(_mapPath, Properties.Settings.Default.FolderComponents)},
-                {AssettType.Entity, Path.Combine(_mapPath, Properties.Settings.Default.FolderEntities)},
-                {AssettType.Model, Path.Combine(_mapPath, Properties.Settings.Default.FolderModels)},
-                {AssettType.Shader, Path.Combine(_mapPath, Properties.Settings.Default.FolderShaders)},
-                {AssettType.String, Path.Combine(_mapPath, Properties.Settings.Default.FolderStrings)}
+                {AssetType.Audio, Path.Combine(_mapPath, Properties.Settings.Default.FolderAudio)},
+                {AssetType.Component, Path.Combine(_mapPath, Properties.Settings.Default.FolderComponents)},
+                {AssetType.Entity, Path.Combine(_mapPath, Properties.Settings.Default.FolderEntities)},
+                {AssetType.Model, Path.Combine(_mapPath, Properties.Settings.Default.FolderModels)},
+                //TODO : Add script path to settings
+                {AssetType.Script, Path.Combine(_mapPath, "Scripts")},
+                {AssetType.Shader, Path.Combine(_mapPath, Properties.Settings.Default.FolderShaders)},
+                {AssetType.String, Path.Combine(_mapPath, Properties.Settings.Default.FolderStrings)}
             };
         }
 
-        private void LoadAllAssetts()
+        private void LoadAllAssets()
         {
-            _assetts = new Dictionary<AssettType, List<Assett>>();
-            foreach (AssettType assettType in Enum.GetValues(typeof(AssettType)))
+            _assetts = new Dictionary<AssetType, List<Asset>>();
+            foreach (AssetType assettType in Enum.GetValues(typeof(AssetType)))
             {
                 string _assettPath = _mapFolderPaths[assettType];
                 if (!Directory.Exists(_assettPath))
                     Directory.CreateDirectory(_assettPath);
-                _assetts[assettType] = new List<Assett>();
-                LoadAssettsInDir(assettType, _assettPath);
+                _assetts[assettType] = new List<Asset>();
+                LoadAssetsInDir(assettType, _assettPath);
             }
         }
 
-        private void LoadAssettsInDir(AssettType assettType, string rootPath)
+        private void LoadAssetsInDir(AssetType assettType, string rootPath)
         {
             foreach (string path in Directory.GetDirectories(rootPath))
             {
-                LoadAssettsInDir(assettType, path);
+                LoadAssetsInDir(assettType, path);
             }
 
             foreach (string file in Directory.GetFiles(rootPath))
             {
-                _assetts[assettType].Add(new Assett(this, file));
+                _assetts[assettType].Add(new Asset(this, file));
             }
         }
 
-        private void BuildHierarchy()
+        private void BuildHierarchyNodes()
         {
-            _hierarchy = new HierarchyAssettNode();
-            _hierarchy.name = "root";
+            _hierarchyNodes = new AssetNode();
+            _hierarchyNodes.name = "Hierarchy Nodes";
 
-            foreach (Assett assett in Assetts)
+            foreach (Asset assett in Assets)
             {
                 List<string> assettHierarchy = assett.Hierarchy;
-                HierarchyAssettNode node = _hierarchy;
+                AssetNode node = _hierarchyNodes;
                 foreach (string level in assettHierarchy)
                 {
                     if (!node.childrenNames.Contains(level))
-                        node.children.Add(new HierarchyAssettNode(level, node));
-                    node = node.childrenNameMap[level];
+                        node.children.Add(new AssetNode(level, node));
+                    node = node.childrenNameMapping[level];
                 }
                 node.assetts.Add(assett);
+            }
+        }
+
+        private void BuildTypeNodes()
+        {
+            _typeNodes = new AssetNode();
+            _typeNodes.name = "Type Nodes";
+
+            AssetNode node = _typeNodes;
+            foreach (AssetType aType in Enum.GetValues(typeof(AssetType)))
+                node.children.Add(new AssetNode(aType.ToString(), node));
+
+            foreach (Asset assett in Assets)
+            {
+                var type = assett.AssetType.ToString();
+                if (!node.childrenNames.Contains(type))
+                    node.children.Add(new AssetNode(type, node));
+                node.childrenNameMapping[type].assetts.Add(assett);
+            }
+        }
+
+        private void BuildNodes()
+        {
+            BuildHierarchyNodes();
+            BuildTypeNodes();
+        }
+
+        private void BuildGuidCollection()
+        {
+            foreach (Asset asset in _assetts[AssetType.Component])
+            {
+                string data;
+                Newtonsoft.Json.Linq.JObject json;
+                string guid = "";
+                using (StreamReader sr = new StreamReader(asset.AssetPath))
+                {
+                    data = sr.ReadToEnd();
+                }
+                try
+                {
+                    json = (Newtonsoft.Json.Linq.JObject)
+                        JsonConvert.DeserializeObject(data, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+                    try
+                    {
+                        guid = json["guid"].ToString();
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            guid = json["json"]["guid"].ToString();
+                        }
+                        catch
+                        {
+                            throw;
+                        }
+                    }
+                }
+                catch
+                {
+                    //TODO: Raise error regarding deserialization
+                    guid = GuidManager.NewGuid().ToString();
+                }
+                GuidManager.RegisterGuid(Guid.Parse(guid), asset.AssetPath);
+            }
+            foreach (Asset asset in _assetts[AssetType.Entity])
+            {
+                string data = "";
+                Newtonsoft.Json.Linq.JObject json = null;
+                string guid = "";
+                string path = "";
+                using (StreamReader sr = new StreamReader(asset.AssetPath))
+                {
+                    data = sr.ReadToEnd();
+                }
+                try
+                {
+                    json = (Newtonsoft.Json.Linq.JObject)
+                        JsonConvert.DeserializeObject(data, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+                    try
+                    {
+                        guid = json["json"]["guid"].ToString();
+                    }
+                    catch { throw; }
+                }
+                catch
+                {
+                    //TODO: Raise error regarding deserialization
+                    guid = GuidManager.NewGuid().ToString();
+                }
+                path = asset.AssetPath;
+                GuidManager.RegisterGuid(Guid.Parse(guid), path);
+                Newtonsoft.Json.Linq.JToken coms = null;
+                try
+                {
+                    coms = json["components"];
+                }
+                catch { }
+                if (coms != null)
+                {
+                    int comCount = -1;
+                    foreach (var com in coms.ToList())
+                    {
+                        comCount += 1;
+
+                        // We want to skip the reference lists
+                        try
+                        {
+                            guid = com["reference"].ToString();
+                            continue;
+                        }
+                        catch { }
+                        // Get the guid and naming convention
+                        path = asset.AssetPath;
+                        path += ":";
+                        try
+                        {
+                            guid = com["json"]["guid"].ToString();
+                            path += com["className"].ToString().Split('.').Last();
+                        }
+                        catch 
+                        {
+                            guid = GuidManager.NewGuid().ToString();
+                            path += "[" + comCount.ToString() + "]";
+                        }
+
+                        GuidManager.RegisterGuid(Guid.Parse(guid), path);
+                    }
+                }
             }
         }
 #endregion
@@ -182,8 +384,10 @@ namespace GameEditor
             }
             _mapPath = mapPath;
             LoadMapPaths();
-            LoadAllAssetts();
-            BuildHierarchy();
+            LoadAllAssets();
+            BuildNodes();
+            BuildGuidCollection();
+            _settings = new MapSetting(this);
         }
 #endregion
     }

@@ -1,0 +1,30 @@
+#52c6309f-0db9-4c6a-a371-9641e65b6b3b
+#0000 0000
+#0000
+#0000
+#0000
+#0000 0000 0000
+
+segGame=0
+segMap=4
+segCom=8
+
+game=F00F
+map=DBDB
+
+assetDefault=0000
+assetEntity=1000
+assetFile=2000
+assetComponent=3000
+
+assetComponentCollision=3001
+assetComponentColor=3002
+assetComponentInput=3003
+assetComponentMenu=3004
+assetComponentRender=3005
+assetComponentWin=3006
+assetComponentChildren=3007
+assetComponentFont=3008
+assetComponentGroup=3009
+assetComponentString=3010
+assetComponentTag=3011

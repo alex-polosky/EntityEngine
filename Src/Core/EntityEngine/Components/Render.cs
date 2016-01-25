@@ -122,7 +122,7 @@ namespace EntityEngine.Components
             D3D10.Device.CreateWithSwapChain(
                 D3D10.DriverType.Hardware,
 #if DEBUG
- DeviceCreationFlags.Debug,
+                DeviceCreationFlags.None,//DeviceCreationFlags.Debug,
 #else
                 DeviceCreationFlags.None,
 #endif

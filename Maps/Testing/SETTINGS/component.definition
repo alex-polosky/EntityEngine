@@ -1,0 +1,12 @@
+collision=EntityEngine.Components.CollisionComponent
+color=EntityEngine.Components.ColorComponent
+input=EntityEngine.Components.InputComponent
+menu=EntityEngine.Components.MenuComponent
+render=EntityEngine.Components.RenderComponent
+win=EntityEngine.Components.WinComponent
+
+children=EntityFramework.Components.ChildrenComponent
+font=EntityFramework.Components.FontComponent
+group=EntityFramework.Components.GroupComponent
+string=EntityFramework.Components.StringComponent
+tag=EntityFramework.Components.TagComponent
