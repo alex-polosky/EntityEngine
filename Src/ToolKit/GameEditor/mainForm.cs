@@ -173,6 +173,52 @@ namespace GameEditor
             SettingsPopUp();
         }
     #endregion Menu Strip Tools
+
+    #region Node Handlers
+        private void treeView_MouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var a = (Asset)e.Node.Tag;
+            if (a != null)
+            {
+                switch (a.AssetType)
+                {
+                    //case AssetType.Component:
+                    //    var tje = new TestJsonEdit();
+                    //    string data;
+                    //    using (var sr = new System.IO.StreamReader(a.AssetPath))
+                    //    {
+                    //        data = sr.ReadToEnd();
+                    //    }
+                    //    tje.LoadComponentS(data);
+                    //    tje.Show();
+                    //    break;
+                    case AssetType.Component:
+                        string data;
+                        using (var sr = new System.IO.StreamReader(a.AssetPath))
+                        {
+                            data = sr.ReadToEnd();
+                        }
+                        var panel = new Form();
+                        panel.Name = "form.component";
+                        var com = new GameEditor.Editor.Forms.Component();
+                        com.Left = 3;
+                        com.Top = 3;
+                        //panel.Width = com.//com.Width + 15;
+                        //panel.Height = //com.Height + 15;
+                        com.LoadComponentS(data);
+                        panel.Controls.Add(com);
+                        panel.Show();
+                        break;
+                    case AssetType.Entity:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    #endregion Node Handlers
+
 #endregion Handlers
     }
 }

@@ -77,10 +77,10 @@
             // Component
             // 
             this.Controls.Add(this.groupBoxCom);
-            this.MaximumSize = new System.Drawing.Size(525, 0);
-            this.MinimumSize = new System.Drawing.Size(525, 108);
+            this.MaximumSize = new System.Drawing.Size(510, 0);
+            this.MinimumSize = new System.Drawing.Size(510, 0);
             this.Name = "Component";
-            this.Size = new System.Drawing.Size(525, 108);
+            this.Size = new System.Drawing.Size(510, 108);
             this.groupBoxCom.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -46,11 +46,11 @@
             // 
             this.panel1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel1.AutoScroll = true;
-            this.panel1.Location = new System.Drawing.Point(-4, 32);
-            this.panel1.MaximumSize = new System.Drawing.Size(525, 0);
-            this.panel1.MinimumSize = new System.Drawing.Size(525, 729);
+            this.panel1.Location = new System.Drawing.Point(-14, 58);
+            this.panel1.MaximumSize = new System.Drawing.Size(510, 0);
+            this.panel1.MinimumSize = new System.Drawing.Size(510, 729);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(525, 729);
+            this.panel1.Size = new System.Drawing.Size(510, 729);
             this.panel1.TabIndex = 0;
             // 
             // TestJsonEdit
@@ -58,7 +58,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(545, 778);
+            this.ClientSize = new System.Drawing.Size(562, 778);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
             this.Name = "TestJsonEdit";

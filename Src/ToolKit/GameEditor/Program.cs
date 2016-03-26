@@ -16,6 +16,21 @@ namespace GameEditor
                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                .ToLowerInvariant();
         }
+
+        public static void PopulateWithAssettNodes(this TreeNode nu, AssetNode hNode, TreeNode tNode)
+        {
+            tNode.Nodes.Add(hNode.name);
+            if (hNode.children.Count > 0)
+                foreach (AssetNode node in hNode.children)
+                    tNode.PopulateWithAssettNodes(node, tNode.Nodes[tNode.Nodes.Count - 1]);
+            else
+                foreach (Asset assett in hNode.assetts)
+                {
+                    var nodes = tNode.Nodes[tNode.Nodes.Count - 1].Nodes;
+                    nodes.Add(assett.Name + assett.Extension);
+                    nodes[nodes.Count - 1].Tag = assett;
+                }
+        }
     }
 
     static class Program
@@ -73,10 +88,10 @@ namespace GameEditor
             //Application.Run(new Dialog.Forms.GuidManagerForm());
             //Application.Run(new mainForm());
 
-            new TestJsonEdit().Show();
-            //new Dialog.Forms.GuidSelector().Show();
-            //new Dialog.Forms.GuidManagerForm().Show();
-            //new mainForm().Show();
+            //new TestJsonEdit().Show();
+            new Dialog.Forms.GuidSelector().Show();
+            new Dialog.Forms.GuidManagerForm().Show();
+            new mainForm().Show();
             Application.Run(new Form());
         }
     }

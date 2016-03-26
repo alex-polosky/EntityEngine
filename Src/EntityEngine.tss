@@ -11,6 +11,7 @@
     </ArrayOfString>
     <ArrayOfString>
       <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\mainForm.cs</string>
+      <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\mainForm.cs</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\Asset.cs</string>
@@ -44,6 +45,15 @@
     </ArrayOfString>
     <ArrayOfString>
       <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\Editor\Controls\Shader.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\Editor\Controls\RenderTypeFlag.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\Editor\Controls\Matrix.cs</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>P:\Code\Git\EntityEngine\Src\ToolKit\GameEditor\gameEditorMainForm.cs</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

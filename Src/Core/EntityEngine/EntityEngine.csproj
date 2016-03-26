@@ -95,6 +95,7 @@
       <DependentUpon>Embedded.cs</DependentUpon>
     </Compile>
     <Compile Include="FileManager.cs" />
+    <Compile Include="GlobalEnvironment.potato.cs" />
     <Compile Include="PyForm.cs">
       <SubType>Form</SubType>
     </Compile>

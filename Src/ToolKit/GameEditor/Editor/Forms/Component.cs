@@ -69,6 +69,7 @@ namespace GameEditor.Editor.Forms
             Assembly assembly = Assembly.Load(assemblyName);
             Type clas = assembly.GetType(className);
 
+            //NOTE: for anything that it needs
             //foreach (var prop in clas.GetProperties())
             //{
             //    if (_controls.Keys.Contains(prop.PropertyType.ToString()))
@@ -78,6 +79,7 @@ namespace GameEditor.Editor.Forms
 
             foreach (var field in clas.GetFields())
             {
+                //NOTE: for some reason, the .Contains method is not working
                 bool a = false;
                 try
                 {

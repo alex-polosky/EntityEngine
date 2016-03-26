@@ -15,7 +15,7 @@ namespace GameEditor.Editor.Controls
 
         public void LoadData(Dictionary<string, string> data)
         {
-            bool success = Enum.TryParse<EntityEngine.Components.RenderTypeFlag>(data[TestJsonEdit.NullDictionaryKey], out flags);
+            bool success = Enum.TryParse<EntityEngine.Components.RenderTypeFlag>(data[Editor.Forms.Component.NullDictionaryKey], out flags);
             if (success)
             {
                 if (flags.HasFlag(EntityEngine.Components.RenderTypeFlag.WireFrame))
@@ -30,7 +30,7 @@ namespace GameEditor.Editor.Controls
         public Dictionary<string, string> GetData()
         {
             Dictionary<string, string> toret = new Dictionary<string, string>();
-            toret.Add(TestJsonEdit.NullDictionaryKey, ((int)flags).ToString());
+            toret.Add(Editor.Forms.Component.NullDictionaryKey, ((int)flags).ToString());
             return toret;
         }
 

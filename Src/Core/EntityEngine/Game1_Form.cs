@@ -272,6 +272,8 @@ List = Generic.List
             // Load the render system
             this.render = sys.GetComponentSystem<Components.RenderComponent, Components.RenderSystem>();
             render.InitializeD3D(this, this.Width, this.Height);
+            // Set Global device 
+            GlobalEnvironment.MainWindowDevice = render.Device;
             render.SetTitle("Testing");
 
             // Load Camera system and set render camera

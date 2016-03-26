@@ -195,6 +195,8 @@ namespace GameEditor
                 {AssetType.Model, Path.Combine(_mapPath, Properties.Settings.Default.FolderModels)},
                 //TODO : Add script path to settings
                 {AssetType.Script, Path.Combine(_mapPath, "Scripts")},
+                //TODO : Add scenarios path to settings
+                {AssetType.Script, Path.Combine(_mapPath, "Scenarios")},
                 {AssetType.Shader, Path.Combine(_mapPath, Properties.Settings.Default.FolderShaders)},
                 {AssetType.String, Path.Combine(_mapPath, Properties.Settings.Default.FolderStrings)}
             };

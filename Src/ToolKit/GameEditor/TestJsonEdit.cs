@@ -13,9 +13,13 @@ using Newtonsoft.Json;
 
 namespace GameEditor
 {
+    [Obsolete("This was just a test form to test out the component/entity editors")]
     public partial class TestJsonEdit : Form
     {
         //TODO: Make the _controls var more modular, ie write a file format for them
+
+        private Point location;
+        private const int padding = 3;
 
         public static string NullDictionaryKey = "NULL_DICTIONARY_KEY_FLAT_STRING";
         public static string JsonDictionaryKey = "JSON_DICTIONARY_KEY_JSON_STRING";
@@ -24,185 +28,185 @@ namespace GameEditor
         private List<string> s = new List<string>()
             {
 @"{
-		'json': {
-			'groups': ['save', ],
-			'entity': {
-				'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
-			},
-			'guid': '93bbca35-ff95-4527-9e19-ed8c2e5c4bed',
-		},
-		'assemblyName': 'EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-		'className': 'EntityFramework.Components.GroupComponent',
-	}
+        'json': {
+            'groups': ['save', ],
+            'entity': {
+                'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
+            },
+            'guid': '93bbca35-ff95-4527-9e19-ed8c2e5c4bed',
+        },
+        'assemblyName': 'EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+        'className': 'EntityFramework.Components.GroupComponent',
+    }
 ".Replace("'", "\""),
 @"{
-		'json': {
-			'name': 'X-Axis',
-			'entity': {
-				'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
-			},
-			'guid': '0577b8fa-9353-4fe5-81e0-143d805f7e65',
-		},
-		'assemblyName': 'EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-		'className': 'EntityFramework.Components.TagComponent',
-	}
+        'json': {
+            'name': 'X-Axis',
+            'entity': {
+                'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
+            },
+            'guid': '0577b8fa-9353-4fe5-81e0-143d805f7e65',
+        },
+        'assemblyName': 'EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+        'className': 'EntityFramework.Components.TagComponent',
+    }
 ".Replace("'", "\""),
 @"{
-		'json': {
-			'rotationXMatrix': {
-				'M11': '1',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '1',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '1',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'rotationYMatrix': {
-				'M11': '1',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '1',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '1',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'rotationZMatrix': {
-				'M11': '1',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '1',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '1',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'scalingMatrix': {
-				'M11': '10000',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '0.01',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '0.01',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'translationLocalMatrix': {
-				'M11': '1',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '1',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '1',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'translationWorldMatrix': {
-				'M11': '1',
-				'M12': '0',
-				'M13': '0',
-				'M14': '0',
-				'M21': '0',
-				'M22': '1',
-				'M23': '0',
-				'M24': '0',
-				'M31': '0',
-				'M32': '0',
-				'M33': '1',
-				'M34': '0',
-				'M41': '0',
-				'M42': '0',
-				'M43': '0',
-				'M44': '1',
-			},
-			'entity': {
-				'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
-			},
-			'guid': 'e2bf4727-3ed2-496b-bc4f-e7252bc69877',
-		},
-		'assemblyName': 'EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-		'className': 'EntityEngine.Components.PositionComponent',
-	}
+        'json': {
+            'rotationXMatrix': {
+                'M11': '1',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '1',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '1',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'rotationYMatrix': {
+                'M11': '1',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '1',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '1',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'rotationZMatrix': {
+                'M11': '1',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '1',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '1',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'scalingMatrix': {
+                'M11': '10000',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '0.01',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '0.01',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'translationLocalMatrix': {
+                'M11': '1',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '1',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '1',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'translationWorldMatrix': {
+                'M11': '1',
+                'M12': '0',
+                'M13': '0',
+                'M14': '0',
+                'M21': '0',
+                'M22': '1',
+                'M23': '0',
+                'M24': '0',
+                'M31': '0',
+                'M32': '0',
+                'M33': '1',
+                'M34': '0',
+                'M41': '0',
+                'M42': '0',
+                'M43': '0',
+                'M44': '1',
+            },
+            'entity': {
+                'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
+            },
+            'guid': 'e2bf4727-3ed2-496b-bc4f-e7252bc69877',
+        },
+        'assemblyName': 'EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+        'className': 'EntityEngine.Components.PositionComponent',
+    }
 ".Replace("'", "\""),
 @"{
-		'json': {
-			'renderFlags': '0',
-			'mesh': {
-				'guid': '583d3b13-82d6-460d-bd92-bc2e61f1b868',
-				'filePath': 'Maps/Test/Models/cube.mesh',
-			},
-			'shader': {
-				'guid': '6b7878aa-9329-481a-8277-8ec3fda6fbaf',
-				'filePath': 'Shaders/color.fx',
-				'shaderVars': [{
-					'SemanticName': 'POSITION',
-					'SemanticIndex': '0',
-					'Format': '6',
-					'Slot': '0',
-					'AlignedByteOffset': '0',
-					'Classification': '0',
-					'InstanceDataStepRate': '0',
-				}, {
-					'SemanticName': 'COLOR',
-					'SemanticIndex': '0',
-					'Format': '2',
-					'Slot': '0',
-					'AlignedByteOffset': '12',
-					'Classification': '0',
-					'InstanceDataStepRate': '0',
-				}, ],
-				'shaderLevel': 'fx_4_0',
-			},
-			'entity': {
-				'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
-			},
-			'guid': '3cebfb2d-a24c-401a-9612-9131bc0f0457',
-		},
-		'assemblyName': 'EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-		'className': 'EntityEngine.Components.RenderComponent',
-	}
+        'json': {
+            'renderFlags': '0',
+            'mesh': {
+                'guid': '583d3b13-82d6-460d-bd92-bc2e61f1b868',
+                'filePath': 'Maps/Test/Models/cube.mesh',
+            },
+            'shader': {
+                'guid': '6b7878aa-9329-481a-8277-8ec3fda6fbaf',
+                'filePath': 'Shaders/color.fx',
+                'shaderVars': [{
+                    'SemanticName': 'POSITION',
+                    'SemanticIndex': '0',
+                    'Format': '6',
+                    'Slot': '0',
+                    'AlignedByteOffset': '0',
+                    'Classification': '0',
+                    'InstanceDataStepRate': '0',
+                }, {
+                    'SemanticName': 'COLOR',
+                    'SemanticIndex': '0',
+                    'Format': '2',
+                    'Slot': '0',
+                    'AlignedByteOffset': '12',
+                    'Classification': '0',
+                    'InstanceDataStepRate': '0',
+                }, ],
+                'shaderLevel': 'fx_4_0',
+            },
+            'entity': {
+                'guid': '3a97e680-b883-42da-ba71-e6e729118bd2',
+            },
+            'guid': '3cebfb2d-a24c-401a-9612-9131bc0f0457',
+        },
+        'assemblyName': 'EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+        'className': 'EntityEngine.Components.RenderComponent',
+    }
 ".Replace("'", "\"")
             };
         #endregion
@@ -245,6 +249,20 @@ namespace GameEditor
             //{"System.String", typeof(Editor.Controls.String)}
         };
 
+        public void LoadComponentS(string s)
+        {
+            Editor.Forms.Component com = new Editor.Forms.Component();
+            com.LoadComponentS(s);
+            com.Location = location;
+            location.Y += com.Height + padding;
+            this.Controls.Add(com);
+            Editor.Controls.LineControl line = new Editor.Controls.LineControl();
+            line.Location = location;
+            line.Height = 3;
+            location.Y += line.Height;
+            this.Controls.Add(line);
+        }
+
         public TestJsonEdit()
         {
             InitializeComponent();
@@ -254,20 +272,20 @@ namespace GameEditor
             this.Controls.Remove(this.panel1);
 
             Point location = new Point(3, 3);
-            int padding = 3;
-            foreach (string _s in s)
-            {
-                Editor.Forms.Component com = new Editor.Forms.Component();
-                com.LoadComponentS(_s);
-                com.Location = location;
-                location.Y += com.Height + padding;
-                this.Controls.Add(com);
-                Editor.Controls.LineControl line = new Editor.Controls.LineControl();
-                line.Location = location;
-                line.Height = 3;
-                location.Y += line.Height;
-                this.Controls.Add(line);
-            }
+            //int padding = 3;
+            //foreach (string _s in s)
+            //{
+            //    Editor.Forms.Component com = new Editor.Forms.Component();
+            //    com.LoadComponentS(_s);
+            //    com.Location = location;
+            //    location.Y += com.Height + padding;
+            //    this.Controls.Add(com);
+            //    Editor.Controls.LineControl line = new Editor.Controls.LineControl();
+            //    line.Location = location;
+            //    line.Height = 3;
+            //    location.Y += line.Height;
+            //    this.Controls.Add(line);
+            //}
 
             //this.panel1.VerticalScroll.Visible = true;
             //this.panel1.VerticalScroll.Enabled = true;

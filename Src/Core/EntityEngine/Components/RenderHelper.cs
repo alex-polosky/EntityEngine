@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -135,10 +136,32 @@ namespace EntityEngine.Components
             this.shaderVars = shaderVars;
             this.shaderLevel = shaderLevel;
 
-            ShaderBytecode shaderCode = ShaderBytecode.CompileFromFile(
-                path,
-                shaderLevel
-            );
+            this._generateFromFile(device);
+        }
+
+        private void _generateFromFile(D3D10.Device device)
+        {
+            // TODO: get path from filename through Map Directory Service?
+            ShaderBytecode shaderCode = null;
+            for (var x = 0; x < 5; x++)
+            {
+                string path = Directory.GetCurrentDirectory();
+                for (var y = 0; y < x; y++)
+                {
+                    path = Path.Combine(path, "..");
+                }
+                path = Path.Combine(path, this.filePath).PathNormalize();
+                try
+                {
+                    shaderCode = ShaderBytecode.CompileFromFile(
+                        path,
+                        shaderLevel
+                    );
+                    if (shaderCode != null)
+                        break;
+                }
+                catch { if (x == (5 - 1)) throw; }
+            }
             this.effect = new Effect(device, shaderCode.Data);
             this.inputLayouts = new List<List<InputLayout>>();
             this.vars = new List<KeyValuePair<object, Type>>();
@@ -168,6 +191,12 @@ namespace EntityEngine.Components
                 }
                 techniqueCount += 1;
             }
+        }
+
+        [OnDeserialized]
+        private void _onDeserialized(StreamingContext context)
+        {
+            this._generateFromFile(GlobalEnvironment.MainWindowDevice);
         }
     }
 
@@ -199,6 +228,33 @@ namespace EntityEngine.Components
 
         public Mesh3D()
         {
+        }
+
+        [OnDeserialized]
+        private void _onDeserialized(StreamingContext context)
+        {
+            // TODO: get path from filename through Map Directory Service?
+            Mesh3D m = null;
+            for (var x = 0; x < 5; x++)
+            {
+                string path = Directory.GetCurrentDirectory();
+                for (var y = 0; y < x; y++)
+                {
+                    path = Path.Combine(path, "..");
+                }
+                path = Path.Combine(path, this.filePath).PathNormalize();
+                try
+                {
+                    m = FileManager.LoadMeshFromFile(GlobalEnvironment.MainWindowDevice, path);
+                    if (m != null)
+                        break;
+                }
+                catch { if (x == (5 - 1)) throw; }
+            }
+            this.vertexBuffer = m.vertexBuffer;
+            this.indexBuffer = m.indexBuffer;
+            this.numberOfVertices = m.numberOfVertices;
+            this.numberOfIndices = m.numberOfIndices;
         }
 
         private Mesh3D(D3D10.Device device, dynamic vertices, short[] indices, string filePath, bool throwaway=false)

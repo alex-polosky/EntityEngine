@@ -409,7 +409,7 @@ namespace GameEditor.Editor.Controls
         public void LoadData(Dictionary<string, string> data)
         {
             json = (Newtonsoft.Json.Linq.JObject)
-                   JsonConvert.DeserializeObject(data[TestJsonEdit.JsonDictionaryKey], new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
+                   JsonConvert.DeserializeObject(data[Editor.Forms.Component.JsonDictionaryKey], new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
             this.fieldGuid.LoadData(json["guid"].ToString());
             this.fieldAsset.LoadData(json["filePath"].ToString());
             this.fieldShaderLevel.LoadData(json["shaderLevel"].ToString());
@@ -470,7 +470,7 @@ namespace GameEditor.Editor.Controls
             json["shaderVars"] = JsonConvert.SerializeObject(shadvar);
 
 
-            toret.Add(TestJsonEdit.JsonDictionaryKey, json.ToString());
+            toret.Add(Editor.Forms.Component.JsonDictionaryKey, json.ToString());
             return toret;
         }
 

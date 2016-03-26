@@ -38,18 +38,4 @@ namespace GameEditor
                 root.PopulateWithAssettNodes(node, root);
         }
     }
-
-    public static partial class Extensions
-    {
-        public static void PopulateWithAssettNodes(this TreeNode nu, AssetNode hNode, TreeNode tNode)
-        {
-            tNode.Nodes.Add(hNode.name);
-            if (hNode.children.Count > 0)
-                foreach (AssetNode node in hNode.children)
-                    tNode.PopulateWithAssettNodes(node, tNode.Nodes[tNode.Nodes.Count - 1]);
-            else
-                foreach (Asset assett in hNode.assetts)
-                    tNode.Nodes[tNode.Nodes.Count - 1].Nodes.Add(assett.Name + assett.Extension);
-        }
-    }
 }

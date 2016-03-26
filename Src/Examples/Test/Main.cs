@@ -19,7 +19,10 @@ namespace Test
     {
         protected override void SetUpEnts()
         {
-            FileManager.LoadAllEntities(Path.Combine("..\\", "..\\", "..\\", "..\\", "..\\",
+            //FileManager.LoadAllEntities(Path.Combine("..\\", "..\\", "..\\", "..\\", "..\\",
+            //                                         "Maps", "Test", "ObjDefs", "Entities"), this.sys);
+            var dir = Directory.GetCurrentDirectory();
+            FileManager.LoadAllEntities(Path.Combine("..\\", "..\\",
                                                      "Maps", "Test", "ObjDefs", "Entities"), this.sys);
             var com = new InputComponent();
             com.IsActive = true;

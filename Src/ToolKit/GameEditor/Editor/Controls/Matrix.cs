@@ -17,7 +17,7 @@ namespace GameEditor.Editor.Controls
 
         public void LoadData(Dictionary<string, string> data)
         {
-            var jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(data[TestJsonEdit.JsonDictionaryKey]);
+            var jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(data[Editor.Forms.Component.JsonDictionaryKey]);
             for (int i = 1; i <= 4; i++)
                 for (int j = 1; j <= 4; j++)
                     _mColl["M" + i.ToString() + j.ToString()].Text = jsonObj["M" + i.ToString() + j.ToString()];
@@ -29,7 +29,7 @@ namespace GameEditor.Editor.Controls
             for (int i = 1; i <= 4; i++)
                 for (int j = 1; j <= 4; j++)
                     toret["M" + i.ToString() + j.ToString()] = _mColl["M" + i.ToString() + j.ToString()].Text;
-            return new Dictionary<string, string>() { { TestJsonEdit.JsonDictionaryKey, Newtonsoft.Json.JsonConvert.SerializeObject(toret) } };
+            return new Dictionary<string, string>() { { Editor.Forms.Component.JsonDictionaryKey, Newtonsoft.Json.JsonConvert.SerializeObject(toret) } };
         }
 
         public void SetGroupBoxTag(string name)
