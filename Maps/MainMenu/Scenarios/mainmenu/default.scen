@@ -1,0 +1,10 @@
+{
+	"guid": "f98e711c-40ff-4a95-8180-e2d634948230",
+	"filePath": "Scenarios/mainmenu/default.scen",
+	"entities": [{
+                "guid": "F0000001-0000-0000-0000-10000000000F"
+        }],
+	"wincondition": {
+		"path": "Bloop"
+	}
+}

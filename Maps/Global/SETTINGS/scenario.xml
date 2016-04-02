@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scenario 
+  xmlns="http://www.w3schools.com"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.w3schools.com ../../Global/SETTINGS/scenario.xsd"
+  guid=""
+  filePath="">
+  <entities>
+    <entity guid="" respawn="false" position="false"/>
+    <entity guid="" respawn="true" position="false">
+      <respawn>
+        <timer>30</timer>
+        <kill>false</kill> <!-- kill current obj that is spawned -->
+      </respawn>
+    </entity>
+    <entity guid="" respawn="false" position="true">
+      <position>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </position>
+    </entity>
+    <entity guid="" respawn="true" position="true">
+      <respawn>
+        <timer>60</timer>
+        <kill>false</kill><!-- kill current obj that is spawned -->
+      </respawn>
+      <position>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </position>
+    </entity>
+  </entities>
+  <wincondition>
+    <path>winConditions.win0</path>
+  </wincondition>
+</scenario>

@@ -1,0 +1,20 @@
+{
+	"guid": "f98e711c-40ff-4a95-8180-e2d634948299",
+	"filePath": "Scenarios/test/default.scen",
+	"entities": [{
+		"guid": "3a97e680-b883-42da-ba71-e6e729118bd2",
+	}, {
+		"guid": "e2825b63-1d58-46c0-a702-5879d2653d95",
+	}, {
+		"guid": "acb7d1db-0bce-4a88-adbc-c4e65dfd7f0c",
+	}, {
+		"guid": "509e33f8-d85e-4b6f-864b-cc76af32ea9d",
+	}, {
+		"guid": "47128e97-d87f-4de4-aa5e-588f41bbedf8",
+	}, {
+		"guid": "8a998fc1-8c6d-43de-8610-f9a77adbd785",
+	}],
+	"wincondition": {
+		"path": "Bloop"
+	}
+}

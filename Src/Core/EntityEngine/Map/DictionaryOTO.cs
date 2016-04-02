@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameEditor
+namespace EntityEngine
 {
     // Courtesy of http://stackoverflow.com/questions/268321/bidirectional-1-to-1-dictionary-in-c-sharp
     /// <summary>

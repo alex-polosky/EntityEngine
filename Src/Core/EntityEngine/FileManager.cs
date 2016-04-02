@@ -189,10 +189,10 @@ namespace EntityEngine
                     if (com.GetType() == typeof(RenderComponent))
                     {
                         RenderComponent renCom = (RenderComponent)com;
-                        renCom.mesh = LoadMeshFromFile(renSys.Device, renCom.mesh.filePath);
+                        //renCom.mesh = LoadMeshFromFile(renSys.Device, renCom.mesh.filePath);
                         var shaderGuid = renCom.shader.guid;
-                        renCom.shader =
-                            new Shader(renSys.Device, renCom.shader.filePath, renCom.shader.shaderVars, renCom.shader.shaderLevel);
+                        //renCom.shader =
+                        //    new Shader(renSys.Device, renCom.shader.filePath, renCom.shader.shaderVars, renCom.shader.shaderLevel);
                         SetProperty(renCom.shader, "guid", shaderGuid);
                     }
                 }

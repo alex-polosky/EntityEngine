@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using EntityFramework;
+using EntityEngine;
+
 namespace GameEditor.Dialog.Forms
 {
     public partial class GuidSelector : Form

@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-	  <Private>False</Private>
+      <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Newtonsoft\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -83,17 +83,17 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\EntityEngine\EntityEngine.csproj">
-	  <Private>False</Private>
+      <Private>False</Private>
       <Project>{BA32E84A-582F-4989-BCF7-DAA09584D9B9}</Project>
       <Name>EntityEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\EntityFramework\EntityFramework.csproj">
-	  <Private>False</Private>
+      <Private>False</Private>
       <Project>{9B024C51-9A91-4254-90DB-9F2E91000F16}</Project>
       <Name>EntityFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\PyInterface\PyInterface.csproj">
-	  <Private>False</Private>
+      <Private>False</Private>
       <Project>{7CD2E53D-7182-44F3-96C0-E41744DE512A}</Project>
       <Name>PyInterface</Name>
     </ProjectReference>

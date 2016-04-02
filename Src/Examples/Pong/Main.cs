@@ -21,8 +21,8 @@ namespace Pong
 
         }
 
-        public Main(int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
-            : base(renderMode, usePyConsole, useGrid, customWidth, customHeight)
+        public Main(bool launchToMainMenu = true, int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
+            : base(launchToMainMenu, renderMode, usePyConsole, useGrid, customWidth, customHeight)
         {
             InitializeComponent();
         }

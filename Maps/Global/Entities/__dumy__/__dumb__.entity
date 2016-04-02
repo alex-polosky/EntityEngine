@@ -1,0 +1,8 @@
+{
+    "json": {
+        "guid": "F0000001-0000-0000-0000-10000000000F"
+    },
+    "assemblyName": "EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "className": "EntityFramework.Entity",
+    "components": []
+}

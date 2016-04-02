@@ -64,6 +64,12 @@ namespace EntityEngine
         protected SystemManager sys;
         protected Components.RenderSystem render;
 
+        protected Map _currentMap;
+        protected Map _globalMap;
+        protected Map _mainMenuMap;
+
+        protected Assets.Scenario _currentScen;
+
         protected PyForm pyForm;
 
         public SystemManager world { get { return this.sys; } }
@@ -83,14 +89,16 @@ namespace EntityEngine
         {
             Entity e;
             Components.RenderComponent rCom;
-            Components.Shader basicShader = new Components.Shader(
+            //Components.Shader basicShader = new Components.Shader(
+            Assets.Shader basicShader = new Assets.Shader(
                 this.render.Device,
                 "Shaders/basicEffect.fx",
                 new SharpDX.Direct3D10.InputElement[] {
                     new SharpDX.Direct3D10.InputElement("POSITION", 0, SharpDX.DXGI.Format.R32G32B32_Float, 0, 0),
                 }
              );
-            Components.Shader colorShader = new Components.Shader(
+            //Components.Shader colorShader = new Components.Shader(
+            Assets.Shader colorShader = new Assets.Shader(
                 this.render.Device,
                 "Shaders/color.fx",
                 new SharpDX.Direct3D10.InputElement[] {
@@ -171,7 +179,7 @@ new Components.VertexStructures.Pos(
             }
         }
 
-        public Game1_Form(int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth=-1, int customHeight=-1)
+        public Game1_Form(bool launchToMainMenu = true, int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth=-1, int customHeight=-1)
         {
             InitializeComponent();
 
@@ -191,6 +199,8 @@ clr.AddReference('PyInterface')
 
 import EntityFramework.Components
 import EntityEngine.Components
+import EntityEngine.GlobalEnvironment as Glob
+import EntityEngine.FileManagerNS.FileManager as FileManager
 #typeof = PyHelp.c_typeof
 
 from System.Collections import Generic
@@ -289,6 +299,16 @@ List = Generic.List
             // Load up input manager
             sys.AddComponentSystem<Components.InputComponent, Components.InputSystem>();
 
+            // Load up to main menu if need be
+            if (launchToMainMenu)
+            {
+                _globalMap = new Map(Properties.Settings.Default.MapGlobal);
+                _mainMenuMap = new Map(Properties.Settings.Default.MapMainMenu);
+                GlobalEnvironment.MapGlobal = _globalMap;
+                GlobalEnvironment.MapMainMenu = _mainMenuMap;
+                LoadScenario(_mainMenuMap, _mainMenuMap.AssetsOfType[AssetType.Scenario][0]);
+            }
+
             // Load any components
             if (useGrid)
                 this.SetUpEnts_Example_Dep();
@@ -311,6 +331,51 @@ List = Generic.List
             this.Shown += new EventHandler(this.StartRunning_Game);
             this.FPS.Start();
             render.ShowGame();
+        }
+
+        public void LoadScenario(Asset scenario)
+        {
+            LoadScenario(_currentMap, scenario);
+        }
+        protected void LoadScenario(Map map, Asset scenario)
+        {
+            if (scenario.AssetType != AssetType.Scenario)
+                throw new Exception("Asset loaded must have an AssetType of Scenario");
+            if (_currentScen != null)
+                UnloadScenario();
+
+            _currentScen = FileManagerNS.FileManager.LoadAssetJson<EntityEngine.Assets.Scenario>(scenario);
+            
+            // Load up all entities
+            foreach (var ent in _currentScen.entities)
+            {
+                Asset asset = FileManagerNS.FileManager.GetAssetFromGuid(ent.guid);
+                // ToDo: use new filemanager class instead of old one
+                FileManager.LoadEntity(asset.AssetPath, sys);
+            }
+
+            // ToDo: Load win condition
+        }
+        protected void UnloadScenario()
+        {
+            // ToDo: make this work
+            //throw new WarningException("Not yet implemented");
+        }
+
+        public Map LoadMap(string mapName, bool fullFolderPath=false)
+        {
+            // ToDo: serialize map input?
+            if (!fullFolderPath)
+                mapName = Path.Combine(Properties.Settings.Default.FolderBaseMap, mapName);
+
+            return new Map(mapName);
+        }
+        public void LoadMapToCurrent(string mapName, bool fullFolderPath=false)
+        {
+            if (_currentMap != null)
+                _currentMap.UnLoad();
+            _currentMap = LoadMap(mapName, fullFolderPath);
+            GlobalEnvironment.MapLoaded = _currentMap;
         }
 
         private void UpdateSys()

@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -56,8 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Asset.cs" />
-    <Compile Include="AssetNode.cs" />
     <Compile Include="Dialog\Forms\GuidManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,7 +71,6 @@
     <Compile Include="Dialog\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="DictionaryOTO.cs" />
     <Compile Include="Editor\Controls\IControlBlock.cs" />
     <Compile Include="Editor\Controls\IField.cs">
       <SubType>UserControl</SubType>
@@ -123,14 +117,12 @@
     <Compile Include="gameEditorMainForm.Designer.cs">
       <DependentUpon>gameEditorMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GuidManager.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
@@ -170,15 +162,6 @@
     <EmbeddedResource Include="mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="TestJsonEdit.resx">
       <DependentUpon>TestJsonEdit.cs</DependentUpon>
     </EmbeddedResource>

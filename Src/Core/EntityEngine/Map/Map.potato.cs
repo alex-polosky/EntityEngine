@@ -6,11 +6,14 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace GameEditor
+using EntityFramework;
+using EntityFramework.Components;
+
+namespace EntityEngine
 {
     public class MapSetting
     {
-        private static string pathSettings= "SETTINGS";
+        private static string pathSettings = "SETTINGS";
         private static string pathCom = "component.definition";
         private static string pathLib = "library.definition";
         private static string pathGid = "guid.definition";
@@ -74,7 +77,7 @@ namespace GameEditor
             LoadDefinition(pathGid, ref _guidDefinition);
         }
 
-        public MapSetting(Map map, bool loadDefinitions=true)
+        public MapSetting(Map map, bool loadDefinitions = true)
         {
             _map = map;
             if (loadDefinitions)
@@ -88,24 +91,24 @@ namespace GameEditor
 
     public class Map
     {
-#region Private Vars
+        #region Private Vars
         private string _mapPath;
         private MapSetting _settings;
         private Dictionary<AssetType, string> _mapFolderPaths;
         private Dictionary<AssetType, List<Asset>> _assetts;
         private AssetNode _hierarchyNodes;
         private AssetNode _typeNodes;
-#endregion
+        #endregion
 
-#region Public Vars
+        #region Public Vars
         public string MapPath { get { return _mapPath; } }
         public MapSetting MapSettings { get { return _settings; } }
         public Dictionary<AssetType, string> MapFolderPaths { get { return _mapFolderPaths; } }
         public Dictionary<AssetType, List<Asset>> AssetsOfType { get { return _assetts; } }
-        public List<Asset> Assets 
-        { 
-            get 
-            { 
+        public List<Asset> Assets
+        {
+            get
+            {
                 List<Asset> assetts = new List<Asset>();
                 foreach (AssetType assettType in Enum.GetValues(typeof(AssetType)))
                     foreach (Asset assett in _assetts[assettType])
@@ -115,9 +118,9 @@ namespace GameEditor
         }
         public AssetNode HierarchyNodes { get { return _hierarchyNodes; } }
         public AssetNode TypeNodes { get { return _typeNodes; } }
-#endregion
+        #endregion
 
-#region Public Methods
+        #region Public Methods
         // searchQuery examples:
         // generic; instruments; instruments.guitar; 
         // hierarchy search must start with the top and works way down
@@ -152,16 +155,26 @@ namespace GameEditor
             return assetts;
         }
 
-        public Asset GetAssetFromGuid(Guid guid)
+        public Asset GetAssetFromPath(string path)
+        {
+            foreach (Asset asset in Assets)
+                if (asset.AssetPath.PathNormalize() == path.PathNormalize())
+                    return asset;
+            return null;
+        }
+
+        public Asset GetAssetFromGuid(Guid guid, bool useCWD=true)
         {
             Asset asset = null;
             string path = GuidManager.GetFromGuid(guid);
+            if (useCWD)
+                path = Path.Combine(Directory.GetCurrentDirectory(), path);
             path = path.Split(':')[0] + ":" + path.Split(':')[1];
             if (path != null && path != "")
             {
                 foreach (Asset a in Assets)
                 {
-                    if (a.AssetPath == path)
+                    if (a.AssetPath.PathNormalize() == path.PathNormalize())
                     {
                         asset = a;
                         break;
@@ -182,9 +195,9 @@ namespace GameEditor
             }
             return guid;
         }
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
         private void LoadMapPaths()
         {
             _mapFolderPaths = new Dictionary<AssetType, string>()
@@ -196,7 +209,7 @@ namespace GameEditor
                 //TODO : Add script path to settings
                 {AssetType.Script, Path.Combine(_mapPath, "Scripts")},
                 //TODO : Add scenarios path to settings
-                {AssetType.Script, Path.Combine(_mapPath, "Scenarios")},
+                {AssetType.Scenario, Path.Combine(_mapPath, "Scenarios")},
                 {AssetType.Shader, Path.Combine(_mapPath, Properties.Settings.Default.FolderShaders)},
                 {AssetType.String, Path.Combine(_mapPath, Properties.Settings.Default.FolderStrings)}
             };
@@ -364,7 +377,7 @@ namespace GameEditor
                             guid = com["json"]["guid"].ToString();
                             path += com["className"].ToString().Split('.').Last();
                         }
-                        catch 
+                        catch
                         {
                             guid = GuidManager.NewGuid().ToString();
                             path += "[" + comCount.ToString() + "]";
@@ -375,9 +388,9 @@ namespace GameEditor
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Constructor
+        #region Constructor
         public Map(string mapPath)
         {
             if (!Directory.Exists(mapPath))
@@ -391,6 +404,11 @@ namespace GameEditor
             BuildGuidCollection();
             _settings = new MapSetting(this);
         }
-#endregion
+        #endregion
+
+        internal void UnLoad()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

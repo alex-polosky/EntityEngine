@@ -54,6 +54,8 @@
             this.modelEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shaderEdtiorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.guidManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -118,6 +120,7 @@
             this.assettTypeNodes.Name = "assettTypeNodes";
             this.assettTypeNodes.Size = new System.Drawing.Size(350, 645);
             this.assettTypeNodes.TabIndex = 0;
+            this.assettTypeNodes.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_MouseClick);
             // 
             // tabPage3
             // 
@@ -226,7 +229,9 @@
             this.entityEditorToolStripMenuItem,
             this.modelEditorToolStripMenuItem,
             this.shaderEdtiorToolStripMenuItem,
-            this.stringEditorToolStripMenuItem});
+            this.stringEditorToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.guidManagerToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.editToolStripMenuItem.Text = "Tools";
@@ -279,6 +284,18 @@
             this.stringEditorToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.stringEditorToolStripMenuItem.Text = "String Editor";
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(169, 6);
+            // 
+            // guidManagerToolStripMenuItem
+            // 
+            this.guidManagerToolStripMenuItem.Name = "guidManagerToolStripMenuItem";
+            this.guidManagerToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.guidManagerToolStripMenuItem.Text = "Guid Manager";
+            this.guidManagerToolStripMenuItem.Click += new System.EventHandler(this.guidManagerToolStripMenuItem_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -329,5 +346,7 @@
         private System.Windows.Forms.TreeView assettHierarchyNodes;
         private System.Windows.Forms.TreeView assettTypeNodes;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem guidManagerToolStripMenuItem;
     }
 }

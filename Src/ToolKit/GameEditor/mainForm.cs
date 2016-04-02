@@ -67,6 +67,7 @@ namespace GameEditor
             if (_currentMap == null)
             {
                 _currentMap = new Map(@"P:\Code\Git\EntityEngine\Maps\Testing");
+                EntityEngine.GlobalEnvironment.MapLoaded = _currentMap;
                 LoadMapAssets(_currentMap);
                 UpdateToolbar();
 
@@ -134,6 +135,8 @@ namespace GameEditor
             {
                 _globalMap = new Map(Properties.Settings.Default.MapGlobal);
                 _mainMenuMap = new Map(Properties.Settings.Default.MapMainMenu);
+                EntityEngine.GlobalEnvironment.MapGlobal = _globalMap;
+                EntityEngine.GlobalEnvironment.MapMainMenu = _mainMenuMap;
                 LoadMapAssets(_globalMap);
                 LoadMapAssets(_mainMenuMap);
             }
@@ -172,6 +175,11 @@ namespace GameEditor
         {
             SettingsPopUp();
         }
+
+        private void guidManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Dialog.Forms.GuidManagerForm().Show();
+        }
     #endregion Menu Strip Tools
 
     #region Node Handlers
@@ -203,8 +211,8 @@ namespace GameEditor
                         var com = new GameEditor.Editor.Forms.Component();
                         com.Left = 3;
                         com.Top = 3;
-                        //panel.Width = com.//com.Width + 15;
-                        //panel.Height = //com.Height + 15;
+                        panel.Width = com.Width + 20;
+                        panel.Height = com.Height + 15;
                         com.LoadComponentS(data);
                         panel.Controls.Add(com);
                         panel.Show();
@@ -212,6 +220,21 @@ namespace GameEditor
                     case AssetType.Entity:
 
                         break;
+                    case AssetType.Scenario:
+
+                        break;
+
+                    case AssetType.Audio:
+                        break;
+                    case AssetType.Model:
+                        break;
+                    case AssetType.Script:
+                        break;
+                    case AssetType.Shader:
+                        break;
+                    case AssetType.String:
+                        break;
+
                     default:
                         break;
                 }

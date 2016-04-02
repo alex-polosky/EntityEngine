@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
+using EntityFramework;
+using EntityEngine;
+
 namespace GameEditor
 {
     public static partial class Extensions
@@ -86,13 +89,13 @@ namespace GameEditor
             //Application.Run(new TestJsonEdit());
             //Application.Run(new Dialog.Forms.GuidSelector());
             //Application.Run(new Dialog.Forms.GuidManagerForm());
-            //Application.Run(new mainForm());
+            Application.Run(new mainForm());
 
             //new TestJsonEdit().Show();
-            new Dialog.Forms.GuidSelector().Show();
-            new Dialog.Forms.GuidManagerForm().Show();
-            new mainForm().Show();
-            Application.Run(new Form());
+            //new mainForm().Show();
+            //new Dialog.Forms.GuidSelector().Show();
+            //new Dialog.Forms.GuidManagerForm().Show();
+            //Application.Run(new Form());
         }
     }
 }

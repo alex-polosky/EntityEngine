@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 
@@ -19,11 +20,15 @@ using EntityFramework.Components;
 
 namespace EntityEngine.Components
 {
+    [DataContract]
     public class RenderComponent : EntityFramework.Component
     {
+        [DataMember]
         public RenderTypeFlag renderFlags;
+        [DataMember]
         public Mesh3D mesh;
-        public Shader shader;
+        [DataMember]
+        public EntityEngine.Assets.Shader shader;
 
         public RenderComponent() : base() { }
         public RenderComponent(Entity e) : base(e) { }

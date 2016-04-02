@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema 
+  attributeFormDefault="unqualified" 
+  elementFormDefault="qualified" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:this="http://www.w3schools.com">
+  <xs:simpleType name="GUID">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">
+        The representation of a GUID, generally the id of an element.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="scenario">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="entities">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="entity">
+                <xs:complexType mixed="true">
+                  <xs:sequence minOccurs="0">
+                    <xs:choice maxOccurs="unbounded">
+                      <xs:element name="position" maxOccurs="1">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="x" type="xs:int" />
+                            <xs:element name="y" type="xs:int" />
+                            <xs:element name="z" type="xs:int" />
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="respawn" maxOccurs="1">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="timer" type="xs:unsignedInt" />
+                            <xs:element name="kill" type="xs:boolean" />
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                  <xs:attribute name="guid" type="GUID" use="required" />
+                  <xs:attribute name="respawn" type="xs:boolean" use="required" />
+                  <xs:attribute name="position" type="xs:boolean" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="wincondition" maxOccurs="1">
+          <xs:complexType mixed="true">
+            <xs:sequence>
+              <xs:element name="path" type="xs:string" maxOccurs="1" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="guid" type="GUID" use="required" />
+      <xs:attribute name="filePath" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

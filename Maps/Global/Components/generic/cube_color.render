@@ -1,0 +1,37 @@
+{
+        "json": {
+            "renderFlags": "0",
+            "mesh": {
+                "guid": "583d3b13-82d6-460d-bd92-bc2e61f1b868",
+                "filePath": "Models/generic/cube.mesh",
+            },
+            "shader": {
+                "guid": "6b7878aa-9329-481a-8277-8ec3fda6fbaf",
+                "filePath": "Shaders/generic/color.fx",
+                "shaderVars": [{
+                    "SemanticName": "POSITION",
+                    "SemanticIndex": "0",
+                    "Format": "6",
+                    "Slot": "0",
+                    "AlignedByteOffset": "0",
+                    "Classification": "0",
+                    "InstanceDataStepRate": "0",
+                }, {
+                    "SemanticName": "COLOR",
+                    "SemanticIndex": "0",
+                    "Format": "2",
+                    "Slot": "0",
+                    "AlignedByteOffset": "12",
+                    "Classification": "0",
+                    "InstanceDataStepRate": "0",
+                }, ],
+                "shaderLevel": "fx_4_0",
+            },
+            "entity": {
+                "guid": "3a97e680-b883-42da-ba71-e6e729118bd2",
+            },
+            "guid": "3cebfb2d-a24c-401a-9612-9131bc0f0457",
+        },
+        "assemblyName": "EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "className": "EntityEngine.Components.RenderComponent",
+    }

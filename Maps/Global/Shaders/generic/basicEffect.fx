@@ -1,4 +1,4 @@
-﻿matrix View;
+matrix View;
 matrix Projection;
 
 matrix rotationXMatrix;
@@ -8,13 +8,9 @@ matrix scalingMatrix;
 matrix translationLocalMatrix;
 matrix translationWorldMatrix;
 
-texture Texture;
-
 struct VS_IN
 {
 	float4 pos : POSITION;
-	float2 tex : TEXTURE;
-	float3 normal : NORMAL;
 };
 
 struct PS_IN
@@ -26,22 +22,23 @@ struct PS_IN
 PS_IN VS( VS_IN input )
 {
 	PS_IN output = (PS_IN)0;
+	
+	input.pos = mul(input.pos, rotationXMatrix);
+	input.pos = mul(input.pos, rotationYMatrix);
+	input.pos = mul(input.pos, rotationZMatrix);
+
+	input.pos = mul(input.pos, scalingMatrix);
+	
+	input.pos = mul(input.pos, translationLocalMatrix);
+	input.pos = mul(input.pos, translationWorldMatrix);
+
+	input.pos = mul(input.pos, View);
+	input.pos = mul(input.pos, Projection);
 
 	output.pos = input.pos;
-	
-	output.pos = mul(input.pos, rotationXMatrix);
-	output.pos = mul(input.pos, rotationYMatrix);
-	output.pos = mul(input.pos, rotationZMatrix);
-
-	output.pos = mul(input.pos, scalingMatrix);
-	
-	output.pos = mul(input.pos, translationLocalMatrix);
-	output.pos = mul(input.pos, translationWorldMatrix);
-
-	output.pos = mul(input.pos, View);
-	output.pos = mul(input.pos, Projection);
-
-	output.col = float4(1, 1, 1, 1);//(sin(input.pos) + float4(1, 1, 1, 1)) / 2;
+	output.col = (sin(input.pos) + float4(1, 1, 1, 1)) / 2;
+	output.col = float4(output.col.r, output.col.g, output.col.b, 1.0f);
+	//output.col = float4(1, 0, 0, 0);
 	
 	return output;
 }

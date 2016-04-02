@@ -1,0 +1,29 @@
+{
+        "json": {
+            "renderFlags": "0",
+            "mesh": {
+                "guid": "bc02a3c7-9276-4a44-8cf2-3042f19f136d",
+                "filePath": "Models/generic/square.mesh",
+            },
+            "shader": {
+                "guid": "f8b75257-cb5e-4087-866b-9b5cf1d48486",
+                "filePath": "Shaders/generic/basicEffect.fx",
+                "shaderVars": [{
+                    "SemanticName": "POSITION",
+                    "SemanticIndex": "0",
+                    "Format": "6",
+                    "Slot": "0",
+                    "AlignedByteOffset": "0",
+                    "Classification": "0",
+                    "InstanceDataStepRate": "0",
+                }, ],
+                "shaderLevel": "fx_4_0",
+            },
+            "entity": {
+                "guid": "509e33f8-d85e-4b6f-864b-cc76af32ea9d",
+            },
+            "guid": "061f9d20-1ffc-45b1-97e0-d9e29dbe0717",
+        },
+        "assemblyName": "EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "className": "EntityEngine.Components.RenderComponent",
+    }

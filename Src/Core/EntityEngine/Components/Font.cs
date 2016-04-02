@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EntityFramework.Components
+using EntityFramework;
+using EntityFramework.Components;
+
+namespace EntityEngine.Components
 {
     public class FontComponent : Component
     {

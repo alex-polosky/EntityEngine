@@ -78,6 +78,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Audio.cs" />
+    <Compile Include="Assets\Model.cs" />
+    <Compile Include="Assets\Scenario.cs" />
+    <Compile Include="Assets\Script.cs" />
+    <Compile Include="Assets\Shader.cs" />
+    <Compile Include="Assets\String.cs" />
     <Compile Include="BootStrap.cs" />
     <Compile Include="Components\Collision.cs" />
     <Compile Include="Components\Color.cs" />
@@ -95,7 +101,15 @@
       <DependentUpon>Embedded.cs</DependentUpon>
     </Compile>
     <Compile Include="FileManager.cs" />
+    <Compile Include="FileManager\AssetFile.cs" />
+    <Compile Include="FileManager\Class1.cs" />
+    <Compile Include="FileManager\FileMananger.cs" />
     <Compile Include="GlobalEnvironment.potato.cs" />
+    <Compile Include="Map\DictionaryOTO.cs" />
+    <Compile Include="Map\GuidManager.cs" />
+    <Compile Include="Map\Map.potato.cs" />
+    <Compile Include="Map\Asset.cs" />
+    <Compile Include="Map\AssetNode.cs" />
     <Compile Include="PyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +142,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

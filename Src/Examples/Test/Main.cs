@@ -21,9 +21,22 @@ namespace Test
         {
             //FileManager.LoadAllEntities(Path.Combine("..\\", "..\\", "..\\", "..\\", "..\\",
             //                                         "Maps", "Test", "ObjDefs", "Entities"), this.sys);
-            var dir = Directory.GetCurrentDirectory();
-            FileManager.LoadAllEntities(Path.Combine("..\\", "..\\",
-                                                     "Maps", "Test", "ObjDefs", "Entities"), this.sys);
+            //var dir = Directory.GetCurrentDirectory();
+            //FileManager.LoadAllEntities(Path.Combine("..\\", "..\\",
+            //                                         "Maps", "Test", "ObjDefs", "Entities"), this.sys);
+            //FileManager.LoadAllEntities(Path.Combine("..\\", "..\\",
+            //                                         "Maps", "Testing", "Entities", "test"), this.sys);
+            //EntityEngine.Assets.Scenario scen = new EntityEngine.Assets.Scenario();
+
+            //this.LoadMapToCurrent("Testing");
+            //Asset scen = EntityEngine.FileManagerNS.FileManager.GetAssetsFromHierarchy("test", AssetType.Scenario)[0];
+            //var scenario = EntityEngine.FileManagerNS.FileManager.LoadAssetJson<EntityEngine.Assets.Scenario>(scen);
+            //LoadScenario(scen);
+
+            // ToDo: use this code in Python to load maps
+            //this.LoadMapToCurrent("Testing")
+            //this.LoadScenario(EntityEngine.FileManagerNS.FileManager.GetAssetsFromHierarchy("test", EntityEngine.AssetType.Scenario)[0])
+
             var com = new InputComponent();
             com.IsActive = true;
             com.Input = (timeDelta, kbState) =>
@@ -91,8 +104,8 @@ namespace Test
                 .AddComponent(com);
         }
 
-        public Main(int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
-            : base(renderMode, usePyConsole, useGrid, customWidth, customHeight)
+        public Main(bool launchToMainMenu = true, int renderMode = 6, bool usePyConsole = true, bool useGrid = false, int customWidth = -1, int customHeight = -1)
+            : base(launchToMainMenu, renderMode, usePyConsole, useGrid, customWidth, customHeight)
         {
             InitializeComponent();
         }

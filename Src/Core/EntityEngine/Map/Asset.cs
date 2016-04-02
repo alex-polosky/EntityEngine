@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace GameEditor
+namespace EntityEngine
 {
     public enum AssetType
     {
@@ -12,6 +12,7 @@ namespace GameEditor
         Component,
         Entity,
         Model,
+        Scenario,
         Script,
         Shader,
         String
