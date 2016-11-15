@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu id="menu_main">
+  <variable language="py" name="sys" value="?" />
+  <variable language="py" name="fileManager" value="?" />
+  <variable language="cs" name="csColl" value="?" />
+  <entry id="newGame">
+    <text>New Game</text>
+    <action language="py" passin="sys">sys.LoadDefaultMap();sys.LoadDefaultScenario();</action>
+  </entry>
+  <entry id="loadGame">
+    <text>Load Game</text>
+    <action language="py" passin="games = [game for game in fileManager.LoadGames()]">
+      <menu id="menu_loadGame" language="py" foreach="game in games">
+        <entry id="loadGame_{game.id}">
+          <text>{game.saveFileName}</text>
+          <picture>{game.picturePath}</picture>
+          <description>{game.description}</description>
+          <action language="py" passin="sys;game">sys.LoadMapToCurrent(game.map.id); sys.LoadScenario(game.scenario.id);</action>
+        </entry>
+      </menu>
+    </action>
+  </entry>
+  <entry id="settings">
+    <text>Settings</text>
+    <action>
+      <menu id="menu_settings">
+        <entry id="audio">
+          <text>Audio</text>
+          <action>
+            <menu id="menu_audio">
+              <entry id="test0">
+                <text>Test0</text>
+                <action></action>
+              </entry>
+              <entry id="test1">
+                <text>Test1</text>
+                <action></action>
+              </entry>
+              <entry id="test2">
+                <text>Test2</text>
+                <action></action>
+              </entry>
+            </menu>
+          </action>
+        </entry>
+        <entry id="video">
+          <text>Video</text>
+        </entry>
+        <entry id="controls">
+          <text>Controls</text>
+        </entry>
+      </menu>
+    </action>
+  </entry>
+  <entry id="exit">
+    <text>Exit</text>
+    <action language="cs" passin="csColl">csColl.Exit</action>
+  </entry>
+</menu>

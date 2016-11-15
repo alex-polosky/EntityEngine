@@ -5,30 +5,29 @@ using System.Text;
 
 namespace EntityFramework.Components
 {
-    public class GroupComponent : Component
+    public class Group : ComponentInterfaces.IGroup
     {
-        public List<string> groups = new List<string>();
-        public GroupComponent() : base() { }
-        public GroupComponent(Entity e) : base(e) { }
-        public GroupComponent(string name, Entity e)
-            : base(e)
+        #region Private Variables
+        #endregion Private Variables
+
+        #region Public Variables
+        #endregion Public Variables
+
+        #region Private Methods
+        #endregion Private Methods
+
+        #region Public Methods
+        #endregion Public Methods
+
+        #region Constructor
+        public Group()
         {
-            this.groups.Add(name);
         }
-    }
+        #endregion Constructor
 
-    public class GroupSystem : ComponentSystem<GroupComponent>
-    {
-        public List<Entity> getTaggedEntities(string name)
-        {
-            List<Entity> toret = new List<Entity>();
-
-            foreach (GroupComponent com in this._components)
-                if (com.groups.Contains(name))
-                    toret.Add(com.entity);
-
-            return toret;
-        }
-        public GroupSystem() : base() { }
+        #region Handlers
+        #region Default Handlers
+        #endregion Default Handlers
+        #endregion Handlers
     }
 }

@@ -28,10 +28,14 @@ namespace Test
             //                                         "Maps", "Testing", "Entities", "test"), this.sys);
             //EntityEngine.Assets.Scenario scen = new EntityEngine.Assets.Scenario();
 
-            //this.LoadMapToCurrent("Testing");
-            //Asset scen = EntityEngine.FileManagerNS.FileManager.GetAssetsFromHierarchy("test", AssetType.Scenario)[0];
+            this.LoadMapToCurrent("Testing");
+            Asset scen = EntityEngine.FileManagerNS.FileManager.GetAssetsFromHierarchy("test", AssetType.Scenario)[0];
             //var scenario = EntityEngine.FileManagerNS.FileManager.LoadAssetJson<EntityEngine.Assets.Scenario>(scen);
-            //LoadScenario(scen);
+            LoadScenario(scen);
+
+            var menu = this.sys.GetComponentSystem<MenuComponent, MenuSystem>();
+            menu.SetActiveGroup("");
+            // axis: main
 
             // ToDo: use this code in Python to load maps
             //this.LoadMapToCurrent("Testing")

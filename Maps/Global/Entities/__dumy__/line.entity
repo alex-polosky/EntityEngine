@@ -1,0 +1,239 @@
+{
+	"json": {
+		"guid": "0027c99d-4573-4876-92dc-165a974db09a"
+	},
+	"assemblyName": "EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+	"className": "EntityFramework.Entity",
+	"components": [{
+		"json": {
+			"rotationXMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"rotationYMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"rotationZMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"scalingMatrix": {
+				"M11": 50.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 50.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 50.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 50.0
+			},
+			"translationLocalMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"translationWorldMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"entity": {
+				"guid": "0027c99d-4573-4876-92dc-165a974db09a"
+			},
+			"guid": "af96fac5-bdc0-4c9f-a8de-769274c6cee5"
+		},
+		"assemblyName": "EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+		"className": "EntityEngine.Components.PositionComponent"
+	}, {
+		"json": {
+			"renderFlags": 0,
+			"mesh": {
+				"guid": "442ac5ac-9559-4879-98cb-e34f5cb27ecd",
+				"filePath": "Models/generic/squarecolor.mesh"
+			},
+			"shader": {
+				"guid": "1330643d-d4bb-4b0a-bd6e-9b60ec564004",
+				"filePath": "Shaders/generic/basicEffect.fx",
+				"shaderVars": [{
+					"SemanticName": "POSITION",
+					"SemanticIndex": 0,
+					"Format": 6,
+					"Slot": 0,
+					"AlignedByteOffset": 0,
+					"Classification": 0,
+					"InstanceDataStepRate": 0
+				}, {
+					"SemanticName": "COLOR",
+					"SemanticIndex": 0,
+					"Format": 2,
+					"Slot": 0,
+					"AlignedByteOffset": 12,
+					"Classification": 0,
+					"InstanceDataStepRate": 0
+				}],
+				"shaderLevel": "fx_4_0"
+			},
+			"entity": {
+				"guid": "0027c99d-4573-4876-92dc-165a974db09a",
+			},
+			"guid": "0000002d-a24c-401a-9612-9131bc0f0457",
+		},
+		"assemblyName": "EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+		"className": "EntityEngine.Components.RenderComponent"
+	}, {
+		"json": {
+			"projectionMatrix": {
+				"M11": 0.00154320989,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 0.00263504614,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": 0.0,
+				"M42": 0.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"Following": null,
+			"IsFollowing": false,
+			"IsOrtho": true,
+			"IsMoveWithRot": true,
+			"IsMoveWithRotLockX": false,
+			"IsMoveWithRotLockY": false,
+			"IsMoveWithRotLockZ": false,
+			"IsLockAxes": true,
+			"IsZBuffer": false,
+			"RadianX": 0.0,
+			"RadianY": 0.0,
+			"RadianZ": 0.0,
+			"Eye": {
+				"X": 648.0,
+				"Y": 379.0,
+				"Z": 0.0,
+				"IsNormalized": false,
+				"IsZero": false
+			},
+			"View": {
+				"X": 648.0,
+				"Y": 379.0,
+				"Z": 1.0,
+				"IsNormalized": false,
+				"IsZero": false
+			},
+			"Up": {
+				"X": 0.0,
+				"Y": 1.0,
+				"Z": 0.0,
+				"IsNormalized": true,
+				"IsZero": false
+			},
+			"ViewMatrix": {
+				"M11": 1.0,
+				"M12": 0.0,
+				"M13": 0.0,
+				"M14": 0.0,
+				"M21": 0.0,
+				"M22": 1.0,
+				"M23": 0.0,
+				"M24": 0.0,
+				"M31": 0.0,
+				"M32": 0.0,
+				"M33": 1.0,
+				"M34": 0.0,
+				"M41": -648.0,
+				"M42": -379.0,
+				"M43": 0.0,
+				"M44": 1.0
+			},
+			"entity": {
+				"guid": "0027c99d-4573-4876-92dc-165a974db09a"
+			},
+			"guid": "9975c5a8-b7de-4840-993a-d24db0bb6d68"
+		},
+		"assemblyName": "EntityEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+		"className": "EntityEngine.Components.CameraComponent"
+	}]
+}

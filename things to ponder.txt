@@ -1,0 +1,46 @@
+SetUpEnts:
+ - MainMenu Entity
+  - Render Com
+   - Mesh
+   - Shader
+  - Group Com
+   - Group of names
+  - Children Com
+   - parent: Null
+   - children: List<e>
+   
+(Handlers .. somehow? Link input from inputmanager -> menu)
+(2 sets of entities per menu.. it can handle any amount of 
+   - scratch that; children com can handle that!
+   
+
+   
+NEW IDEA:
+ - __link:
+    - Components that need to "talk" to each other;
+	- Link Com:
+	 - Dictionary<Type?, List<Component>> link;
+	 - GetComponents<List<T>> T:IComponent ()
+	//List<RenderComponent> coms = com.entity.GetLinkedComponents<MenuComponent, RenderComponent>(this);
+	private Dictionary<Type, List<Component>> linkedComponents;
+	
+	
+
+Actual menu system:
+ - New Game
+   -> Load defaultMap; Launch defaultScenario
+ - Load Game; entries:loadSaveGames()
+  - {entries}
+   -[ {saveFileName}, {mapName}, {...} ]
+   -> Load map, load saveFile; Launch saved scenario and data
+ - Settings
+  - Audio
+   - AudioTab0; header: whatevs
+    - {header}
+	- 
+   - someBS1
+   - someBS2
+   - someBS3
+  - Video
+  - Controls
+ - Exit

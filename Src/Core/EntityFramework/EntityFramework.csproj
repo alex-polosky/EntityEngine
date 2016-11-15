@@ -2,56 +2,127 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9B024C51-9A91-4254-90DB-9F2E91000F16}</ProjectGuid>
+    <ProjectGuid>{1D188824-AF34-4BAC-8C27-5F74AEA97DB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EntityFramework</RootNamespace>
     <AssemblyName>EntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\..\Bin\Core</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Bin\Core\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component.cs" />
-    <Compile Include="ComponentSystem.cs" />
+    <Compile Include="AssetFileInterface\IAssetFileInterface.cs" />
+    <Compile Include="AssetFileInterface\IAudio.cs" />
+    <Compile Include="AssetFileInterface\IComponent.cs" />
+    <Compile Include="AssetFileInterface\IEntity.cs" />
+    <Compile Include="AssetFileInterface\IModel.cs" />
+    <Compile Include="AssetFileInterface\IScenario.cs" />
+    <Compile Include="AssetFileInterface\IScript.cs" />
+    <Compile Include="AssetFileInterface\IShader.cs" />
+    <Compile Include="AssetFileInterface\IString.cs" />
+    <Compile Include="base\AComponentSystem.cs" />
+    <Compile Include="base\Component.cs" />
+    <Compile Include="base\DictionaryOTO.cs" />
+    <Compile Include="base\Entity.cs" />
+    <Compile Include="base\IComponentSystem.cs" />
+    <Compile Include="base\IFileManager.cs" />
+    <Compile Include="base\IGuidManager.cs" />
+    <Compile Include="base\ISystemManager.cs" />
+    <Compile Include="base\Map.cs" />
+    <Compile Include="ComponentInterfaces\ICamera.cs" />
+    <Compile Include="ComponentInterfaces\ICameraSystem.cs" />
+    <Compile Include="ComponentInterfaces\IChildren.cs" />
+    <Compile Include="ComponentInterfaces\IChildrenSystem.cs" />
+    <Compile Include="ComponentInterfaces\ICollision.cs" />
+    <Compile Include="ComponentInterfaces\ICollisionSystem.cs" />
+    <Compile Include="ComponentInterfaces\IGroup.cs" />
+    <Compile Include="ComponentInterfaces\IGroupSystem.cs" />
+    <Compile Include="ComponentInterfaces\IInput.cs" />
+    <Compile Include="ComponentInterfaces\IInputSystem.cs" />
+    <Compile Include="ComponentInterfaces\IPosition.cs" />
+    <Compile Include="ComponentInterfaces\IPositionSystem.cs" />
+    <Compile Include="ComponentInterfaces\IRender.cs" />
+    <Compile Include="ComponentInterfaces\IRenderSystem.cs" />
+    <Compile Include="ComponentInterfaces\ITag.cs" />
+    <Compile Include="ComponentInterfaces\ITagSystem.cs" />
+    <Compile Include="ComponentInterfaces\IWinCondition.cs" />
+    <Compile Include="ComponentInterfaces\IWinConditionSystem.cs" />
     <Compile Include="Components\Children.cs" />
-    <Compile Include="Components\Font.cs" />
+    <Compile Include="Components\ChildrenSystem.cs" />
     <Compile Include="Components\Group.cs" />
-    <Compile Include="Components\String.cs" />
+    <Compile Include="Components\GroupSystem.cs" />
     <Compile Include="Components\Tag.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="GlobalEnvironment.cs" />
+    <Compile Include="Components\TagSystem.cs" />
+    <Compile Include="Components\WinCondition.cs" />
+    <Compile Include="Components\WinConditionSystem.cs" />
+    <Compile Include="Engine\EntityEngineEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemManager.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PyInterface\PyInterface.csproj">
+      <Project>{7CD2E53D-7182-44F3-96C0-E41744DE512A}</Project>
+      <Name>PyInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpDX.Mathematics\MathExt.csproj">
+      <Project>{49e4485f-3a2a-4c35-a159-12eccfc00396}</Project>
+      <Name>MathExt</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

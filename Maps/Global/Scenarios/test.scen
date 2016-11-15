@@ -1,0 +1,46 @@
+{
+	"guid": "18f9a28d-9a15-4997-ac1c-ffa8fe179275",
+	"filePath": "Global/Scenarios/testing/test.scen",
+	"entities": [{
+		"guid": "2b23f1ac-6480-44b8-a506-ec9a9b1531ab",
+		"respawn": false,
+		"position": false,
+		"respawnField": null,
+		"positionField": null
+	}, {
+		"guid": "4baa7825-7b6d-400c-aa36-4a04350c2173",
+		"respawn": false,
+		"position": true,
+		"respawnField": null,
+		"positionField": {
+			"x": 1,
+			"y": 2,
+			"z": 3
+		}
+	}, {
+		"guid": "ceb53bbb-d313-4dcb-96ca-6bcfbe60bcb6",
+		"respawn": true,
+		"position": false,
+		"respawnField": {
+			"timer": 60,
+			"kill": false
+		},
+		"positionField": null
+	}, {
+		"guid": "bb116eb3-5f72-43cb-89f2-27db7b05f4c1",
+		"respawn": true,
+		"position": true,
+		"respawnField": {
+			"timer": 3600,
+			"kill": true
+		},
+		"positionField": {
+			"x": 1,
+			"y": 2,
+			"z": 3
+		}
+	}],
+	"wincondition": {
+		"path": "Bloop"
+	}
+}

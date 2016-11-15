@@ -5,28 +5,29 @@ using System.Text;
 
 namespace EntityFramework.Components
 {
-    public class TagComponent : Component
+    public class Tag : ComponentInterfaces.ITag
     {
-        public string name;
-        public TagComponent() : base() { }
-        public TagComponent(Entity e) : base(e) { }
-        public TagComponent(string name)
-            : base()
-        { this.name = name; }
-        public TagComponent(string name, Entity e)
-            : base(e)
-        { this.name = name; }
-    }
+        #region Private Variables
+        #endregion Private Variables
 
-    public class TagSystem : ComponentSystem<TagComponent>
-    {
-        public Entity getTaggedEntity(string name)
+        #region Public Variables
+        #endregion Public Variables
+
+        #region Private Methods
+        #endregion Private Methods
+
+        #region Public Methods
+        #endregion Public Methods
+
+        #region Constructor
+        public Tag()
         {
-            foreach (TagComponent com in this._components)
-                if (com.name == name)
-                    return com.entity;
-            return null;
         }
-        public TagSystem() : base() { }
+        #endregion Constructor
+
+        #region Handlers
+        #region Default Handlers
+        #endregion Default Handlers
+        #endregion Handlers
     }
 }

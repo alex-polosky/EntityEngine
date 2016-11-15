@@ -11,7 +11,8 @@
     <RootNamespace>PyInterface</RootNamespace>
     <AssemblyName>PyInterface</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\..\Bin\Core</OutputPath>
   </PropertyGroup>

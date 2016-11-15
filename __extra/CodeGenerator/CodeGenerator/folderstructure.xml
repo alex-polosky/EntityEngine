@@ -1,0 +1,840 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FolderStructure>
+  <Folder name="Bin">
+
+  </Folder>
+  <Folder name="Lib">
+    <Folder name="IronPython">
+
+    </Folder>
+    <Folder name="Newtonsoft">
+
+    </Folder>
+    <Folder name="SharpDX">
+
+    </Folder>
+  </Folder>
+  <Folder name="Maps">
+    <FolderTemplate>
+      <Folder name="Audio">
+        <AssetType name="Audio"/>
+      </Folder>
+      <Folder name="Components">
+        <AssetType name="Component"/>
+      </Folder>
+      <Folder name="Entities">
+        <AssetType name="Entity"/>
+      </Folder>
+      <Folder name="Models">
+        <AssetType name="Model"/>
+      </Folder>
+      <Folder name="Scenarios">
+        <AssetType name="Scenario"/>
+      </Folder>
+      <Folder name="Scripts">
+        <AssetType name="Script"/>
+      </Folder>
+      <Folder name="Shaders">
+        <AssetType name="Shader"/>
+      </Folder>
+      <Folder name="Strings">
+        <AssetType name="String"/>
+      </Folder>
+      <Folder name="MODULES">
+
+      </Folder>
+      <Folder name="SETTINGS">
+        <File type="setting">
+          <Name>component</Name>
+          <Ext>definition</Ext>
+          <Mapping name="collision" value="EntityFramework.ComponentInterfaces.ICollision" />
+        </File>
+        <File type="setting">
+          <Name>guid</Name>
+          <Ext>definition</Ext>
+          <Mapping name="segGame" value="0" />
+        </File>
+      </Folder>
+    </FolderTemplate>
+  </Folder>
+  <Folder name="Src">
+    <Solution name="EntityEngine" />
+    <Folder name="Core">
+      <Project name="Extension_Render">
+        <Reference name="SharpDX" />
+        <Reference name="SharpDX.D3DCompiler" />
+        <Reference name="SharpDX.Direct3D10" />
+        <Reference name="SharpDX.DirectInput" />
+        <Reference name="SharpDX.DirectSound" />
+        <Reference name="SharpDX.DXGI" />
+        <Folder name="Components">
+          <File name="Camera" type="cs" inherits="EntityFramework.ComponentInterfaces.ICamera">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="CameraSystem" type="cs" inherits="EntityFramework.ComponentInterfaces.ICameraSystem">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Collision" type="cs" inherits="EntityFramework.ComponentInterfaces.ICollision">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="CollisionSystem" type="cs" inherits="EntityFramework.ComponentInterfaces.ICollisionSystem">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Input" type="cs" inherits="EntityFramework.ComponentInterfaces.IInput">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="InputSystem" type="cs" inherits="EntityFramework.ComponentInterfaces.IInputSystem">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Position" type="cs" inherits="EntityFramework.ComponentInterfaces.IPosition">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="PositionSystem" type="cs" inherits="EntityFramework.ComponentInterfaces.IPositionSystem">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Render" type="cs" inherits="EntityFramework.ComponentInterfaces.IRender">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="RenderSystem" type="cs" inherits="EntityFramework.ComponentInterfaces.IRenderSystem">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+        <Folder name="Forms">
+
+        </Folder>
+        <File name="BootStrap" type="cs">
+          <API>
+            <Method name="">
+              <Input type="" />
+              <Output type="" />
+              <Description></Description>
+            </Method>
+            <Property name="" type="" />
+          </API>
+        </File>
+      </Project>
+      <Project name="Extension_Serialize">
+        <Reference name="Newtonsoft.Json" />
+        <Folder name="AssetFiles">
+          <File name="Audio" type="cs" inherits="EntityFramework.AssetFileInterfaces.IAudio">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Model" type="cs" inherits="EntityFramework.AssetFileInterfaces.IModel">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Scenario" type="cs" inherits="EntityFramework.AssetFileInterfaces.IScenario">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Script" type="cs" inherits="EntityFramework.AssetFileInterfaces.IScript">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Shader" type="cs" inherits="EntityFramework.AssetFileInterfaces.IShader">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="String" type="cs" inherits="EntityFramework.AssetFileInterfaces.IString">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+      </Project>
+      <Project name="EntityFramework">
+        <Folder name="AssetFileInterfaces">
+          <!-- These types need to be defined in Extension_Serialize to work -->
+          <File name="IAssetFileInterface" type="cs" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IAudio" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IModel" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IScenario" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IScript" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IShader" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IString" type="cs" inherits="IAssetFileInterface" interface="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+        <Folder name="Components">
+          <File name="Children" type="cs" inherits="base.Component">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="ChildrenSystem" type="cs" inherits="base.ComponentSystem:Children">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Group" type="cs" inherits="base.Component">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="GroupSystem" type="cs" inherits="base.ComponentSystem:Group">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Tag" type="cs" inherits="base.Component">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="TagSystem" type="cs" inherits="base.ComponentSystem:Tag">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="WinCondition" type="cs" inherits="base.Component">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="WinConditionSystem" type="cs" inherits="base.ComponentSystem:WinCondition">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+        <Folder name="ComponentInterfaces">
+          <!-- These files need to be defined in Extension_Render -->
+          <File name="ICamera" type="cs" inherits="base.Component" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="ICameraSystem" type="cs" inherits="base.ComponentSystem:ICamera" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="ICollision" type="cs" inherits="base.Component" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="ICollisionSystem" type="cs" inherits="base.ComponentSystem:ICollision" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IInput" type="cs" inherits="base.Component" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IInputSystem" type="cs" inherits="base.ComponentSystem:IInput" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IPosition" type="cs" inherits="base.Component" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IPositionSystem" type="cs" inherits="base.ComponentSystem:IPosition" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IRender" type="cs" inherits="base.Component" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="IRenderSystem" type="cs" inherits="base.ComponentSystem:IRender" abstract="true">
+            <API>
+              <Method name="">
+                <Input type="" name="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+        <Folder name="Manager">
+          <File name="FileManager" type="cs">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="GuidManager" type="cs" static="true">
+            <API final="true">
+              <Method name="NewGuid" static="true">
+                <Output type="Guid" />
+                <Description>Generates a new Guid</Description>
+              </Method>
+              <Method name="NewGuidFromAsset" static="true">
+                <Input type="Asset" name="asset" />
+                <Output type="Guid" />
+                <Description>Generates guid based on asset properties</Description>
+              </Method>
+              <!--<Method name="RegisterNewGuid" static="true">
+                <Input type="string" name="objPath" />
+                <Output type="Guid" />
+                <Description>Registers a new guid based on the objPath</Description>
+              </Method>-->
+              <Method name="RegisterGuid" static="true">
+                <Input type="Guid" name="guid" />
+                <Input type="string" name="objPath" />
+                <Output type="void" />
+                <Description>Registers the guid to the objPath</Description>
+              </Method>
+              <Method name="RegisterGuid" static="true">
+                <Input type="Guid" name="guid" />
+                <Input type="Asset" name="asset" />
+                <Output type="void" />
+                <Description>Registers the guid to the asset's path</Description>
+              </Method>
+              <Method name="GetFromGuid" static="true">
+                <Input type="Guid" name="guid" />
+                <Output type="string" />
+                <Description>Returns the objPath that the guid translates to</Description>
+              </Method>
+              <Method name="GetGuidOfObject" static="true">
+                <Input type="string" name="objPath" />
+                <Output type="Guid" />
+                <Description>Returns the guid associated with the objPath</Description>
+              </Method>
+              <Property name="NULL" type="Guid" static="true" readonly="true" value="Guid.Empty" />
+              <Property name="ActiveGuids" type="List&lt;Guid&gt;" static="true" />
+            </API>
+          </File>
+          <File name="SystemManager" type="cs">
+            <API final="true">
+              <MethodColl name="Entity Generation">
+                <Method name="AddNewEntity">
+                  <Input type="Guid" name="id" />
+                  <Output type="Entity" />
+                  <Description>Generates and returns new Entity with Guid 'id'</Description>
+                </Method>
+                <Method name="AddNewEntity">
+                  <Output type="Entity" />
+                  <Description>Generates and returns new Entity</Description>
+                </Method>
+                <Method name="AddEntity">
+                  <Input type="Entity" name="e" />
+                  <Output type="void" />
+                  <Description>Adds Entity 'e' to collection of entities</Description>
+                </Method>
+                <Method name="RemoveEntity">
+                  <Input type="Guid" name="id" />
+                  <Output type="void" />
+                  <Description>Removes Entity based on 'id'</Description>
+                </Method>
+              </MethodColl>
+              <MethodColl name="Entity Components">
+                <Method
+                  name="AddComponentToEntity"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Input type="TComponent" name="component" />
+                  <Input type="Entity" name="e" />
+                  <Output type="void" />
+                  <Description>Adds TComponent 'component' to Entity 'e' via TComponentSystem</Description>
+                </Method>
+                <Method
+                  name="AddNewComponentToEntity"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Input type="Entity" name="e" />
+                  <Output type="TComponent" />
+                  <Description>Generates and adds TComponent to Entity 'e' via TComponentSystem</Description>
+                </Method>
+                <Method
+                  name="RemoveComponentFromEntity"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Input type="Entity" name="e" />
+                  <Output type="void" />
+                  <Description>Removes TComponent from Entity 'e' via TComponentSystem</Description>
+                </Method>
+              </MethodColl>
+              <MethodColl name="Get Entity">
+                <Method name="GetAllEntities">
+                  <Output type="List&lt;Entity&gt;" />
+                  <Description>Returns all Entities in System</Description>
+                </Method>
+                <Method name="GetEntitiesWithComponentType" template="TComponent:Component,new()">
+                  <Output type="List&lt;Entity&gt;" />
+                  <Description>Returns all Entities that have a TComponent</Description>
+                </Method>
+                <Method name="GetEntityWithTagId" deprecated="true">
+                  <Input type="string" name="tagId" />
+                  <Output type="Entity" />
+                  <Description>Searches TagSystem for Entity with 'tagId'</Description>
+                </Method>
+              </MethodColl>
+              <MethodColl name="Component Systems">
+                <Method name="HasComponentSystem"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Output type="bool" />
+                  <Description>Returns true if system contains TComponentSystem</Description>
+                </Method>
+                <Method name="GetComponentSystem"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Output type="TComponentSystem" />
+                  <Description>Returns TComponentSystem; generates new one automatically if does not exist</Description>
+                </Method>
+                <Method name="AddComponentSystem"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Input type="TComponentSystem" name="sys" null="true" />
+                  <Output type="void" />
+                  <Description>Adds TComponentSystem 'sys' to system; generates new one if null</Description>
+                </Method>
+                <Method name="RemoveComponentSystem"
+                  template="TComponent:Component,new();TComponentSystem:ComponentSystem&lt;TComponent&gt;, new()">
+                  <Output type="void" />
+                  <Description>Removes TComponentSystem from system</Description>
+                </Method>
+              </MethodColl>
+              <MethodColl name="Map Loading">
+                <Method name="LoadMap">
+                  <Input type="base.Map" name="map" />
+                  <Output type="void" />
+                  <Description>Loads map into system</Description>
+                </Method>
+                <Method name="LoadDefaultMap">
+                  <Output type="void" />
+                  <Description>Loads default map into system</Description>
+                </Method>
+                <Method name="UnloadMap">
+                  <Output type="true" />
+                  <Description>Unloads map from system [still need to figure this out]</Description>
+                </Method>
+                <Method name="LoadScenario">
+                  <Input type="AssetFileInterfaces.IScenario" />
+                  <Output type="void" />
+                  <Description>Loads scenario from map into system</Description>
+                </Method>
+                <Method name="LoadDefaultScenario">
+                  <Output type="void" />
+                  <Description>Loads default scenario from map into system</Description>
+                </Method>
+                <Method name="UnloadScenario">
+                  <Output type="void" />
+                  <Description>Unloads scenario from system [still need to figure this out]</Description>
+                </Method>
+              </MethodColl>
+              <Method name="Update">
+                <Input type="double" name="timeDelta" />
+                <Output type="void" />
+                <Description>Updates all Component Systems in system</Description>
+              </Method>
+              <Construct>
+                <Description>Constructs SystemManager</Description>
+              </Construct>
+            </API>
+          </File>
+        </Folder>
+        <Folder name="base">
+          <File name="Asset" type="cs">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Component" type="cs">
+            <API final="true">
+              <Property name="entity" type="Entity" />
+              <Property name="guid" type="Guid" />
+              <Method name="SetEntity">
+                <Input type="Entity" name="e" />
+                <Output type="e" />
+                <Description>Sets component's entity to Entity 'e'</Description>
+              </Method>
+              <Method name="RemoveEntity">
+                <Output type="void" />
+                <Description>Removes component's entity reference</Description>
+              </Method>
+              <Construct>
+                <Description>Generates new Component</Description>
+              </Construct>
+              <Construct>
+                <Input type="Entity" name="e" />
+                <Description>Generates new Component preattached to Entity 'e'</Description>
+              </Construct>
+              <Construct>
+                <Input type="Guid" name="id" />
+                <Description>Generates new Component with Guid 'id'</Description>
+              </Construct>
+              <Construct>
+                <Input type="Entity" name="e" />
+                <Input type="Guid" name="id" />
+                <Description>Generates new Component with Guid 'id' preattached to Entity 'e'</Description>
+              </Construct>
+            </API>
+          </File>
+          <File name="IComponentSystem" type="cs" interface="true">
+            <API final="true">
+              <Method name="Update" abstract="true">
+                <Input type="double" name="timeDelta" />
+                <Output type="void" />
+                <Description>Updates all components attached to system</Description>
+              </Method>
+              <Method name="Init" abstract="true">
+                <Output type="void" />
+                <Description>Initializes anything not able to during constructor</Description>
+              </Method>
+            </API>
+          </File>
+          <File name="ComponentSystem" type="cs" abstract="true" template="TComponent:Component" inherits="IComponentSystem">
+            <API final="true">
+              <Method name="AddComponent">
+                <Input type="TComponent" name="com" />
+                <Output type="void" />
+                <Description>Adds component 'com' to system</Description>
+              </Method>
+              <Method name="RemoveComponent">
+                <Input type="TComponent" name="com" />
+                <Output type="void" />
+                <Description>Removes component 'com' from system</Description>
+              </Method>
+              <!--<Method name="Update" from="IComponentSystem">
+                <Input type="double" name="timeDelta" />
+                <Output type="void" />
+                <Description>Updates all components in system</Description>
+              </Method>
+              <Method name="Init" override="true">
+                <Output type="void" />
+                <Description>Initializes anything not able to during constructor</Description>
+              </Method>-->
+              <Construct>
+                <Description>Generates new ComponentSystem</Description>
+              </Construct>
+            </API>
+          </File>
+          <File name="DictionaryOTO" type="cs">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+          <File name="Entity" type="cs">
+            <API final="true">
+              <Property name="guid" type="System.Guid" />
+              <Method name="GetComponent">
+                <Template name="TComponent" where="Component" />
+                <Output type="TComponent" null="true" />
+                <Description>Get component of type TComponent attached to entity</Description>
+              </Method>
+              <Method name="GetAllComponents">
+                <Output type="List&lt;Component&gt;" />
+                <Description>Get all components attached to entity</Description>
+              </Method>
+              <Construct>
+                <Description>Generates new Entity</Description>
+              </Construct>
+              <Construct>
+                <Input type="Guid" name="id" />
+                <Description>Generates new Entity with Guid</Description>
+              </Construct>
+            </API>
+          </File>
+          <File name="Map" type="cs">
+            <API>
+              <Method name="">
+                <Input type="" />
+                <Output type="" />
+                <Description></Description>
+              </Method>
+              <Property name="" type="" />
+            </API>
+          </File>
+        </Folder>
+        <File name="GlobalEnvironment" type="cs">
+          <API>
+            <Method name="">
+              <Input type="" />
+              <Output type="" />
+              <Description></Description>
+            </Method>
+            <Property name="" type="" />
+          </API>
+        </File>
+      </Project>
+      <Project name="PyInterface">
+
+      </Project>
+    </Folder>
+    <Folder name="Examples">
+
+    </Folder>
+    <Folder name="ToolKit">
+      <Project name="GameEditor">
+
+      </Project>
+      <Project name="ObjDefEditor" ignore="true">
+
+      </Project>
+      <Project name="TestSuite" ignore="true">
+
+      </Project>
+    </Folder>
+  </Folder>
+</FolderStructure>

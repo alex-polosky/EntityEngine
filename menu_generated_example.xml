@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu id="menu_main">
+  <variable language="cs" name="csColl" value="?" />
+  <variable language="cs" name="sys" value="?" />
+  <entry id="newGame">
+    <text>New Game</text>
+    <action language="cs" passin="sys">sys.LoadDefaultMap;sys.LoadDefaultScenario;</action>
+  </entry>
+  <entry id="loadGame">
+    <text>Load Game</text>
+    <action>
+      <menu id="menu_loadGame">
+        <entry id="loadGame_0">
+          <text>Game testing</text>
+          <picture>SaveGames/game_testing0</picture>
+          <description>No real description found</description>
+          <!-- these would normally be guids, but for brevity I'm using simple integers -->
+          <action language="cs" passin="sys">sys.LoadMapToCurrent(0); sys.LoadScenario(0);</action>
+        </entry>
+        <entry id="loadGame_1">
+          <text>More Game Testing</text>
+          <picture>SaveGames/game_testing1</picture>
+          <description>Also no description.</description>
+          <!-- these would normally be guids, but for brevity I'm using simple integers -->
+          <action language="cs" passin="sys">sys.LoadMapToCurrent(1); sys.LoadScenario(0);</action>
+        </entry>
+        <entry id="loadGame_2">
+          <text>Yet another game test</text>
+          <picture>SaveGames/game_testing2</picture>
+          <description>Fuck any of this fucking shit</description>
+          <!-- these would normally be guids, but for brevity I'm using simple integers -->
+          <action language="cs" passin="sys">sys.LoadMapToCurrent(2); sys.LoadScenario(0);</action>
+        </entry>
+      </menu>
+    </action>
+  </entry>
+  <entry id="settings">
+    <text>Settings</text>
+    <action>
+      <menu id="menu_settings">
+        <entry id="audio">
+          <text>Audio</text>
+          <action>
+            <menu id="menu_audio">
+              <entry id="test0">
+                <text>Test0</text>
+                <action></action>
+              </entry>
+              <entry id="test1">
+                <text>Test1</text>
+                <action></action>
+              </entry>
+              <entry id="test2">
+                <text>Test2</text>
+                <action></action>
+              </entry>
+            </menu>
+          </action>
+        </entry>
+        <entry id="video">
+          <text>Video</text>
+        </entry>
+        <entry id="controls">
+          <text>Controls</text>
+        </entry>
+      </menu>
+    </action>
+  </entry>
+  <entry id="exit">
+    <text>Exit</text>
+    <action language="cs" passin="csColl">csColl.Exit</action>
+  </entry>
+</menu>

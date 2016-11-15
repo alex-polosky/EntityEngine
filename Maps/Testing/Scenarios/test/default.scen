@@ -13,7 +13,9 @@
 		"guid": "47128e97-d87f-4de4-aa5e-588f41bbedf8",
 	}, {
 		"guid": "8a998fc1-8c6d-43de-8610-f9a77adbd785",
-	}],
+	}, {
+                "guid": "0027c99d-4573-4876-92dc-165a974db09a",
+        }],
 	"wincondition": {
 		"path": "Bloop"
 	}

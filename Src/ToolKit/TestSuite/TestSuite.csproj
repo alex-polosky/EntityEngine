@@ -72,6 +72,32 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\EF_Extension_Render\EntityFramework.Render.csproj">
+      <Project>{446d5e8e-02a8-410e-b491-e57d4a1adf9b}</Project>
+      <Name>EntityFramework.Render</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\EF_Extension_Serialize\EntityFramework.Serialize.csproj">
+      <Project>{bf121330-710e-43c0-9c18-fea30b1884c9}</Project>
+      <Name>EntityFramework.Serialize</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\EntityFramework.Engine\EntityFramework.Engine.csproj">
+      <Project>{9c61e547-e573-4e9d-a4cc-ae7208d278c4}</Project>
+      <Name>EntityFramework.Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\EntityFramework\EntityFramework.csproj">
+      <Project>{1d188824-af34-4bac-8c27-5f74aea97db4}</Project>
+      <Name>EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\PyInterface\PyInterface.csproj">
+      <Project>{7cd2e53d-7182-44f3-96c0-e41744de512a}</Project>
+      <Name>PyInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharpDX.Mathematics\MathExt.csproj">
+      <Project>{49e4485f-3a2a-4c35-a159-12eccfc00396}</Project>
+      <Name>MathExt</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
