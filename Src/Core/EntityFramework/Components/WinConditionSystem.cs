@@ -22,9 +22,9 @@ namespace EntityFramework.Components
             base.Update(timeDelta);
         }
 
-        public override void Init()
+        public override void Init(Type comType)
         {
-            base.Init();
+            base.Init(comType);
         }
         #endregion Public Methods
 

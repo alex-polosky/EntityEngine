@@ -44,97 +44,120 @@ namespace EntityFramework.Manager
         }
 
         #region Entity Generation
-        public Entity AddNewEntity(Guid id)
+        public void AddNewEntity(Guid id)
         {
             // ToDo: guid checking?
+            if (id == Guid.Empty)
+                id = new Guid();
             Entity e = new Entity(id);
-            AddEntity(e);
-            return e;
+            entities.Add(e);
         }
 
-        public Entity AddNewEntity()
-        {
-            Entity e = new Entity();
-            AddEntity(e);
-            return e;
-        }
-
-        public void AddEntity(Entity e)
-        {
-            if (!entities.Contains(e))
-                entities.Add(e);
-        }
+        //public void AddEntity(Entity e)
+        //{
+        //    if (!entities.Contains(e))
+        //        entities.Add(e);
+        //}
 
         public void RemoveEntity(Guid id)
         {
             var e = GetEntityFromId(id);
             if (e != null)
-                RemoveEntity(e);
+                if (entities.Contains(e))
+                    entities.Remove(e);
         }
 
-        public void RemoveEntity(Entity e)
-        {
-            if (entities.Contains(e))
-                entities.Remove(e);
-        }
+        //public void RemoveEntity(Entity e)
+        //{
+        //    if (entities.Contains(e))
+        //        entities.Remove(e);
+        //}
         #endregion
 
         #region Entity Components
-        public void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Guid id)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
+        public void AddComponentToEntity<TSystem>(Guid id, Component com = null)
+            where TSystem : IComponentSystem
         {
-            AddComponentToEntity<TComponent, TComponentSystem>(com, GetEntityFromId(id));
-        }
-        public void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Entity e)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
-        {
+            TSystem sys = GetComponentSystem<TSystem>();
+
+            if (com == null)
+                com = sys.GenerateComponent();
+            sys.AddComponent(com);
+
+            Entity e = GetEntityFromId(id);
             com.SetEntity(e);
-
-            var comSys = GetComponentSystem<TComponentSystem>();
-            if (!comSys.HasComponent(com))
-            {
-                comSys.AddComponent(com);
-            }
         }
-
-        public TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Guid id)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
+        public void RemoveComponentFromEntity<TSystem>(Guid id)
+            where TSystem : IComponentSystem
         {
-            return AddNewComponentToEntity<TComponent, TComponentSystem>(GetEntityFromId(id));
-        }
-        public TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Entity e)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
-        {
-            var com = new TComponent();
-            com.SetEntity(e);
-
-            var comSys = GetComponentSystem<TComponentSystem>();
-            if (!comSys.HasComponent(com))
-            {
-                comSys.AddComponent(com);
-            }
-
-            return com;
+            Entity e = GetEntityFromId(id);
+            TSystem sys = GetComponentSystem<TSystem>();
+            Component com = e.GetComponent(sys.GetGenerateType());
+            com.RemoveEntity();
+            sys.RemoveComponent(com);
         }
 
-        public void RemoveComponentFromEntity<TComponent, TComponentSystem>(Guid id)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
-        {
-            RemoveComponentFromEntity<TComponent, TComponentSystem>(GetEntityFromId(id));
-        }
-        public void RemoveComponentFromEntity<TComponent, TComponentSystem>(Entity e)
-            where TComponent : Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>
-        {
-            var com = e.GetComponent<TComponent>();
-            if (com != null)
-                com.RemoveEntity();
-        }
+        //[Obsolete]
+        //public void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Guid id)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    AddComponentToEntity<TComponent, TComponentSystem>(com, GetEntityFromId(id));
+        //}
+        //[Obsolete]
+        //public void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Entity e)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    com.SetEntity(e);
+
+        //    var comSys = GetComponentSystem<TComponentSystem>();
+        //    if (!comSys.HasComponent(com))
+        //    {
+        //        comSys.AddComponent(com);
+        //    }
+        //}
+
+        //[Obsolete]
+        //public TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Guid id)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    return AddNewComponentToEntity<TComponent, TComponentSystem>(GetEntityFromId(id));
+        //}
+        //[Obsolete]
+        //public TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Entity e)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    var com = new TComponent();
+        //    com.SetEntity(e);
+
+        //    var comSys = GetComponentSystem<TComponentSystem>();
+        //    if (!comSys.HasComponent(com))
+        //    {
+        //        comSys.AddComponent(com);
+        //    }
+
+        //    return com;
+        //}
+
+        //[Obsolete]
+        //public void RemoveComponentFromEntity<TComponent, TComponentSystem>(Guid id)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    RemoveComponentFromEntity<TComponent, TComponentSystem>(GetEntityFromId(id));
+        //}
+        //[Obsolete]
+        //public void RemoveComponentFromEntity<TComponent, TComponentSystem>(Entity e)
+        //    where TComponent : Component, new()
+        //    where TComponentSystem : IComponentSystem<TComponent>
+        //{
+        //    var com = e.GetComponent<TComponent>();
+        //    if (com != null)
+        //        com.RemoveEntity();
+        //}
         #endregion
 
         #region Get Entity

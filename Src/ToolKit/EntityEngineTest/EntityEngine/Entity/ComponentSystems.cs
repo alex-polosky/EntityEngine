@@ -27,16 +27,16 @@ namespace EntityFramework.Test.EntityEngine.Entity
             //  this up properly. If anything, NewGuid() should return
             //  a blank one. If not.. then oh well.
             // ToDo: maybe try..catch and just provide a blank guid?
-            _entity = _system.AddNewEntity(_guids.NewGuid());
+            //_entity = _system.AddNewEntity(_guids.NewGuid());
         }
 
         private void TestTearDown()
         {
-            Assert.That(_entity != null);
-            Assert.That(_entity.GetAllComponents().Count == 0,
-                "Entity should have no components loaded");
-            _system.RemoveEntity(_entity.Guid);
-            _entity = null;
+            //Assert.That(_entity != null);
+            //Assert.That(_entity.GetAllComponents().Count == 0,
+            //    "Entity should have no components loaded");
+            //_system.RemoveEntity(_entity.Guid);
+            //_entity = null;
 
             Assert.That(_guids != null);
             Assert.That(_guids.ActiveGuids.Count == 0,
@@ -60,16 +60,136 @@ namespace EntityFramework.Test.EntityEngine.Entity
         }
 
         [TestCase]
+        public void ComponentSystem_Poly_ATag_TagSys()
+        {
+            EntityFramework.Components.TagSystem tagSys =
+                new Components.TagSystem();
+
+            var ATag_TagSys =
+                (EntityFramework.AComponentSystem
+                    <EntityFramework.ComponentInterfaces.ITag>)tagSys;
+
+            Assert.That(tagSys == ATag_TagSys);
+        }
+
+        [TestCase]
+        public void ComponentSystem_Poly_ITag_TagSys()
+        {
+            EntityFramework.Components.TagSystem tagSys =
+                new Components.TagSystem();
+
+            var ITag_TagSys =
+                (EntityFramework.IComponentSystem
+                    <EntityFramework.ComponentInterfaces.ITag>)tagSys;
+
+            Assert.That(tagSys == ITag_TagSys);
+        }
+
+        [TestCase]
+        public void ComponentSystem_Poly_I_TagSys()
+        {
+            EntityFramework.Components.TagSystem tagSys =
+                new Components.TagSystem();
+
+            var I_TagSys =
+                (EntityFramework.IComponentSystem)tagSys;
+
+            Assert.That(tagSys == I_TagSys);
+        }
+
+        [TestCase]
+        [ExpectedException(typeof(TypeAccessException))]
+        public void ComponentSystem_Init_Tag_With_ITag()
+        {
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            tagSys.Init(typeof(EntityFramework.ComponentInterfaces.ITag));
+            // This should not hit
+            Assert.That(tagSys.GetGenerateType() == null);
+        }
+
+        [TestCase]
+        public void ComponentSystem_Init_Tag_With_Tag()
+        {
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            tagSys.Init(typeof(EntityFramework.Components.Tag));
+            Assert.That(tagSys.GetGenerateType() != null);
+        }
+
+        [TestCase]
+        [ExpectedException(typeof(TypeLoadException))]
+        public void ComponentSystem_Init_Tag_With_NonTag()
+        {
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            // The following should throw an error
+            tagSys.Init(typeof(EntityFramework.Components.Children));
+            // This should not hit
+            Assert.That(tagSys.GetGenerateType() == null);
+        }
+
+        [TestCase]
+        [ExpectedException(typeof(TypeAccessException))]
+        public void ComponentSystem_Init_Tag_With_BaseComponent()
+        {
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            // The following should throw an error
+            tagSys.Init(typeof(EntityFramework.Component));
+            // This should not hit
+            Assert.That(tagSys.GetGenerateType() == null);
+        }
+
+        [TestCase]
         public void MultipleComponents_DifferentTypes()
         {
             TestSetUp();
 
-            _system.AddComponentSystem<EntityFramework.ComponentInterfaces.ITagSystem>
-                (new EntityFramework.Components.TagSystem());
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            tagSys.Init(typeof(EntityFramework.Components.Tag));
 
-            _system.AddNewComponentToEntity
-                <EntityFramework.Components.Tag,
-                 EntityFramework.ComponentInterfaces.ITagSystem>(_entity);
+            EntityFramework.ComponentInterfaces.IChildrenSystem childSys =
+                new EntityFramework.Components.ChildrenSystem();
+            childSys.Init(typeof(EntityFramework.Components.Children));
+
+            _system.AddComponentSystem<EntityFramework.ComponentInterfaces.ITagSystem>
+                (tagSys);
+            _system.AddComponentSystem<EntityFramework.ComponentInterfaces.IChildrenSystem>
+                (childSys);
+
+            //_system.AddNewComponentToEntity
+            //    <EntityFramework.Components.Tag,
+            //     EntityFramework.ComponentInterfaces.ITagSystem>(_entity);
+
+            TestTearDown();
+        }
+
+        [TestCase]
+        public void Entity_Add_Remove()
+        {
+            TestSetUp();
+
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            tagSys.Init(typeof(EntityFramework.Components.Tag));
+            _system.AddComponentSystem<EntityFramework.ComponentInterfaces.ITagSystem>
+                 (tagSys);
+
+            Guid id = Guid.NewGuid();
+            _system.AddNewEntity(id);
+
+            _system.AddComponentToEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+
+            _system.RemoveComponentFromEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+
+            _system.RemoveComponentSystem
+                <EntityFramework.ComponentInterfaces.ITagSystem>();
+
+            _system.RemoveEntity(id);
 
             TestTearDown();
         }

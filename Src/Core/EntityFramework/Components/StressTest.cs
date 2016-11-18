@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EntityFramework.Components
 {
-    public class TagSystem : ComponentInterfaces.ITagSystem
+    public class StressTest : ComponentInterfaces.IStressTest
     {
         #region Private Variables
         #endregion Private Variables
@@ -17,16 +17,13 @@ namespace EntityFramework.Components
         #endregion Private Methods
 
         #region Public Methods
-        public override void Update(double timeDelta)
-        {
-            base.Update(timeDelta);
-        }
-
-        public override void Init(Type comType)
-        {
-            base.Init(comType);
-        }
         #endregion Public Methods
+
+        #region Constructor
+        public StressTest()
+        {
+        }
+        #endregion Constructor
 
         #region Handlers
         #region Default Handlers

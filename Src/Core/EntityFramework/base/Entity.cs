@@ -25,37 +25,74 @@ namespace EntityFramework
         // please do not override these methods
         internal void AddComponent(Component com)
         {
-            if (this._components.Keys.Contains(com.GetType().Name))
+            string comType = NormalizeTypeName(com.GetType());
+            if (this._components.Keys.Contains(comType))
                 throw new Exception(string.Format("Entity already contains a component with type {0}", com.GetType().Name));
             else
-                this._components.Add(com.GetType().Name, com);
+                this._components.Add(comType, com);
         }
 
         internal void RemoveComponent<TComponent>()
         {
-            if (this._components.Keys.Contains(typeof(TComponent).Name))
-                this._components.Remove(typeof(TComponent).Name);
+            string comType = NormalizeTypeName(typeof(TComponent));
+            if (this._components.Keys.Contains(comType))
+                this._components.Remove(comType);
             else
-                throw new Exception(string.Format("Entity does not contain a component with type %s", typeof(TComponent).Name));
+                throw new Exception(string.Format("Entity does not contain a component with type {0}", typeof(TComponent).Name));
         }
 
         internal void RemoveComponent(Component com)
         {
-            if (this._components.Keys.Contains(com.GetType().Name))
-                this._components.Remove(com.GetType().Name);
+            string comType = NormalizeTypeName(com.GetType());
+            if (this._components.Keys.Contains(comType))
+                this._components.Remove(comType);
             else
-                throw new Exception(string.Format("Entity does not contain a component with type %s", com.GetType().Name));
+                throw new Exception(string.Format("Entity does not contain a component with type {0}", com.GetType().Name));
         }
         #endregion Internal Methods
 
+        #region Private Methods
+        /// <summary>
+        /// This method ensures that we get the base type right above Component
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private string NormalizeTypeName(Type type)
+        {
+            Type baseType = type.BaseType;
+            Type lastType = null;
+            Type targetType = null;
+            while (baseType != typeof(Component))
+            {
+                lastType = baseType;
+                baseType = baseType.BaseType;
+                if (baseType == typeof(Component))
+                {
+                    targetType = lastType;
+                }
+            }
+            return targetType.ToString();
+        }
+        #endregion
+
         #region Public Methods
+        public Component GetComponent(string typeName)
+        {
+            if (this._components.Keys.Contains(typeName))
+                return this._components[typeName];
+            else
+                return null;
+        }
+
+        public Component GetComponent(Type type)
+        {
+            return GetComponent(NormalizeTypeName(type));
+        }
+
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
         {
-            if (this._components.Keys.Contains(typeof(TComponent).Name))
-                return (TComponent)this._components[typeof(TComponent).Name];
-            else
-                return null;
+            return (TComponent)GetComponent(NormalizeTypeName(typeof(TComponent)));
         }
 
         public List<Component> GetAllComponents()

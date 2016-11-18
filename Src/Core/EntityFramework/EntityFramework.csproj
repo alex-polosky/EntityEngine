@@ -79,7 +79,9 @@
     <Compile Include="ComponentInterfaces\IPositionSystem.cs" />
     <Compile Include="ComponentInterfaces\IRender.cs" />
     <Compile Include="ComponentInterfaces\IRenderSystem.cs" />
+    <Compile Include="ComponentInterfaces\IStressTest.cs" />
     <Compile Include="ComponentInterfaces\ITag.cs" />
+    <Compile Include="ComponentInterfaces\IStressTestSystem.cs" />
     <Compile Include="ComponentInterfaces\ITagSystem.cs" />
     <Compile Include="ComponentInterfaces\IWinCondition.cs" />
     <Compile Include="ComponentInterfaces\IWinConditionSystem.cs" />
@@ -87,7 +89,9 @@
     <Compile Include="Components\ChildrenSystem.cs" />
     <Compile Include="Components\Group.cs" />
     <Compile Include="Components\GroupSystem.cs" />
+    <Compile Include="Components\StressTest.cs" />
     <Compile Include="Components\Tag.cs" />
+    <Compile Include="Components\StressTestSystem.cs" />
     <Compile Include="Components\TagSystem.cs" />
     <Compile Include="Components\WinCondition.cs" />
     <Compile Include="Components\WinConditionSystem.cs" />

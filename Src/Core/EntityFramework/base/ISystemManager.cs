@@ -11,34 +11,32 @@ namespace EntityFramework
         void RenderDraw(double timeDelta, IntPtr handle);
         void RenderPhysics(double timeDelta);
 
-        Entity AddNewEntity(Guid id);
-        Entity AddNewEntity();
-        void AddEntity(Entity e);
+        void AddNewEntity(Guid id);
         void RemoveEntity(Guid id);
-        void RemoveEntity(Entity e);
+        //void AddEntity(Entity e);
+        //void RemoveEntity(Entity e);
 
-        void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Guid id)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
-        void AddComponentToEntity<TComponent, TComponentSystem>(TComponent com, Entity e)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
-        TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Guid id)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
-        TComponent AddNewComponentToEntity<TComponent, TComponentSystem>(Entity e)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
-        void RemoveComponentFromEntity<TComponent, TComponentSystem>(Guid id)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
-        void RemoveComponentFromEntity<TComponent, TComponentSystem>(Entity e)
-            where TComponent : EntityFramework.Component, new()
-            where TComponentSystem : IComponentSystem<TComponent>;
+        void AddComponentToEntity<TSystem>(Guid id, Component com=null)
+            where TSystem : IComponentSystem;
+        void RemoveComponentFromEntity<TSystem>(Guid id)
+            where TSystem : IComponentSystem;
+
+        //void AddComponentToEntity<TComponentSystem>(TComponent com, Guid id)
+        //    where TComponentSystem : IComponentSystem;
+        //void AddComponentToEntity<TComponentSystem>(TComponent com, Entity e)
+        //    where TComponentSystem : IComponentSystem;
+        //TComponent AddNewComponentToEntity<TComponentSystem>(Guid id)
+        //    where TComponentSystem : IComponentSystem;
+        //TComponent AddNewComponentToEntity<TComponentSystem>(Entity e)
+        //    where TComponentSystem : IComponentSystem;
+        //void RemoveComponentFromEntity<TComponentSystem>(Guid id)
+        //    where TComponentSystem : IComponentSystem;
+        //void RemoveComponentFromEntity<TComponentSystem>(Entity e)
+        //    where TComponentSystem : IComponentSystem;
 
         List<Entity> GetAllEntities();
         List<Entity> GetEntitiesWithComponentType<TComponent>()
-            where TComponent : EntityFramework.Component, new();
+            where TComponent : Component, new();
         Entity GetEntityFromId(Guid id);
         [Obsolete]
         Entity GetEntityWithTagId(string tagId);

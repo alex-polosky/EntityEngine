@@ -157,9 +157,27 @@ namespace TestingNewEngine0
             var sysMan = this.SystemManager;
             EntityFramework.ComponentInterfaces.IRenderSystem renderSystem =
                 new EntityFramework.Render.RenderSystem();
+            renderSystem.Init(typeof(EntityFramework.Render.Render));
             sysMan.AddComponentSystem<EntityFramework.ComponentInterfaces.IRenderSystem>(renderSystem);
 
-            
+            EntityFramework.ComponentInterfaces.IStressTestSystem stressSystem =
+                new EntityFramework.Components.StressTestSystem();
+            stressSystem.Init(typeof(EntityFramework.Components.StressTest));
+            sysMan.AddComponentSystem<EntityFramework.ComponentInterfaces.IStressTestSystem>(stressSystem);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                Guid id = Guid.NewGuid();
+                sysMan.AddNewEntity(id);
+                sysMan.AddComponentToEntity<EntityFramework.ComponentInterfaces.IStressTestSystem>(id);
+            }
+
+            foreach (var com in sysMan
+                .GetComponentSystem<EntityFramework.ComponentInterfaces.IStressTestSystem>()
+                .GetTComponents())
+            {
+                com.StressLevel = EntityFramework.ComponentInterfaces.IStressTest.Level.CompHi;
+            }
         }
 
         protected override void OnStopEvent(object sender, StopEventArgs e)

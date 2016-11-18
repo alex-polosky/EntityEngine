@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using EntityFramework;
+using Components = EntityFramework.Components;
 using Engine = EntityFramework.Engine;
 using Interfaces = EntityFramework.ComponentInterfaces;
 using Render = EntityFramework.Render;
@@ -28,7 +29,8 @@ namespace BasicWinFormDefaultEngine
 
                 var sysMan = SystemManager;
                 sysMan.AddComponentSystem<Interfaces.IRenderSystem>(new Render.RenderSystem());
-                sysMan.GetComponentSystem<Interfaces.IRenderSystem>().Init();
+                sysMan.GetComponentSystem<Interfaces.IRenderSystem>()
+                    .Init(typeof(Render.Render));
             }
 
             public Engine0(IntPtr handle)

@@ -28,7 +28,8 @@ namespace WinFormExtension
 
                 var sysMan = SystemManager;
                 sysMan.AddComponentSystem<Interfaces.IRenderSystem>(new Render.RenderSystem());
-                sysMan.GetComponentSystem<Interfaces.IRenderSystem>().Init();
+                sysMan.GetComponentSystem<Interfaces.IRenderSystem>()
+                    .Init(typeof(Render.Render));
             }
 
             public Engine0(IntPtr handle)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EntityFramework.Components
 {
-    public class TagSystem : ComponentInterfaces.ITagSystem
+    public class StressTestSystem : ComponentInterfaces.IStressTestSystem
     {
         #region Private Variables
         #endregion Private Variables
