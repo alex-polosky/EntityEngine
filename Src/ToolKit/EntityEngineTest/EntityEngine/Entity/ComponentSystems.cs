@@ -159,9 +159,52 @@ namespace EntityFramework.Test.EntityEngine.Entity
             _system.AddComponentSystem<EntityFramework.ComponentInterfaces.IChildrenSystem>
                 (childSys);
 
-            //_system.AddNewComponentToEntity
-            //    <EntityFramework.Components.Tag,
-            //     EntityFramework.ComponentInterfaces.ITagSystem>(_entity);
+            Guid id = Guid.NewGuid();
+            _system.AddNewEntity(id);
+
+            _system.AddComponentToEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+            _system.AddComponentToEntity
+                <EntityFramework.ComponentInterfaces.IChildrenSystem>(id);
+
+            _system.RemoveComponentFromEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+            _system.RemoveComponentFromEntity
+                <EntityFramework.ComponentInterfaces.IChildrenSystem>(id);
+
+            _system.RemoveComponentSystem
+                <EntityFramework.ComponentInterfaces.ITagSystem>();
+            _system.RemoveComponentSystem
+                <EntityFramework.ComponentInterfaces.IChildrenSystem>();
+
+            _system.RemoveEntity(id);
+
+            TestTearDown();
+        }
+
+        [TestCase]
+        public void MultipleComponentSameType()
+        {
+            TestSetUp();
+
+            EntityFramework.ComponentInterfaces.ITagSystem tagSys =
+                new EntityFramework.Components.TagSystem();
+            tagSys.Init(typeof(EntityFramework.Components.Tag));
+
+            _system.AddComponentSystem<EntityFramework.ComponentInterfaces.ITagSystem>
+                (tagSys);
+
+            Guid id = Guid.NewGuid();
+            _system.AddNewEntity(id);
+
+            _system.AddComponentToEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+
+            _system.AddComponentToEntity
+                <EntityFramework.ComponentInterfaces.ITagSystem>(id);
+
+            _system.RemoveComponentSystem
+                <EntityFramework.ComponentInterfaces.ITagSystem>();
 
             TestTearDown();
         }
@@ -190,16 +233,6 @@ namespace EntityFramework.Test.EntityEngine.Entity
                 <EntityFramework.ComponentInterfaces.ITagSystem>();
 
             _system.RemoveEntity(id);
-
-            TestTearDown();
-        }
-
-        //[TestCase]
-        public void MultipleComponentSameType()
-        {
-            TestSetUp();
-
-            //_system.AddComponentSystem<EntityFramework.
 
             TestTearDown();
         }

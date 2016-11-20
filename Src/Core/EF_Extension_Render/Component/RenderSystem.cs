@@ -200,8 +200,6 @@ namespace EntityFramework.Render
                 d3d10Device.ClearRenderTargetView(this.renderTargetView, (Color4)SharpDX.Color.CornflowerBlue);
                 d3d10Device.ClearDepthStencilView(depthStencilView, DepthStencilClearFlags.Depth, 1f, 0);
 
-                //d3d10Device.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-
                 foreach (IRender renderCom in _components)
                 {
                     if (!renderCom.Active)
@@ -210,6 +208,10 @@ namespace EntityFramework.Render
                     IPosition posCom = renderCom.Entity.GetComponent<IPosition>();
 
                     var inputAssembler = d3d10Device.InputAssembler;
+
+                    // ToDo: Set this up for each individual component
+                    inputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+
                     //inputAssembler.SetVertexBuffers(0, renderCom.GetShader())
                 }
 
